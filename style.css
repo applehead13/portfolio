@@ -1745,3 +1745,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Панель слева: «Живу в Санкт-Петербурге…» обычного размера текста */
 .side__role { font-size: var(--fs-text); line-height: 1.45; max-width: none; }
+
+/* «Заполнить бриф»: блок шире (кнопка растянута), описание под ней длиннее и заканчивается ровно по границе кнопки */
+.contacts__brief { width: min(100%, 28rem); }
