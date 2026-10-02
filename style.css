@@ -1716,3 +1716,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .field.is-valid::after { background: var(--ok); transform: scaleX(1); }
 .check.is-invalid .check__box { border-color: var(--bad); }
 .form__error::before { color: var(--bad) !important; }
+
+/* Панель слева: расстояние между кнопками-ссылками такое же, как между кнопками на всём сайте (1rem) */
+.side__foot { gap: 1rem !important; }
