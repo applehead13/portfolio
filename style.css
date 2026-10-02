@@ -1465,3 +1465,107 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
     linear-gradient(color-mix(in srgb, var(--muted) 55%, transparent), color-mix(in srgb, var(--muted) 55%, transparent)) 3.6rem 0 / 0.5rem 0.5rem no-repeat,
     linear-gradient(color-mix(in srgb, var(--muted) 30%, transparent), color-mix(in srgb, var(--muted) 30%, transparent)) 4.8rem 0 / 0.5rem 0.5rem no-repeat;
 }
+
+/* Разделитель: три квадрата лесенкой по диагонали, одного цвета, чтобы не напоминать пагинацию */
+.section::before {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-bottom: var(--pad);
+  background:
+    linear-gradient(var(--text), var(--text)) 0 1.9rem / 0.5rem 0.5rem no-repeat,
+    linear-gradient(var(--text), var(--text)) 0.95rem 0.95rem / 0.5rem 0.5rem no-repeat,
+    linear-gradient(var(--text), var(--text)) 1.9rem 0 / 0.5rem 0.5rem no-repeat;
+}
+
+/* ===== Плитка работы: фото с сайта, название по центру; при наведении фото размывается, остаются название и значок ===== */
+.card__media--photo { background: var(--surface); }
+.card__media--photo .work__img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.001);
+  transition: filter 0.7s var(--ease), transform 1.1s var(--ease);
+}
+.card__media--photo::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 28%, transparent); transition: background-color 0.6s var(--ease); pointer-events: none; }
+.work__logo { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; pointer-events: none; }
+.work__name {
+  position: relative;
+  padding: 0.6rem 1.8rem;
+  font-family: var(--f-head); font-weight: 700;
+  font-size: var(--fs-text); letter-spacing: 0.05em; text-transform: uppercase; text-align: center;
+  color: var(--text);
+  text-shadow: 0 1px 12px color-mix(in srgb, var(--bg) 60%, transparent);
+}
+.work__name::before, .work__name::after { content: ""; position: absolute; top: 0; bottom: 0; width: 0.4rem; border: 1px solid currentColor; }
+.work__name::before { left: 0; border-right: 0; }
+.work__name::after { right: 0; border-left: 0; }
+.work__eye {
+  display: grid; place-items: center;
+  width: 3.4rem; height: 3.4rem;
+  background: var(--bg); color: var(--text);
+  opacity: 0; transform: translateY(0.75rem);
+  transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
+}
+.work__eye svg { width: 1.6rem; height: 1.6rem; }
+.card:hover .work__img, .card:focus-visible .work__img { filter: blur(16px); transform: scale(1.08); }
+.card:hover .card__media--photo::after, .card:focus-visible .card__media--photo::after { background: color-mix(in srgb, var(--bg) 40%, transparent); }
+.card:hover .work__eye, .card:focus-visible .work__eye { opacity: 1; transform: none; }
+/* На сенсорных экранах наведения нет: значок глаза виден всегда, фото слегка размыто */
+@media (hover: none) { .work__eye { opacity: 1; transform: none; } .work__img { filter: blur(3px); } }
+
+/* ===== Телефон: кнопки на всю ширину экрана (первый экран, контакты, подвал) ===== */
+@media (max-width: 767px) {
+  .hero__actions { width: 100%; flex-direction: column; }
+  .hero__actions .btn, .contacts__brief .btn, .done__actions .btn { width: 100%; }
+  .contacts__brief { width: 100%; }
+  .attach__btn { width: 100%; }
+  .footer__up { width: 100%; justify-self: stretch; justify-content: center; }
+  .side__foot .blink { flex: 1 1 auto; justify-content: center; }
+  .types .chip { flex: 1 1 100%; }
+  .types .chip span { width: 100%; justify-content: center; }
+}
+
+/* Цены на ПК: описание слева, срок и стоимость прижаты к правому краю */
+@media (min-width: 768px) {
+  .price { grid-template-columns: minmax(0, 1fr) 11rem 13rem; }
+  .price__fact:nth-of-type(2) { text-align: right; align-items: flex-end; }
+  .price__fact:nth-of-type(1) { align-items: flex-start; }
+}
+
+/* Пружинка при наведении двигает только название и описание, срок и стоимость остаются у края */
+.price:hover .price__fact { transform: none; }
+
+/* Левая панель снова уже: ~25% ширины; ссылки внизу компактнее, чтобы три в ряд помещались */
+:root { --side-w: clamp(16rem, 25vw, 30rem); }
+.side { --side-pad: clamp(1rem, 0.8rem + 0.8vw, 1.75rem); padding: var(--side-pad); }
+.side__foot { gap: 0.3rem; }
+.side__foot .blink { padding-inline: 0.65rem; letter-spacing: 0.02em; min-height: 2.1rem; font-size: clamp(0.75rem, 0.7rem + 0.18vw, 0.9rem); }
+.side__foot .blink--mail { padding-inline: 0.85rem; letter-spacing: 0.01em; }
+.side__foot .blink::before, .side__foot .blink::after { width: 0.3rem; }
+@media (max-width: 1023px) { .side { padding: 0 var(--gutter); } }
+
+/* Панель ещё уже (~22% ширины); три соцссылки всегда в одну строку: шрифт подгоняется под ширину панели */
+:root { --side-w: clamp(15rem, 22vw, 27rem); }
+@media (min-width: 1024px) {
+  .side { container-type: inline-size; }
+  .side__foot { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .side__foot .blink--mail { flex: 1 1 100%; justify-content: center; font-size: clamp(0.65rem, 4.3cqw, 0.9rem); }
+  .side__foot .blink:not(.blink--mail) {
+    flex: 1 1 0; min-width: 0; justify-content: center; white-space: nowrap;
+    padding-inline: 0.35rem; letter-spacing: 0;
+    font-size: clamp(0.6rem, 3.6cqw, 0.85rem);
+  }
+}
+
+/* Первый экран на ПК и планшете: описание внизу слева, кнопки внизу справа */
+@media (min-width: 768px) {
+  .hero__figure { grid-row: 1 !important; }
+  .hero__lower {
+    grid-column: 1 / -1 !important; grid-row: 2 !important;
+    flex-direction: row !important; align-items: flex-end !important; justify-content: space-between; gap: var(--pad) var(--gutter);
+  }
+  .hero__lower .hero__sub { max-width: 46ch; }
+  .hero__lower .hero__actions { margin-top: 0; justify-content: flex-end; flex-wrap: nowrap; }
+}
+
+/* Левая панель шире ровно на 50px относительно прошлой версии */
+:root { --side-w: clamp(17rem, calc(22vw + 50px), 30rem); }

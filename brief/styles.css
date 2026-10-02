@@ -343,3 +343,9 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
 /* В форме ссылки подчёркнуты, но тусклее */
 .check__text .doclink { color: var(--muted); text-decoration-color: color-mix(in srgb, var(--muted) 70%, transparent); }
 .check__text .doclink:hover { color: var(--text); text-decoration-color: currentColor; }
+
+/* Телефон: кнопки вступления и финала на всю ширину */
+@media (max-width: 699px) {
+  .intro__actions, .done__actions { flex-direction: column; }
+  .intro__actions .btn, .done__actions .btn { width: 100%; }
+}

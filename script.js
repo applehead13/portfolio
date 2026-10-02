@@ -2,6 +2,7 @@
 (function () {
   var root = document.documentElement;
   var lenis = null;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var side = document.getElementById('side');
   var footer = document.getElementById('footer');
 
@@ -219,45 +220,6 @@
       requestAnimationFrame(loop);
     })();
   }
-
-  /* Живые сайты в плитках: по наведению играет видео прокрутки, только вниз */
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var canHover = window.matchMedia('(hover: hover)').matches;
-  document.querySelectorAll('.card').forEach(function (card) {
-    var v = card.querySelector('.live');
-    if (!v || reduce) { return; }
-    var timer = null;
-    /* Подгружаем видео заранее, когда плитка близко к экрану */
-    if ('IntersectionObserver' in window) {
-      var pre = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { v.preload = 'auto'; pre.disconnect(); } });
-      }, { rootMargin: '300px' });
-      pre.observe(card);
-    }
-    function start() {
-      clearTimeout(timer);
-      if (v.preload !== 'auto') { v.preload = 'auto'; }
-      v.currentTime = 0;
-      card.classList.add('is-live');
-      var p = v.play(); if (p && p.catch) { p.catch(function () {}); }
-    }
-    function stop() {
-      card.classList.remove('is-live');
-      timer = setTimeout(function () { v.pause(); v.currentTime = 0; }, 450);
-    }
-    if (canHover) {
-      card.addEventListener('mouseenter', start);
-      card.addEventListener('mouseleave', stop);
-      card.addEventListener('focus', start);
-      card.addEventListener('blur', stop);
-    } else {
-      /* Сенсорные экраны: играем, пока плитка на экране */
-      v.loop = true;
-      new IntersectionObserver(function (es) {
-        es.forEach(function (e) { e.isIntersecting ? start() : stop(); });
-      }, { threshold: 0.6 }).observe(card);
-    }
-  });
 
   /* Ссылки-заглушки (документы, Instagram) пока никуда не ведут и не прыгают наверх */
   document.querySelectorAll('a[href="#"]').forEach(function (a) {
