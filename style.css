@@ -1569,3 +1569,34 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Левая панель шире ровно на 50px относительно прошлой версии */
 :root { --side-w: clamp(17rem, calc(22vw + 50px), 30rem); }
+
+/* Разделитель из квадратиков убран; описание на первом экране шире */
+.section::before { display: none !important; }
+@media (min-width: 768px) { .hero__lower .hero__sub { max-width: 72ch; } }
+
+/* Первый экран: описание ровно в три строки примерно одной длины */
+@media (min-width: 768px) { .hero__lower .hero__sub { max-width: 66ch; text-wrap: balance; } }
+
+/* Плитки: логотип сайта (белый, шрифтом самого сайта) по центру, без глаза и скобок */
+.work__eye, .work__name { display: none !important; }
+.work__mark { width: min(62%, 17rem); height: auto; filter: drop-shadow(0 1px 14px color-mix(in srgb, var(--bg) 55%, transparent)); }
+.card--free .work__mark { display: none; }
+
+/* Заголовки блоков: капсом и зелёным (светлый оттенок нашего зелёного, чтобы читался на тёмном) */
+.section__head .h2 { text-transform: uppercase; color: var(--accent-text); }
+.section__head .h2 .ch { color: inherit; }
+
+/* Левая панель: ссылки не растягиваются, скобки на том же расстоянии от слова, что и у всех кнопок */
+@media (min-width: 1024px) {
+  .side__foot .blink, .side__foot .blink--mail { flex: 0 0 auto !important; justify-content: flex-start !important; padding-inline: 1.1rem !important; }
+  .side__foot .blink::before, .side__foot .blink::after { width: 0.35rem; }
+}
+
+/* Названия услуг в ценах: обычным регистром, не капсом */
+.price__title { text-transform: none; }
+
+/* Три соцссылки в панели: размер шрифта ограничен, чтобы помещались в одну строку на широких экранах */
+@media (min-width: 1024px) { .side__foot .blink:not(.blink--mail) { font-size: clamp(0.6rem, 2.9cqw, 0.72rem) !important; } }
+
+/* Почта всегда на своей строке, не растягиваясь: остальное переносится под неё */
+@media (min-width: 1024px) { .side__foot .blink--mail { margin-right: 100%; } }
