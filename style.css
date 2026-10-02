@@ -1703,3 +1703,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* ===== Типографика: ровные переносы, без висячих предлогов ===== */
 h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
 p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* Форма: от подписи «Что нужно сделать» до кнопок выбора такой же отступ, как от «Как к вам обращаться» до поля (по тексту) */
+.types .field__label { margin-bottom: 0.75rem; }
+@media (max-width: 1023px) { .types .field__label { margin-bottom: 0.55rem; } }
