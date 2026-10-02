@@ -1665,3 +1665,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Фото в «Обо мне» стоит на месте вверху блока и не едет за прокруткой */
 @media (min-width: 1100px) { .about .gallery { position: relative !important; top: auto !important; } }
+
+/* Цены: у услуг номера без скобок слева от названия; у заголовков блоков номеров нет */
+.price__num::before, .price__num::after { content: none !important; }
+.price { grid-template-columns: 2.5rem minmax(0, 1fr) 11rem 13rem !important; grid-template-areas: "num title title title" ". desc term cost" !important; }
+.price__num { grid-area: num; padding-top: 0.55em; font-size: var(--fs-small); color: var(--muted); white-space: nowrap; }
+.price:hover .price__num { color: var(--text); transform: translateX(1.4rem); transition: transform 0.6s cubic-bezier(0.34, 1.7, 0.5, 1), color 0.3s; }
+@media (max-width: 767px) {
+  .price { grid-template-columns: 2.25rem minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-areas: "num title title" ". desc desc" ". term cost" !important; }
+}
