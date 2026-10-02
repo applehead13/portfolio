@@ -1674,3 +1674,32 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (max-width: 767px) {
   .price { grid-template-columns: 2.25rem minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-areas: "num title title" ". desc desc" ". term cost" !important; }
 }
+
+/* Номера в ценах и в фактах: в квадратных скобках */
+.price__num::before, .fact::before { content-visibility: visible; }
+.price__num::before { content: "[ " !important; }
+.price__num::after { content: " ]" !important; }
+.fact::before { content: "[ 0" counter(fact) " ]" !important; white-space: nowrap; }
+.price { grid-template-columns: 4.2rem minmax(0, 1fr) 11rem 13rem !important; }
+@media (max-width: 767px) { .price { grid-template-columns: 4.2rem minmax(0, 1fr) minmax(0, 1fr) !important; } }
+.fact, .about__body .fact { grid-template-columns: 4.2rem minmax(0, 1fr) !important; }
+
+/* Факты в узкой колонке: номер в скобках стоит над названием, текст занимает всю ширину колонки */
+@media (min-width: 768px) {
+  .fact, .about__body .fact { grid-template-columns: minmax(0, 1fr) !important; gap: 0.2rem 0 !important; }
+  .fact::before { grid-row: auto !important; padding-top: 0 !important; margin-bottom: 0.15rem; }
+}
+
+/* Цены: номер в скобках стоит сразу после названия услуги, как индекс */
+.price { grid-template-columns: minmax(0, 1fr) 11rem 13rem !important; grid-template-areas: "title title title" "desc term cost" !important; }
+.price__title .price__num {
+  display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em; padding-top: 0 !important;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; color: var(--muted);
+  transition: color 0.3s;
+}
+.price:hover .price__title .price__num { color: var(--text); transform: none; }
+@media (max-width: 767px) { .price { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-areas: "title title" "desc desc" "term cost" !important; } }
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
