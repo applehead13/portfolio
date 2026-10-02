@@ -377,3 +377,13 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
 .stage__clear { margin-top: 1.25rem; font-size: var(--fs-small); color: var(--muted); text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px; transition: color 0.3s var(--ease); }
 .stage__clear:hover { color: var(--text); }
 @media (max-width: 699px) { .top__saved { display: none; } .top__clear { padding: 0 0.7rem; } }
+
+/* Номера в списках вступления и финала: в квадратных скобках, вплотную перед словом, приподняты как индекс */
+.intro__list li, .done__steps li { grid-template-columns: minmax(0, 1fr) !important; gap: 0.15rem 0 !important; }
+.intro__list li::before, .done__steps li::before { content: none !important; }
+.intro__list strong::before, .done__steps strong::before {
+  content: "[ 0" counter(li) " ]";
+  display: inline-block; vertical-align: top;
+  margin-right: 0.45rem; margin-top: 0.15em;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; color: var(--muted);
+}
