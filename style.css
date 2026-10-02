@@ -1719,3 +1719,9 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Панель слева: расстояние между кнопками-ссылками такое же, как между кнопками на всём сайте (1rem) */
 .side__foot { gap: 1rem !important; }
+
+/* Факты: заголовок «Факты обо мне» без скобок, обычным шрифтом; сами факты обычного размера текста */
+.facts__label::before, .facts__label::after { content: none !important; }
+.facts__label { font-family: var(--f-text); font-weight: 400; font-size: var(--fs-text); color: var(--text); }
+.fact__title { font-size: var(--fs-text) !important; }
+.fact__text { font-size: var(--fs-text) !important; max-width: none; }
