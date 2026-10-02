@@ -1614,3 +1614,29 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .hero__lower .hero__actions .btn { white-space: nowrap; }
   .hero__lower .hero__sub { flex: 1 1 0; min-width: 0; max-width: 62ch; }
 }
+
+/* Обо мне: фото снова меньше (4:5), справа вступление; факты ниже в две колонки на всю ширину */
+@media (min-width: 1100px) {
+  .about { grid-template-areas: "photo intro" "facts facts" "skills skills"; align-items: start; row-gap: calc(var(--pad) * 1.5); }
+  .about .gallery { grid-area: photo; aspect-ratio: 4 / 5; height: auto; min-height: 0; align-self: start; }
+  .about__body { display: contents; }
+  .about__body > .lead { grid-area: intro; align-self: start; }
+  .about__body > .text { grid-area: intro; align-self: end; }
+  .about__body > .facts { grid-area: facts; margin-top: 0; }
+}
+@media (min-width: 768px) {
+  .facts__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+}
+
+/* Обо мне: вступление и абзац идут друг за другом справа от фото, без дыры между ними */
+@media (min-width: 1100px) {
+  .about { grid-template-areas: "photo intro" "photo text" "facts facts" "skills skills"; grid-template-rows: auto 1fr auto auto; row-gap: calc(var(--pad) * 0.75); }
+  .about__body > .lead { grid-area: intro; align-self: start; }
+  .about__body > .text { grid-area: text; align-self: start; }
+  .about .gallery { grid-row: 1 / span 2; }
+}
+
+/* Панель слева: почта и три соцссылки одного размера шрифта */
+@media (min-width: 1024px) {
+  .side__foot .blink, .side__foot .blink--mail, .side__foot .blink:not(.blink--mail) { font-size: clamp(0.6rem, 3.3cqw, 0.75rem) !important; letter-spacing: 0.02em; }
+}
