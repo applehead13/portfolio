@@ -312,7 +312,8 @@ function buildSteps() {
     stage.append(
       el('div', { class: 'stage__num' }, st.num),
       el('h2', { class: 'stage__title', id: 'st-' + si, tabindex: '-1' }, nb(st.title)),
-      el('p', { class: 'stage__lead' }, nb(st.lead)));
+      el('p', { class: 'stage__lead' }, nb(st.lead)),
+      el('button', { class: 'stage__clear', type: 'button', 'data-clear': String(si) }, 'Очистить этот этап'));
     const fields = el('div', { class: 'fields' });
     st.questions.forEach(q => fields.append(buildQuestion(q)));
     sec.append(stage, fields);
@@ -406,6 +407,7 @@ function saveDraft() {
       values[q.key] = readValue(q.key);
     }));
     localStorage.setItem(SETTINGS.draftKey, JSON.stringify({ v: 1, step: state.step, started: state.view !== 'intro', values, ts: Date.now() }));
+    var sv = $('#saved'); if (sv) { sv.textContent = 'Сохранено ' + new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); }
   } catch (e) { /* хранилище недоступно: ответы остаются на странице */ }
 }
 function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 350); }
@@ -438,6 +440,8 @@ function updateChrome() {
   $('#count').textContent = (state.view === 'intro' ? '00' : pad2(idx + 1)) + ' / ' + pad2(total);
   $('#bar').style.setProperty('--p', (state.view === 'intro' ? 0 : state.view === 'done' ? 100 : ((idx + 1) / total) * 100) + '%');
   const showDock = state.view === 'step';
+  $('#btn-clear-all').hidden = !showDock;
+  if (!showDock) { $('#saved').textContent = ''; }
   $('#dock').hidden = !showDock;
   document.body.classList.toggle('has-dock', showDock);
   if (showDock) {
@@ -578,7 +582,11 @@ function init() {
   /* Автосохранение и снятие подсветки ошибки при вводе */
   $('#steps').addEventListener('input', e => {
     const wrap = e.target.closest('.q');
-    if (wrap) { wrap.classList.remove('is-invalid'); }
+    if (wrap) {
+      wrap.classList.remove('is-invalid');
+      var key = wrap.getAttribute('data-key');
+      wrap.classList.toggle('is-valid', !!key && wrap.querySelector('.req, .tag') !== null && !!readValue(key));
+    }
     scheduleSave();
     updateChrome();
   });
@@ -610,6 +618,35 @@ function init() {
     $('#btn-start .btn__label').textContent = 'Начать';
     toast('Черновик очищен');
   });
+  /* Очистить один этап */
+  $('#steps').addEventListener('click', e => {
+    const b = e.target.closest('[data-clear]');
+    if (!b) { return; }
+    const si = Number(b.getAttribute('data-clear'));
+    if (!confirm('Стереть ответы на этом этапе?')) { return; }
+    STAGES[si].questions.forEach(q => {
+      if (q.type === 'files') { state.files = []; renderFiles(); return; }
+      const f = fieldOf(q.key);
+      if (!f) { return; }
+      if (f.type === 'checkbox') { f.checked = false; } else { f.value = ''; }
+      const w = f.closest('.q'); if (w) { w.classList.remove('is-invalid', 'is-valid'); }
+    });
+    $$('.step:not([hidden]) textarea').forEach(grow);
+    saveDraft(); updateChrome(); toast('Этап очищен');
+  });
+  /* Стереть все ответы */
+  $('#btn-clear-all').addEventListener('click', () => {
+    if (!confirm('Стереть все ответы и начать заново?')) { return; }
+    clearDraft(); draftLocked = false;
+    $$('[data-field]').forEach(f => { if (f.type === 'checkbox') { f.checked = false; } else { f.value = ''; } });
+    $$('.q').forEach(q => q.classList.remove('is-invalid', 'is-valid'));
+    state.files = []; renderFiles();
+    $$('textarea').forEach(grow);
+    $('#btn-reset').hidden = true;
+    $('#btn-start .btn__label').textContent = 'Начать';
+    state.step = 0; showView('intro'); window.scrollTo({ top: 0 });
+    toast('Ответы стёрты');
+  });
   $('#btn-prev').addEventListener('click', () => go(state.step - 1));
   $('#btn-next').addEventListener('click', next);
   $('#btn-download').addEventListener('click', downloadCopy);
@@ -621,6 +658,7 @@ function init() {
     $('#btn-start .btn__label').textContent = 'Продолжить';
     $('#btn-reset').hidden = false;
     toast('Черновик восстановлен');
+    if (d.started) { go(Math.min(d.step || 0, total - 1), false); return; }
   }
   showView('intro');
 }

@@ -164,6 +164,10 @@
     var name = f.name.value.trim();
     var contact = f.contact.value.trim();
     note.hidden = true;
+    form.querySelectorAll('.field').forEach(function (fl) { fl.classList.remove('is-invalid'); });
+    form.querySelector('.check').classList.toggle('is-invalid', !f.agree.checked);
+    if (!name) { f.name.closest('.field').classList.add('is-invalid'); }
+    if (!contact) { f.contact.closest('.field').classList.add('is-invalid'); }
     if (!name || !contact || !f.agree.checked) {
       err.hidden = false;
       err.textContent = 'Укажите имя и контакт и подтвердите согласие.';
@@ -318,4 +322,15 @@
     window.addEventListener('resize', fitBig);
     if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fitBig); }
   }
+
+  /* Заполненные обязательные поля подсвечиваются зелёным */
+  ['name', 'contact'].forEach(function (n) {
+    var inp = form.elements[n];
+    inp.addEventListener('input', function () {
+      var fl = inp.closest('.field');
+      fl.classList.remove('is-invalid');
+      fl.classList.toggle('is-valid', !!inp.value.trim());
+    });
+  });
+  form.elements.agree.addEventListener('change', function () { form.querySelector('.check').classList.remove('is-invalid'); });
 })();

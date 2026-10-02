@@ -17,7 +17,11 @@
   <!-- Верхняя панель: на сайт, счётчик этапов и полоса прогресса -->
   <header class="top">
     <a class="top__brand" href="../" aria-label="Вернуться на сайт">Полина Гусева <span>— веб-дизайнер</span></a>
-    <span class="top__count" id="count" aria-live="polite">00 / 07</span>
+    <div class="top__right">
+      <span class="top__saved" id="saved" aria-live="polite"></span>
+      <button class="top__clear" type="button" id="btn-clear-all" hidden>Стереть ответы</button>
+      <span class="top__count" id="count" aria-live="polite">00 / 07</span>
+    </div>
     <div class="top__bar" aria-hidden="true"><i id="bar"></i></div>
   </header>
 
@@ -87,15 +91,16 @@
 
   <!-- Документы -->
   <footer class="legal" id="legal">
+    
+    <div class="legal__row">
+      <span>© 2026 Полина Гусева. ИНН 472600004020</span>
+      <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Написать в Telegram</a>
+    </div>
     <nav class="legal__docs" aria-label="Документы">
       <!-- Пока ссылки-заглушки, позже подставим страницы документов -->
       <a class="doclink" href="../docs/privacy.html" data-doc="privacy">Политика конфиденциальности</a>
       <a class="doclink" href="../docs/consent.html" data-doc="consent">Согласие на обработку персональных данных</a>
     </nav>
-    <div class="legal__row">
-      <span>© 2026 Полина Гусева. ИНН 472600004020</span>
-      <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Написать в Telegram</a>
-    </div>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

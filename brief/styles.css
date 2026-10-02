@@ -349,3 +349,31 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
   .intro__actions, .done__actions { flex-direction: column; }
   .intro__actions .btn, .done__actions .btn { width: 100%; }
 }
+
+/* Вступление: заголовок и текст слева начинаются на одном уровне с первым этапом справа */
+@media (min-width: 700px) {
+  .view--intro { align-items: start !important; }
+  .view--intro .intro__body { padding-top: 0 !important; }
+  .view--intro .intro__list li:first-child { padding-top: 0; }
+  .view--intro .kicker { display: none; }
+}
+
+/* Обязательные поля: незаполненные подсвечиваются красным, заполненные верно зелёным */
+:root { --bad: #e0675b; --ok: #4fbf85; }
+.q.is-invalid .input, .q.is-invalid .drop { border-color: var(--bad) !important; box-shadow: inset 0 -2px 0 var(--bad) !important; }
+.q.is-invalid .q__label { color: var(--bad); }
+.q.is-invalid .q__error, .q.is-invalid .q__error::before { color: var(--bad); }
+.q.is-invalid .check__box { border-color: var(--bad) !important; }
+.q.is-valid .input { border-color: var(--ok); box-shadow: inset 0 -2px 0 var(--ok); }
+.q.is-valid .req { color: var(--ok); }
+
+/* Верхняя панель: статус сохранения и «Стереть ответы» */
+.top__right { display: flex; align-items: center; gap: 1rem 1.5rem; flex-wrap: nowrap; }
+.top__saved { font-size: var(--fs-small); color: var(--muted); white-space: nowrap; }
+.top__clear { position: relative; min-height: 2.75rem; padding: 0 1.1rem; font-family: var(--f-head); font-weight: 700; font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); transition: color 0.3s var(--ease); white-space: nowrap; }
+.top__clear::before, .top__clear::after { content: ""; position: absolute; top: 0.45rem; bottom: 0.45rem; width: 0.3rem; border: 1px solid currentColor; }
+.top__clear::before { left: 0; border-right: 0; } .top__clear::after { right: 0; border-left: 0; }
+.top__clear:hover { color: var(--bad); }
+.stage__clear { margin-top: 1.25rem; font-size: var(--fs-small); color: var(--muted); text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px; transition: color 0.3s var(--ease); }
+.stage__clear:hover { color: var(--text); }
+@media (max-width: 699px) { .top__saved { display: none; } .top__clear { padding: 0 0.7rem; } }

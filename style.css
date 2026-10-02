@@ -1707,3 +1707,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Форма: от подписи «Что нужно сделать» до кнопок выбора такой же отступ, как от «Как к вам обращаться» до поля (по тексту) */
 .types .field__label { margin-bottom: 0.75rem; }
 @media (max-width: 1023px) { .types .field__label { margin-bottom: 0.55rem; } }
+
+/* Форма на главной: незаполненные обязательные поля красным, заполненные зелёным */
+:root { --bad: #e0675b; --ok: #4fbf85; }
+.field.is-invalid .field__input { border-bottom-color: var(--bad) !important; }
+.field.is-invalid .field__label, .form__error { color: var(--bad); }
+.field.is-invalid::after { background: var(--bad); transform: scaleX(1); }
+.field.is-valid::after { background: var(--ok); transform: scaleX(1); }
+.check.is-invalid .check__box { border-color: var(--bad); }
+.form__error::before { color: var(--bad) !important; }
