@@ -1600,3 +1600,17 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Почта всегда на своей строке, не растягиваясь: остальное переносится под неё */
 @media (min-width: 1024px) { .side__foot .blink--mail { margin-right: 100%; } }
+
+/* Исправление: почта на своей строке через разрыв строки, а не через отступ */
+@media (min-width: 1024px) {
+  .side__foot .blink--mail { margin-right: 0 !important; order: 0; }
+  .side__foot::before { content: ""; order: 1; flex: 0 0 100%; height: 0; }
+  .side__foot .blink:not(.blink--mail) { order: 2; }
+}
+
+/* Кнопки на первом экране не переносятся на две строки; описание уступает им место */
+@media (min-width: 768px) {
+  .hero__lower .hero__actions { flex: 0 0 auto; }
+  .hero__lower .hero__actions .btn { white-space: nowrap; }
+  .hero__lower .hero__sub { flex: 1 1 0; min-width: 0; max-width: 62ch; }
+}
