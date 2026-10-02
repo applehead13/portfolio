@@ -1650,3 +1650,15 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
     font-size: clamp(0.6rem, 3.6cqw, 0.78rem) !important; letter-spacing: 0.03em; padding-inline: 1.1rem !important;
   }
 }
+
+/* Обо мне: фото 4:5 слева; справа вступление, абзац и под ними факты в две колонки */
+@media (min-width: 1100px) {
+  .about { grid-template-areas: "photo body" "skills skills"; grid-template-rows: auto auto; row-gap: calc(var(--pad) * 1.5); align-items: start; }
+  .about .gallery { grid-area: photo; grid-row: auto; aspect-ratio: 4 / 5; align-self: start; position: sticky; top: var(--pad); }
+  .about__body { display: flex !important; grid-area: body; flex-direction: column; gap: var(--pad); }
+  .about__body > .lead, .about__body > .text, .about__body > .facts { grid-area: auto; align-self: auto; }
+  .about__body > .facts { margin-top: calc(var(--pad) * 0.5); }
+  .about .skills { grid-area: skills; }
+  .facts__list { column-gap: clamp(1.25rem, 0.5rem + 2vw, 3rem); }
+}
+@media (min-width: 1100px) { .about__body .fact { grid-template-columns: 1.8rem minmax(0, 1fr); gap: 0.1rem 0.5rem; } .about__body .facts__list { column-gap: 1.5rem; } }
