@@ -1725,3 +1725,15 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .facts__label { font-family: var(--f-text); font-weight: 400; font-size: var(--fs-text); color: var(--text); }
 .fact__title { font-size: var(--fs-text) !important; }
 .fact__text { font-size: var(--fs-text) !important; max-width: none; }
+
+/* Панель слева: ссылки того же размера, что и все кнопки сайта */
+@media (min-width: 1024px) {
+  .side__foot .blink, .side__foot .blink--mail, .side__foot .blink:not(.blink--mail) {
+    font-size: var(--fs-small) !important; letter-spacing: 0.05em; min-height: 2.25rem; padding-inline: 1.4rem !important;
+  }
+  .side__foot { gap: 0.75rem 1rem !important; }
+}
+
+/* Подсказка у «Прикрепить ТЗ»: тот же шрифт и размер, что у подсказок в полях («Ваше имя», «О проекте») */
+.attach__name { font-family: var(--f-text); font-size: var(--fs-text); font-weight: 400; line-height: 1.5; color: var(--muted); }
+.attach.has-file .attach__name { color: var(--text); }
