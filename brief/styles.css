@@ -387,3 +387,8 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
   margin-right: 0.45rem; margin-top: 0.15em;
   font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; color: var(--muted);
 }
+
+/* Номера в скобках приподняты над словом, как индекс на основном сайте */
+.intro__list strong::before, .done__steps strong::before {
+  vertical-align: baseline; position: relative; top: -0.6em; margin-top: 0; margin-right: 0.35rem; font-size: 0.72rem;
+}
