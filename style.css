@@ -1640,3 +1640,13 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (min-width: 1024px) {
   .side__foot .blink, .side__foot .blink--mail, .side__foot .blink:not(.blink--mail) { font-size: clamp(0.6rem, 3.3cqw, 0.75rem) !important; letter-spacing: 0.02em; }
 }
+
+/* Панель слева: почта и три соцссылки одного шрифта и размера, идут подряд и переносятся по месту:
+   почта + Telegram в первой строке, Pinterest + Instagram во второй */
+@media (min-width: 1024px) {
+  .side__foot::before { display: none !important; }
+  .side__foot .blink, .side__foot .blink--mail, .side__foot .blink:not(.blink--mail) {
+    order: 0 !important; flex: 0 0 auto !important; margin: 0 !important;
+    font-size: clamp(0.6rem, 3.6cqw, 0.78rem) !important; letter-spacing: 0.03em; padding-inline: 1.1rem !important;
+  }
+}
