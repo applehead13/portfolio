@@ -1450,3 +1450,18 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .footer { min-height: clamp(20rem, 52vh, 34rem); }
 .footer__inner { padding-top: var(--section); }
 .footer__big { margin-top: 0 !important; margin-bottom: 40px !important; }
+
+/* ===== Разделитель между блоками: ряд из пяти квадратиков, левый светлый, дальше тускнее ===== */
+.section::before {
+  content: "";
+  display: block;
+  width: 5.4rem;
+  height: 0.5rem;
+  margin-bottom: var(--pad);
+  background:
+    linear-gradient(var(--text), var(--text)) 0 0 / 0.5rem 0.5rem no-repeat,
+    linear-gradient(var(--muted), var(--muted)) 1.2rem 0 / 0.5rem 0.5rem no-repeat,
+    linear-gradient(var(--muted), var(--muted)) 2.4rem 0 / 0.5rem 0.5rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--muted) 55%, transparent), color-mix(in srgb, var(--muted) 55%, transparent)) 3.6rem 0 / 0.5rem 0.5rem no-repeat,
+    linear-gradient(color-mix(in srgb, var(--muted) 30%, transparent), color-mix(in srgb, var(--muted) 30%, transparent)) 4.8rem 0 / 0.5rem 0.5rem no-repeat;
+}
