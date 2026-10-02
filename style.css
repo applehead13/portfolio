@@ -1748,3 +1748,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* «Заполнить бриф»: блок шире (кнопка растянута), описание под ней длиннее и заканчивается ровно по границе кнопки */
 .contacts__brief { width: min(100%, 28rem); }
+
+/* Факты: одинаковые отступы между номером, названием и текстом в каждой карточке.
+   Раньше соседние факты в одной строке растягивались по высоте, и пустое место делилось между номером, названием и текстом по-разному */
+.facts__list { align-items: start; row-gap: 1.5rem; }
+.fact, .about__body .fact { display: flex !important; flex-direction: column; align-items: flex-start; gap: 0.6rem !important; padding: 0 !important; }
+.fact::before { margin: 0 !important; padding: 0 !important; line-height: 1; }
+.fact__title, .fact__text { margin: 0; }
+.fact__title { line-height: 1.35; }
+.fact__text { line-height: 1.5; }
