@@ -333,4 +333,38 @@
     });
   });
   form.elements.agree.addEventListener('change', function () { form.querySelector('.check').classList.remove('is-invalid'); });
+
+  /* Эффект при прокрутке на фото в «Обо мне»: волна и разъезд цветов зависят от скорости прокрутки.
+     Когда фото стоит на месте, фильтр полностью выключен, помех нет. */
+  var fxTargets = document.querySelectorAll('.about .gallery');
+  var fxDisp = document.getElementById('fx-disp');
+  var fxR = document.getElementById('fx-r');
+  var fxB = document.getElementById('fx-b');
+  if (fxTargets.length && fxDisp && !reduce) {
+    var lastY = window.scrollY, vel = 0, running = false;
+    var onFxScroll = function () {
+      var y = window.scrollY;
+      vel += (y - lastY) * 0.35;
+      lastY = y;
+      if (!running) { running = true; requestAnimationFrame(fxTick); }
+    };
+    var fxTick = function () {
+      vel *= 0.86;                                   /* плавно затухает */
+      var k = Math.min(1, Math.abs(vel) / 45);       /* сила эффекта 0..1 */
+      if (k < 0.015) {
+        fxTargets.forEach(function (t) { t.style.filter = ''; t.style.transform = ''; });
+        vel = 0; running = false; return;
+      }
+      var sign = vel < 0 ? -1 : 1;
+      fxDisp.setAttribute('scale', (k * 32).toFixed(1));
+      fxR.setAttribute('dx', (k * 6 * sign).toFixed(1));
+      fxB.setAttribute('dx', (-k * 6 * sign).toFixed(1));
+      fxTargets.forEach(function (t) {
+        t.style.filter = 'url(#scroll-fx)';
+        t.style.transform = 'skewY(' + (sign * k * 1.6).toFixed(2) + 'deg)';
+      });
+      requestAnimationFrame(fxTick);
+    };
+    window.addEventListener('scroll', onFxScroll, { passive: true });
+  }
 })();

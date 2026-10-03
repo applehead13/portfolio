@@ -1971,3 +1971,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .stage-card__title { margin-top: 1rem; }
 .stage-card__desc { text-wrap: wrap; }
 .stage-card { min-height: 0; }
+
+/* Эффект прокрутки на фото в «Обо мне» использует transform: даём ему плавность и не ломаем появление */
+.about .gallery { will-change: filter; }
