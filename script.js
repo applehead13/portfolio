@@ -225,7 +225,7 @@
     document.addEventListener('mousemove', function (e) {
       tx = e.clientX; ty = e.clientY;
       if (!seen) { seen = true; cur.classList.add('is-on'); }
-      cur.classList.toggle('is-hover', !!e.target.closest('a, button, label, input, select, textarea, .price'));
+      cur.classList.toggle('is-hover', !!e.target.closest('a, button, label, input, select, textarea, .price, [data-gallery]'));
     });
     document.addEventListener('mousedown', function () { cur.classList.add('is-down'); });
     document.addEventListener('mouseup', function () { cur.classList.remove('is-down'); });
