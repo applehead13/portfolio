@@ -227,19 +227,21 @@ function buildQuestion(q) {
   let field;
   if (q.type === 'textarea' || q.type === 'links') {
     field = el('textarea', {
-      class: 'input input--area' + (q.type === 'links' ? ' input--links' : ''),
+      class: 'field__input field__area' + (q.type === 'links' ? ' input--links' : ''),
       id: fid, name: q.key, rows: q.type === 'links' ? '3' : '4',
       placeholder: q.type === 'links' ? 'https://...' : 'Ваш ответ',
       'data-field': ''
     });
     field.addEventListener('input', () => grow(field));
-    wrap.append(field);
+    wrap.append(el('div', { class: 'field' }));
+    wrap.lastChild.append(field);
   } else if (q.type === 'text') {
     field = el('input', {
-      class: 'input', id: fid, name: q.key, type: 'text',
+      class: 'field__input', id: fid, name: q.key, type: 'text',
       placeholder: q.placeholder || '', autocomplete: q.autocomplete || 'off', 'data-field': ''
     });
-    wrap.append(field);
+    wrap.append(el('div', { class: 'field' }));
+    wrap.lastChild.append(field);
   } else if (q.type === 'files') {
     wrap.append(buildDrop(fid));
   } else if (q.type === 'consent') {
@@ -438,7 +440,8 @@ function applyDraft(d) {
 function updateChrome() {
   const idx = state.view === 'step' ? state.step : (state.view === 'done' ? total - 1 : -1);
   $('#count').textContent = (state.view === 'intro' ? '00' : pad2(idx + 1)) + ' / ' + pad2(total);
-  $('#bar').style.setProperty('--p', (state.view === 'intro' ? 0 : state.view === 'done' ? 100 : ((idx + 1) / total) * 100) + '%');
+  /* Прогресс брифа рисует полоса на левой панели, как прогресс прокрутки на основном сайте */
+  $('#side').style.setProperty('--p', state.view === 'intro' ? 0 : state.view === 'done' ? 1 : (idx + 1) / total);
   const showDock = state.view === 'step';
   $('#btn-clear-all').hidden = !showDock;
   if (!showDock) { $('#saved').textContent = ''; }

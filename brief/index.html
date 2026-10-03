@@ -12,29 +12,65 @@
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=1791038313">
   <link rel="preload" href="../fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=1791033341">
+  <script>document.documentElement.classList.add('js')</script>
+  <!-- Общие стили основного сайта: те же цвета, шрифты, кнопки, поля, левая панель -->
+  <link rel="stylesheet" href="../style.css?v=1791039949">
+  <link rel="stylesheet" href="styles.css?v=1791039949">
 </head>
-<body>
+<body class="brief">
 
-  <!-- Верхняя панель: на сайт, счётчик этапов и полоса прогресса -->
-  <header class="top">
-    <a class="top__brand" href="../" aria-label="Вернуться на сайт">Полина Гусева <span>— веб-дизайнер</span></a>
-    <div class="top__right">
-      <span class="top__saved" id="saved" aria-live="polite"></span>
-      <button class="top__clear" type="button" id="btn-clear-all" hidden>Стереть ответы</button>
-      <span class="top__count" id="count" aria-live="polite">00 / 07</span>
+<div class="layout" id="top">
+
+  <!-- Левая закреплённая колонка: та же ширина и содержимое, что на основном сайте -->
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel">
+        <span class="side__toggle-text">Меню</span>
+      </button>
     </div>
-    <div class="top__bar" aria-hidden="true"><i id="bar"></i></div>
-  </header>
 
-  <main class="app" id="app">
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="../#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="../#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="../#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="../#contacts"><span class="nav__text">Контакты</span></a>
+        <a class="nav__link is-active" href="./" aria-current="page"><span class="nav__text">Бриф</span></a>
+      </nav>
+
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Правая часть: бриф -->
+  <main class="pane app" id="app">
+
+    <!-- Состояние: номер этапа, статус сохранения, «Стереть ответы» -->
+    <div class="top">
+      <span class="top__count" id="count" aria-live="polite">00 / 07</span>
+      <div class="top__right">
+        <span class="top__saved" id="saved" aria-live="polite"></span>
+        <button class="top__clear" type="button" id="btn-clear-all" hidden>Стереть ответы</button>
+      </div>
+    </div>
 
     <!-- Вступление -->
     <section class="view view--intro" id="view-intro" aria-labelledby="intro-title">
       <div class="intro__head">
-        <span class="kicker">Бриф</span>
         <h1 class="intro__title" id="intro-title">Бриф на сайт</h1>
-        <p class="intro__lead">Несколько вопросов, чтобы я поняла ваш бизнес и сделала сайт, который работает на задачу. Займёт около 15–20 минут.</p>
+        <p class="intro__lead">Несколько вопросов, чтобы я поняла ваш бизнес и сделала сайт, который работает на задачу. Заполнить можно за 15–20 минут.</p>
       </div>
       <div class="intro__body">
         <ol class="intro__list">
@@ -56,7 +92,6 @@
     <!-- Финальный экран -->
     <section class="view view--done" id="view-done" aria-labelledby="done-title" hidden>
       <div class="done__photo">
-        <!-- Фото: путь можно поменять, сейчас то же, что на главной странице -->
         <img src="../img/portrait.jpg" alt="Полина Гусева" width="960" height="1280">
       </div>
       <div class="done__body">
@@ -68,7 +103,7 @@
           <span class="kicker">Что будет дальше</span>
           <ol class="done__steps">
             <li><strong>Изучу ответы и материалы.</strong><span>Если чего-то не хватит, уточню в переписке.</span></li>
-            <li><strong>В течение 1–2 рабочих дней напишу вам.</strong><span>Предложу удобное время для созвона или сразу следующий шаг.</span></li>
+            <li><strong>В течение 1–2 рабочих дней напишу вам.</strong><span>Предложу удобное время для созвона или сразу следующие шаги.</span></li>
             <li><strong>Согласуем задачи, сроки и стоимость.</strong><span>И только после этого начнём работу.</span></li>
           </ol>
         </div>
@@ -80,34 +115,34 @@
       </div>
     </section>
 
-  </main>
+    <!-- Документы -->
+    <footer class="legal" id="legal">
+      <div class="legal__row">
+        <span>© 2026 Полина Гусева. ИНН 472600004020</span>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Написать в Telegram</a>
+      </div>
+      <nav class="legal__docs" aria-label="Документы">
+        <a class="doclink" href="../docs/privacy.html" data-doc="privacy">Политика конфиденциальности</a>
+        <a class="doclink" href="../docs/consent.html" data-doc="consent">Согласие на обработку персональных данных</a>
+      </nav>
+    </footer>
 
-  <!-- Нижняя навигация: назад, точки-этапы, далее -->
-  <nav class="dock" id="dock" aria-label="Навигация по этапам" hidden>
-    <div class="dock__inner">
-      <button class="btn btn--ghost" type="button" id="btn-prev"><span class="btn__label">Назад</span></button>
-      <div class="dots" id="dots" role="list"></div>
-      <button class="btn" type="button" id="btn-next"><span class="btn__label">Далее</span></button>
-    </div>
-  </nav>
-
-  <!-- Документы -->
-  <footer class="legal" id="legal">
-    
-    <div class="legal__row">
-      <span>© 2026 Полина Гусева. ИНН 472600004020</span>
-      <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Написать в Telegram</a>
-    </div>
-    <nav class="legal__docs" aria-label="Документы">
-      <!-- Пока ссылки-заглушки, позже подставим страницы документов -->
-      <a class="doclink" href="../docs/privacy.html" data-doc="privacy">Политика конфиденциальности</a>
-      <a class="doclink" href="../docs/consent.html" data-doc="consent">Согласие на обработку персональных данных</a>
+    <!-- Нижняя навигация: назад, этапы-квадраты, далее. Прилипает к низу экрана внутри правой части -->
+    <nav class="dock" id="dock" aria-label="Навигация по этапам" hidden>
+      <div class="dock__inner">
+        <button class="btn btn--ghost" type="button" id="btn-prev"><span class="btn__label">Назад</span></button>
+        <div class="dots" id="dots" role="list"></div>
+        <button class="btn" type="button" id="btn-next"><span class="btn__label">Далее</span></button>
+      </div>
     </nav>
-  </footer>
+
+  </main>
+</div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="config.js?v=1791033341"></script>
-  <script src="app.js?v=1791033341"></script>
+  <script src="config.js?v=1791039949"></script>
+  <script src="app.js?v=1791039949"></script>
+  <script src="ui.js?v=1791039949"></script>
 </body>
 </html>
