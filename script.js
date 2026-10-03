@@ -501,6 +501,23 @@
       el.setAttribute('data-text', text);
       el.classList.add('glitch');
     });
+
+    /* Один раз по мере прокрутки: когда заголовок появился на экране и напечатался, помехи проигрываются сами (на телефоне и на ПК).
+       Дальше на ПК они работают только по наведению. */
+    var played = function (el) {
+      el.classList.add('is-glitching');
+      setTimeout(function () { el.classList.remove('is-glitching'); }, 1700);
+    };
+    if ('IntersectionObserver' in window) {
+      var glitchIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) { return; }
+          glitchIo.unobserve(e.target);
+          setTimeout(function () { played(e.target); }, 900);
+        });
+      }, { threshold: 0.6 });
+      document.querySelectorAll('.glitch').forEach(function (el) { glitchIo.observe(el); });
+    }
   }
 
   /* Помехи на фото: плитки работ и фото на первом экране.

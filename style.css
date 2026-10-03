@@ -2175,3 +2175,34 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .footer__up { grid-column: 6 / span 2; justify-self: start !important; }
   .footer__docs { grid-column: 8 / -1; justify-self: end; }
 }
+
+/* Помехи на заголовках один раз по мере прокрутки, на любом экране; после этого на ПК только по наведению */
+.glitch { position: relative; }
+.glitch.is-glitching::before {
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0; width: 100%;
+  pointer-events: none;
+  text-transform: inherit; letter-spacing: inherit; line-height: inherit; text-wrap: inherit; white-space: inherit;
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(10% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  opacity: 1;
+  animation: glitch-scroll 0.8s steps(2, end) 2 forwards;
+}
+.footer__big.glitch.is-glitching::before { white-space: nowrap; font-size: inherit; }
+@keyframes glitch-scroll {
+  0%   { clip-path: var(--move1); transform: translate(0, -0.2em); }
+  10%  { clip-path: var(--move2); transform: translate(-0.2em, 0.2em); }
+  20%  { clip-path: var(--move3); transform: translate(0.2em, 0); }
+  30%  { clip-path: var(--move4); transform: translate(-0.2em, 0.2em); }
+  40%  { clip-path: var(--move5); transform: translate(0.2em, -0.2em); }
+  50%  { clip-path: var(--move6); transform: translate(-0.2em, 0.2em); }
+  60%  { clip-path: var(--move1); transform: translate(0.2em, -0.2em); }
+  70%  { clip-path: var(--move3); transform: translate(-0.2em, 0.2em); }
+  80%  { clip-path: var(--move2); transform: translate(0.2em, -0.2em); }
+  90%  { clip-path: var(--move4); transform: translate(-0.2em, 0.2em); }
+  100% { clip-path: var(--move1); transform: translate(0); opacity: 0; }
+}
