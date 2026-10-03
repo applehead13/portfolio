@@ -1807,3 +1807,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .hero__lower { align-items: center; }
   .done__actions, .intro__actions { justify-content: center; }
 }
+
+/* Подвал: «Веб-дизайнер» обычными буквами, не капсом */
+.footer__meta .caps { text-transform: none; }
