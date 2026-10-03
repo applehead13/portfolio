@@ -906,7 +906,7 @@ html.lenis, html.lenis body { height: auto; }
   position: absolute;
   inset: 0;
   background: var(--bg);
-  opacity: calc(1 - var(--fp, 0));
+  opacity: var(--fv, 1);
   pointer-events: none;
   z-index: 2;
 }

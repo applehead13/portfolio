@@ -83,6 +83,8 @@
       var r = footer.getBoundingClientRect();
       var fp = (window.innerHeight - r.top) / Math.max(1, r.height);
       footer.style.setProperty('--fp', Math.min(1, Math.max(0, fp)).toFixed(3));
+      /* Тёмная завеса держится дольше обычного: футер проявляется из темноты и «загорается» только к концу страницы */
+      footer.style.setProperty('--fv', Math.pow(1 - Math.min(1, Math.max(0, fp)), 0.5).toFixed(3));
     }
 
     var line = window.innerHeight * 0.4;
