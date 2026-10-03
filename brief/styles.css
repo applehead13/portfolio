@@ -410,3 +410,8 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
   .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
   .blink { background-size: 100% 100%; }
 }
+
+/* Ссылки в тексте: обычное подчёркивание */
+.doclink, .check__text .doclink { text-decoration: underline; text-decoration-thickness: auto; text-underline-offset: auto; text-decoration-color: currentColor; }
+.check__text .doclink { color: var(--text); }
+.check__text .doclink:hover { color: var(--accent-text, #3f9669); }

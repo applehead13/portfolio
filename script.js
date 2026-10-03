@@ -420,9 +420,7 @@
 
     function tick() {
       var t = performance.now() / 1000, dt = Math.min(0.1, t - lastT); lastT = t;
-      var y = window.scrollY, dy = y - lastY; lastY = y;
       J *= Math.exp(-dt * 10);
-      J += Math.min(Math.abs(dy) * 10 / window.innerHeight, 5);
       var strength = Math.min(1, J);
       var img = gal.querySelector('.gallery__slide.is-active') || gal.querySelector('.gallery__slide');
       if (visible && strength > 0.012 && img && img.naturalWidth) {
@@ -440,7 +438,10 @@
       if (J > 0.004) { requestAnimationFrame(tick); } else { cv.style.opacity = '0'; running = false; }
     }
     window.addEventListener('scroll', function () {
-      if (!running) { running = true; lastT = performance.now() / 1000; lastY = window.scrollY; requestAnimationFrame(tick); }
+      var y = window.scrollY;
+      J += Math.min(Math.abs(y - lastY) * 10 / window.innerHeight, 5);
+      lastY = y;
+      if (!running) { running = true; lastT = performance.now() / 1000; requestAnimationFrame(tick); }
     }, { passive: true });
   })();
 
@@ -589,9 +590,7 @@
       }
       function tick() {
         var t = performance.now() / 1000, dt = Math.min(0.1, t - lastT); lastT = t;
-        var y = window.scrollY, dy = y - lastY; lastY = y;
         J *= Math.exp(-dt * 10);
-        J += Math.min(Math.abs(dy) * 10 / window.innerHeight, 5);
         if (hovering) { hoverLevel = Math.max(hoverLevel * Math.exp(-dt * 4), 0.22 + (Math.random() > 0.93 ? 0.35 : 0)); }
         else { hoverLevel *= Math.exp(-dt * 7); }
         var level = Math.max(Math.min(1, J), hoverLevel);
@@ -615,8 +614,17 @@
         }
         requestAnimationFrame(tick);
       }
-      function start() { if (!running) { running = true; lastT = performance.now() / 1000; lastY = window.scrollY; requestAnimationFrame(tick); } }
-      window.addEventListener('scroll', start, { passive: true });
+      function start() { if (!running) { running = true; lastT = performance.now() / 1000; requestAnimationFrame(tick); } }
+      /* Скорость прокрутки копится прямо в обработчике прокрутки: так работает и на телефоне, где событий мало */
+      function onScroll() {
+        var y = window.scrollY;
+        J += Math.min(Math.abs(y - lastY) * 10 / window.innerHeight, 5);
+        lastY = y;
+        start();
+      }
+      /* На компьютере у плиток помехи только при наведении; на телефоне, где наведения нет, они идут при прокрутке. Фото первого экрана: при прокрутке везде */
+      var scrollOn = item.cls === 'hero__fx' || !canHover;
+      if (scrollOn) { window.addEventListener('scroll', onScroll, { passive: true }); }
       if (item.hoverHost && canHover) {
         item.hoverHost.addEventListener('mouseenter', function () { hovering = true; hoverLevel = 1; start(); });
         item.hoverHost.addEventListener('mouseleave', function () { hovering = false; start(); });
@@ -670,9 +678,11 @@
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('is-typed'); typeObs.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px', threshold: 0 });
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
+      /* Вложенные блоки (например «ИНН» внутри строки подвала) не оборачиваем второй раз: печатается внешний */
+      if (el.parentElement && el.parentElement.closest('[data-typed]')) { return; }
       typeify(el);
       el.classList.add('typing');
       typeObs.observe(el);
@@ -689,4 +699,28 @@
       });
     });
   }
+
+  /* Временная сетка-подсказка: 12 прозрачных колонок поверх прокручиваемой части (без левой панели).
+     Клавиша G включает и выключает; адрес с ?grid=0 открывает сайт без неё. */
+  (function () {
+    var pane = document.querySelector('.pane');
+    if (!pane || /[?&]grid=0/.test(location.search)) { return; }
+    var ov = document.createElement('div');
+    ov.className = 'grid-overlay';
+    ov.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < 12; i++) { ov.appendChild(document.createElement('i')); }
+    document.body.appendChild(ov);
+    function place() {
+      var r = pane.getBoundingClientRect();
+      ov.style.left = r.left + 'px';
+      ov.style.width = r.width + 'px';
+    }
+    place();
+    window.addEventListener('resize', place);
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'g' || e.key === 'G' || e.key === 'п' || e.key === 'П') && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) {
+        ov.classList.toggle('is-off');
+      }
+    });
+  })();
 })();

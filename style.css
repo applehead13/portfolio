@@ -2114,3 +2114,30 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .hero__figure { position: relative; }
 .hero__figure:hover .hero__fx { filter: none; }
 .js .hero__figure, .js .gallery { opacity: 1 !important; transform: none !important; filter: none; }
+
+/* Ссылки в тексте (политика, согласие и др.): обычное подчёркивание самих слов, без отступа от текста */
+.doclink, .check__text .doclink, .doc__body a { text-decoration: underline; text-decoration-thickness: auto; text-underline-offset: auto; text-decoration-color: currentColor; }
+.check__text .doclink { color: var(--text); }
+.check__text .doclink:hover { color: var(--accent-text); }
+
+/* ===== Временная сетка-подсказка: колонки только над прокручиваемой частью ===== */
+.grid-overlay {
+  position: fixed; top: 0; bottom: 0; z-index: 90; pointer-events: none;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap);
+  padding-inline: var(--gutter);
+}
+.grid-overlay i { background: rgba(79, 191, 133, 0.11); border-inline: 1px solid rgba(79, 191, 133, 0.28); }
+.grid-overlay.is-off { display: none; }
+@media (max-width: 1023px) { .grid-overlay { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid-overlay i:nth-child(n+5) { display: none; } }
+
+/* Телефон: подсвеченная услуга целиком внутри верхней и нижней линии, не выходит за их края; квадратик внутри плашки, заголовок сдвигается */
+@media (hover: none), (max-width: 767px) {
+  .price.is-active { box-shadow: none !important; }
+  .price::before { left: 0.3rem; }
+  .price.is-active .price__title, .price.is-active .price__desc { transform: translateX(1.1rem); }
+  .price.is-active .price__fact { transform: translateX(0.55rem); }
+  .price.is-active .price__fact:nth-of-type(2) { transform: translateX(-0.55rem); }
+}
+@media (hover: none), (max-width: 767px) {
+  .price.is-active .price__title, .price.is-active .price__desc { width: calc(100% - 1.4rem); }
+}
