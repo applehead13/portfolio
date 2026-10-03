@@ -443,4 +443,18 @@
       if (!running) { running = true; lastT = performance.now() / 1000; lastY = window.scrollY; requestAnimationFrame(tick); }
     }, { passive: true });
   })();
+
+  /* Этапы работы: аккордеон, открыт один этап */
+  var stepItems = document.querySelectorAll('.step-item');
+  stepItems.forEach(function (item) {
+    var btn = item.querySelector('.step-item__head');
+    btn.addEventListener('click', function () {
+      var willOpen = !item.classList.contains('is-open');
+      stepItems.forEach(function (o) {
+        o.classList.remove('is-open');
+        o.querySelector('.step-item__head').setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) { item.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
 })();

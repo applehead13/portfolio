@@ -1978,3 +1978,34 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Холст с эффектом помех поверх фото: скрыт, пока нет прокрутки */
 .gallery__fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; z-index: 1; transition: none; }
 .about .gallery { will-change: auto; }
+
+/* ===== Этапы работы: аккордеон. Открыт один этап, остальные приглушены; значок + превращается в × ===== */
+.steps { margin-top: var(--pad); display: block; }
+.step-item { border-top: 1px solid var(--line); }
+.step-item:last-child { border-bottom: 1px solid var(--line); }
+.step-item__h { margin: 0; font: inherit; }
+.step-item__head {
+  width: 100%; display: grid; grid-template-columns: 4.4rem minmax(0, 1fr) 2rem; align-items: baseline; column-gap: 0.5rem;
+  padding: clamp(1rem, 0.8rem + 0.8vw, 1.6rem) 0; text-align: left; color: var(--muted); cursor: pointer;
+  transition: color 0.35s var(--ease);
+}
+.step-item__num { font-family: var(--f-text); font-size: var(--fs-small); }
+.step-item__num::before { content: "[ "; } .step-item__num::after { content: " ]"; }
+.step-item__title { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.2; text-transform: uppercase; }
+.step-item__icon { position: relative; justify-self: end; align-self: center; width: 1rem; height: 1rem; }
+.step-item__icon::before, .step-item__icon::after { content: ""; position: absolute; left: 0; top: 50%; width: 100%; height: 2px; margin-top: -1px; background: currentColor; transition: transform 0.45s var(--ease); }
+.step-item__icon::after { transform: rotate(90deg); }
+.step-item__head:hover, .step-item.is-open .step-item__head { color: var(--text); }
+.step-item.is-open .step-item__icon::before { transform: rotate(45deg); }
+.step-item.is-open .step-item__icon::after { transform: rotate(-45deg); }
+.step-item__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease); }
+.step-item.is-open .step-item__body { grid-template-rows: 1fr; }
+.step-item__inner { overflow: hidden; padding-left: 4.9rem; }
+.step-item__inner p { padding-bottom: clamp(1rem, 0.8rem + 0.8vw, 1.6rem); max-width: 60ch; color: var(--text); font-size: var(--fs-text); line-height: var(--lh-text); opacity: 0; transform: translateY(-0.35rem); transition: opacity 0.4s var(--ease), transform 0.5s var(--ease); }
+.step-item.is-open .step-item__inner p { opacity: 1; transform: none; transition-delay: 0.1s; }
+@media (max-width: 767px) { .step-item__head { grid-template-columns: 3.4rem minmax(0, 1fr) 1.5rem; } .step-item__inner { padding-left: 3.9rem; } }
+@media (prefers-reduced-motion: reduce) { .step-item__body, .step-item__inner p, .step-item__icon::before, .step-item__icon::after { transition: none; } }
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
