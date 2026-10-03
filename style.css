@@ -2410,3 +2410,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   opacity: 1 !important; transform: none !important; animation: none !important;
 }
 .js .side__bar, .js .side__role, .js .side__foot { transition: none !important; }
+
+/* «Отправить»: проявляется последней, так же, как кнопки первого экрана */
+.js .form .btn--wide[data-reveal]:not(.is-in) { opacity: 0 !important; pointer-events: none; }
+.js .form .btn--wide[data-reveal].is-in { animation: qfade 0.4s var(--ease) both; }

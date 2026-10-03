@@ -180,6 +180,12 @@ function el(tag, attrs, text) {
   return node;
 }
 
+/* Кнопки везде одинаковые, как на основном сайте: текст в span.btn__label, скобки по краям рисует стиль */
+function btnLabel(btn, text) {
+  btn.append(el('span', { class: 'btn__label' }, text));
+  return btn;
+}
+
 function fmtSize(bytes) {
   if (bytes < 1024 * 1024) { return Math.max(1, Math.round(bytes / 1024)) + ' КБ'; }
   return (bytes / 1024 / 1024).toFixed(1).replace('.', ',') + ' МБ';
@@ -218,9 +224,11 @@ function buildQuestion(q) {
   const fid = 'f-' + q.id;
 
   const head = el('div', { class: 'q__head' });
-  head.append(el('label', { class: 'q__label', for: fid }, nb(q.label)));
-  if (q.important) { head.append(el('span', { class: 'tag' }, 'Важно')); }
-  else if (q.required && q.type !== 'consent') { head.append(el('span', { class: 'req' }, 'обязательно')); }
+  const label = el('label', { class: 'q__label', for: fid }, nb(q.label));
+  /* «Важно» стоит сверху справа от вопроса, как показатель степени (так же, как номера в ценах на сайте) */
+  if (q.important) { label.append(el('span', { class: 'tag' }, 'Важно')); }
+  head.append(label);
+  if (!q.important && q.required && q.type !== 'consent') { head.append(el('span', { class: 'req' }, 'обязательно')); }
   wrap.append(head);
   if (q.hint) { wrap.append(el('p', { class: 'q__hint', id: fid + '-hint' }, nb(q.hint))); }
 
@@ -299,7 +307,7 @@ function renderFiles() {
     const li = el('li', { class: 'file' });
     const name = el('span', { class: 'file__name' }, f.name);
     name.append(el('span', { class: 'file__size' }, fmtSize(f.size)));
-    const del = el('button', { class: 'file__del', type: 'button', 'aria-label': 'Удалить файл ' + f.name }, 'Удалить');
+    const del = btnLabel(el('button', { class: 'btn btn--ghost file__del', type: 'button', 'aria-label': 'Удалить файл ' + f.name }), 'Удалить');
     del.addEventListener('click', () => { state.files.splice(i, 1); renderFiles(); $('#drop-msg').textContent = ''; });
     li.append(name, del);
     list.append(li);
@@ -315,7 +323,7 @@ function buildSteps() {
       el('div', { class: 'stage__num' }, st.num),
       el('h2', { class: 'stage__title', id: 'st-' + si, tabindex: '-1' }, nb(st.title)),
       el('p', { class: 'stage__lead' }, nb(st.lead)),
-      el('button', { class: 'stage__clear', type: 'button', 'data-clear': String(si) }, 'Очистить этот этап'));
+      btnLabel(el('button', { class: 'btn btn--ghost stage__clear', type: 'button', 'data-clear': String(si) }), 'Очистить этот этап'));
     const fields = el('div', { class: 'fields' });
     st.questions.forEach(q => fields.append(buildQuestion(q)));
     sec.append(stage, fields);

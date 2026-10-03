@@ -82,9 +82,14 @@
   /* Элементы, которые раньше стояли на месте с самого начала, теперь тоже появляются по очереди */
   /* Элементы первого экрана ведёт отдельный сценарий (см. ниже), общая очередь их не трогает */
   document.querySelectorAll('.hero__sub, .hero__actions').forEach(function (el) { el.setAttribute('data-hero', ''); });
+  /* «Контакты»: заголовок, вступление, кнопка «Заполнить бриф» и вся форма стоят на месте сразу, без появления;
+     печатаются только подсказки, а главная кнопка «Отправить» проявляется последней, как кнопки первого экрана */
+  document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); });
+  var sendBtn = document.querySelector('#lead-form .btn--wide');
+  if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); }
   /* «Работы»: заголовок блока, плитки с названием работы и годом проявляются сразу, как только попали на экран, не ожидая очереди; в очереди печатается только текст под ними */
   document.querySelectorAll('#works .section__head, #works .card, #prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
-  document.querySelectorAll('.gallery, .footer__up').forEach(function (el) {
+  document.querySelectorAll('.gallery').forEach(function (el) {
     if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
   });
 
@@ -749,12 +754,12 @@
      Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
-      '.about__body > .text', '.fact__p', '.contacts__side .lead',
+      '.about__body > .text', '.fact__p',
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
       '.step-item__inner p',
-      '.contacts__hint', '.field__label', '.check__text', '.attach__name',
-      '.footer__copy span', '.footer__docs a', '.doc__body p', '.doc__body li'
+      '.contacts__hint', '.attach__name',
+      '.doc__body p', '.doc__body li'
     ].join(', ');
 
     function typeify(el) {

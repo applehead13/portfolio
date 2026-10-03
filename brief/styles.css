@@ -20,11 +20,6 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .top__count::after { content: " ]"; }
 .top__right { display: flex; align-items: center; gap: 1rem 1.5rem; }
 .top__saved { white-space: nowrap; }
-.top__clear { position: relative; min-height: 2.75rem; padding: 0 1.1rem; font-family: var(--f-head); font-weight: 700; font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); }
-.top__clear::before, .top__clear::after { content: ""; position: absolute; top: 0.45rem; bottom: 0.45rem; width: 0.3rem; border: 1px solid currentColor; }
-.top__clear::before { left: 0; border-right: 0; }
-.top__clear::after { right: 0; border-left: 0; }
-.top__clear:hover { color: var(--bad); }
 @media (max-width: 699px) { .top__saved { display: none; } }
 
 /* ===== Вступление и финал: сетка из 12 колонок, как на сайте ===== */
@@ -64,11 +59,7 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .stage__title { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-h2); line-height: 1.1; text-transform: uppercase; color: var(--accent-text); text-wrap: balance; }
 .stage__lead { margin-top: var(--pad); max-width: 38ch; color: var(--muted); }
 .stage__title:focus { outline: 0; }
-.stage__clear { margin-top: 1.25rem; font-size: var(--fs-small); color: var(--muted); text-decoration: none; position: relative; padding: 0.35rem 1rem; }
-.stage__clear::before, .stage__clear::after { content: ""; position: absolute; top: 0; bottom: 0; width: 0.3rem; border: 1px solid currentColor; opacity: 0.55; }
-.stage__clear::before { left: 0; border-right: 0; }
-.stage__clear::after { right: 0; border-left: 0; }
-.stage__clear:hover { color: var(--text); }
+.stage__clear { margin-top: 1.25rem; }
 .fields { margin-top: var(--pad); display: flex; flex-direction: column; gap: calc(var(--pad) * 1.6); }
 @media (min-width: 1024px) {
   .step { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
@@ -80,10 +71,13 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .q { position: relative; display: flex; flex-direction: column; gap: 0.5rem; }
 .q__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.9rem; }
 .q__label { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.25; text-wrap: balance; }
-.tag { display: inline-flex; align-items: center; padding: 0.1rem 0.7rem; position: relative; font-size: var(--fs-small); line-height: 1.4; text-transform: uppercase; letter-spacing: 0.04em; }
-.tag::before, .tag::after { content: ""; position: absolute; top: 0; bottom: 0; width: 0.3rem; border: 1px solid currentColor; }
-.tag::before { left: 0; border-right: 0; }
-.tag::after { right: 0; border-left: 0; }
+/* «Важно»: сверху справа от вопроса, как показатель степени (так же, как номера в ценах на сайте) */
+.q__label .tag {
+  display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; text-transform: none; color: var(--muted);
+}
+.q__label .tag::before { content: "[ "; }
+.q__label .tag::after { content: " ]"; }
 .req { font-size: var(--fs-small); color: var(--muted); }
 .q__hint { color: var(--muted); font-size: var(--fs-small); max-width: 62ch; }
 .q .field__input { font-size: var(--fs-text); }
@@ -117,11 +111,7 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .file { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; font-size: var(--fs-small); border-bottom: 1px solid var(--line); }
 .file__name { min-width: 0; overflow-wrap: anywhere; }
 .file__size { color: var(--muted); white-space: nowrap; margin-left: 0.5rem; }
-.file__del { position: relative; flex: none; min-height: 2.75rem; padding: 0 1.1rem; font-family: var(--f-head); font-weight: 700; font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.05em; }
-.file__del::before, .file__del::after { content: ""; position: absolute; top: 0.4rem; bottom: 0.4rem; width: 0.3rem; border: 1px solid currentColor; }
-.file__del::before { left: 0; border-right: 0; }
-.file__del::after { right: 0; border-left: 0; }
-.file__del:hover { background: var(--accent); }
+.file__del { flex: none; }
 
 /* Согласие */
 .q--consent .q__head { display: none; }
@@ -175,3 +165,6 @@ body.brief .footer__inner { transform: none; }
 .js .brief [data-reveal]:not(.is-in) { opacity: 0 !important; }
 .js .brief [data-reveal].is-in { animation: qfade 0.4s var(--ease) both; }
 .js .intro__list li:not(.is-in)::before, .js .done__steps li:not(.is-in)::before { opacity: 0; }
+
+/* «Далее» всегда залита зелёным сразу (и на компьютере тоже) */
+.dock .btn:not(.btn--ghost)::before { transform: scaleX(1); }
