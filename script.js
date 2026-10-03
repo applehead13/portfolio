@@ -749,6 +749,8 @@
       typeQueue.sort(function (a, b) { return (a.compareDocumentPosition(b) & 4) ? -1 : 1; });
       var el = typeQueue.shift();
       el.classList.add('is-typed');
+      var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
+      if (host) { host.classList.add('is-typed'); }
       if (!onScreen(el)) { typeNext(); return; }
       typeBusy = true;
       setTimeout(function () { typeBusy = false; typeNext(); }, el.__typeDur || 0);

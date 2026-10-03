@@ -2388,3 +2388,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .types__list .chip { display: inline-block; flex: 0 0 auto; }
   .types__list .chip span { display: inline-flex; width: auto !important; justify-content: flex-start; }
 }
+
+/* Квадратики появляются вместе с текстом, к которому относятся, а не висят заранее */
+.js .fact::before, .js .side__note .mark, .js .footer__meta .sq { transition: opacity 0.25s var(--ease); }
+.js .fact:not(.is-typed)::before { opacity: 0; }
+.js .side__note.typing:not(.is-typed) .mark { opacity: 0; }
+.js .footer__meta.typing:not(.is-typed) .sq { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .js .fact::before, .js .side__note .mark, .js .footer__meta .sq { opacity: 1 !important; }
+}
