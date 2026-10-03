@@ -599,4 +599,70 @@
       host.addEventListener('mouseleave', function () { hovering = false; start(); });
     });
   })();
+
+  /* Печать: тексты появляются по буквам, когда блок попадает на экран.
+     Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var TYPE_SEL = [
+      '.hero__sub', '.hero__cap span', '.side__role', '.side__note',
+      '.about__body > .text', '.fact__title', '.fact__text',
+      '.card__title', '.card__desc', '.card__tags',
+      '.price__title', '.price__desc', '.price__label', '.price__value',
+      '.step-item__title', '.step-item__inner p',
+      '.contacts__hint', '.field__label', '.check__text', '.attach__name',
+      '.footer__copy span', '.footer__docs a', '.doc__body p', '.doc__body li'
+    ].join(', ');
+
+    function typeify(el) {
+      if (el.hasAttribute('data-typed')) { return; }
+      el.setAttribute('data-typed', '');
+      var total = 0;
+      var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      var nodes = [];
+      while (walker.nextNode()) { if (walker.currentNode.nodeValue.trim()) { nodes.push(walker.currentNode); } }
+      nodes.forEach(function (node) {
+        var parts = node.nodeValue.split(/([ \t\r\n]+)/);
+        var frag = document.createDocumentFragment();
+        parts.forEach(function (part) {
+          if (!part) { return; }
+          if (/^[ \t\r\n]+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+          var word = document.createElement('span');
+          word.className = 'tw';
+          Array.prototype.forEach.call(part, function (ch) {
+            var c = document.createElement('span');
+            c.className = 'tc';
+            c.style.setProperty('--i', total++);
+            c.textContent = ch;
+            word.appendChild(c);
+          });
+          frag.appendChild(word);
+        });
+        node.parentNode.replaceChild(frag, node);
+      });
+      el.style.setProperty('--ts', Math.min(0.016, 1.5 / Math.max(total, 1)).toFixed(4) + 's');
+    }
+
+    var typeObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-typed'); typeObs.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+
+    document.querySelectorAll(TYPE_SEL).forEach(function (el) {
+      typeify(el);
+      el.classList.add('typing');
+      typeObs.observe(el);
+    });
+
+    /* Описание этапа печатается заново при каждом раскрытии */
+    document.querySelectorAll('.step-item__head').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var p = btn.closest('.step-item').querySelector('.step-item__inner p');
+        if (!p) { return; }
+        p.classList.remove('is-typed');
+        void p.offsetWidth;
+        setTimeout(function () { if (btn.getAttribute('aria-expanded') === 'true') { p.classList.add('is-typed'); } }, 120);
+      });
+    });
+  }
 })();

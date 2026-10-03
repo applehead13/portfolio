@@ -2096,3 +2096,9 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (hover: none) { .work__img { filter: none !important; } }
 .card__media--photo::after { z-index: 1; }
 .work__logo { z-index: 3; }
+
+/* ===== Печать текста: буквы появляются по очереди ===== */
+.tw { display: inline-block; white-space: nowrap; }
+.js .typing .tc { opacity: 0; }
+.js .typing.is-typed .tc { opacity: 1; transition: opacity 0.01s linear calc(var(--i) * var(--ts, 0.014s)); }
+@media (prefers-reduced-motion: reduce) { .js .typing .tc { opacity: 1; } }
