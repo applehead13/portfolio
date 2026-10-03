@@ -735,13 +735,29 @@
         });
         node.parentNode.replaceChild(frag, node);
       });
-      el.style.setProperty('--ts', Math.min(0.016, 1.5 / Math.max(total, 1)).toFixed(4) + 's');
+      var ts = Math.min(0.016, 1.5 / Math.max(total, 1));
+      el.style.setProperty('--ts', ts.toFixed(4) + 's');
+      el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
 
+    /* Тексты печатаются по очереди, сверху вниз, сплошным полотном: следующий начинает, когда предыдущий допечатался.
+       Тексты, которые уже ушли с экрана, проявляются сразу, чтобы очередь не копилась. */
+    var typeQueue = [], typeBusy = false;
+    function onScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
+    function typeNext() {
+      if (typeBusy || !typeQueue.length) { return; }
+      typeQueue.sort(function (a, b) { return (a.compareDocumentPosition(b) & 4) ? -1 : 1; });
+      var el = typeQueue.shift();
+      el.classList.add('is-typed');
+      if (!onScreen(el)) { typeNext(); return; }
+      typeBusy = true;
+      setTimeout(function () { typeBusy = false; typeNext(); }, el.__typeDur || 0);
+    }
     var typeObs = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-typed'); typeObs.unobserve(e.target); }
+        if (e.isIntersecting) { typeObs.unobserve(e.target); typeQueue.push(e.target); }
       });
+      typeNext();
     }, { rootMargin: '0px', threshold: 0 });
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
