@@ -1856,3 +1856,7 @@ body, .text, .hero__sub, .price__desc, .fact__text, .card__desc, .contacts__hint
   .about__body > .facts { margin-top: calc(var(--pad) * 0.5); }
 }
 .facts__list { display: flex !important; flex-direction: column; gap: 1.5rem; }
+
+/* Логотип в левой панели: «— веб-дизайнер» тёмно-зелёным */
+:root { --accent-deep: #0b2a1b; }
+.side__name span:last-child { color: var(--accent-deep) !important; }
