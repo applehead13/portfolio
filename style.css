@@ -2012,3 +2012,13 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Сноска про Instagram в панели слева */
 .side__note { flex: 1 1 100%; margin: 0.25rem 0 0; font-size: 0.75rem; line-height: 1.35; color: var(--side-soft, var(--muted)); max-width: 40ch; }
+
+/* Телефон: услуги подсвечиваются по очереди по мере прокрутки (то же, что при наведении на компьютере) */
+@media (hover: none), (max-width: 767px) {
+  .price.is-active { background: transparent; background-color: color-mix(in srgb, var(--text) 6%, var(--bg)); box-shadow: -0.75rem 0 0 color-mix(in srgb, var(--text) 6%, var(--bg)), 0.75rem 0 0 color-mix(in srgb, var(--text) 6%, var(--bg)); }
+  .price.is-active::before { transform: scale(1); }
+  .price.is-active .price__title, .price.is-active .price__desc { transform: translateX(0.9rem); }
+  .price.is-active .price__num, .price.is-active .price__desc { color: var(--text); }
+  .price.is-active .price__label { color: var(--text); }
+  .prices.has-active .price:not(.is-active) { opacity: 0.4; }
+}

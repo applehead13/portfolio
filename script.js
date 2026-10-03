@@ -457,4 +457,33 @@
       if (willOpen) { item.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); }
     });
   });
+
+  /* Телефон: подсвечиваем ту услугу в ценах, которая сейчас ближе всего к середине экрана */
+  var priceList = document.querySelector('.prices');
+  var touchMq = window.matchMedia('(hover: none), (max-width: 767px)');
+  if (priceList) {
+    var priceRows = Array.prototype.slice.call(priceList.querySelectorAll('.price'));
+    var priceTick = false;
+    var updatePrices = function () {
+      priceTick = false;
+      if (!touchMq.matches) {
+        priceRows.forEach(function (r) { r.classList.remove('is-active'); });
+        priceList.classList.remove('has-active');
+        return;
+      }
+      var mid = window.innerHeight * 0.5, best = null, bestD = Infinity;
+      priceRows.forEach(function (r) {
+        var b = r.getBoundingClientRect();
+        if (b.bottom < 0 || b.top > window.innerHeight) { return; }
+        var d = Math.abs((b.top + b.height / 2) - mid);
+        if (d < bestD) { bestD = d; best = r; }
+      });
+      priceRows.forEach(function (r) { r.classList.toggle('is-active', r === best && bestD < window.innerHeight * 0.38); });
+      priceList.classList.toggle('has-active', !!priceList.querySelector('.is-active'));
+    };
+    var schedulePrices = function () { if (!priceTick) { priceTick = true; requestAnimationFrame(updatePrices); } };
+    window.addEventListener('scroll', schedulePrices, { passive: true });
+    window.addEventListener('resize', schedulePrices);
+    updatePrices();
+  }
 })();
