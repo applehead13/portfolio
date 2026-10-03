@@ -2082,3 +2082,10 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .step-item__head { padding-block: clamp(1rem, 0.8rem + 0.9vw, 1.75rem); }
 .step-item__icon { align-self: start; margin-top: 0.7em; }
 .step-item__inner p { font-size: var(--fs-text); }
+
+/* Помехи только на заголовках блоков, первом экране, фразе в подвале и вступлении к форме */
+@media (min-width: 1100px) and (hover: hover) {
+  .price:hover .price__title.glitch::before, .step-item__head:hover .glitch::before, .card:hover .card__title.glitch::before { animation: none; opacity: 0; }
+  .glitch::before { white-space: inherit; }
+  .footer__big.glitch::before { white-space: nowrap; font-size: inherit; }
+}

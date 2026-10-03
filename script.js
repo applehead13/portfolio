@@ -489,7 +489,7 @@
 
   /* Помехи на заголовках: копия текста в атрибуте data-text (без номеров в скобках) */
   if (!reduce) {
-    document.querySelectorAll('.h2, .price__title, .step-item__title, .card__title, .hero__title').forEach(function (el) {
+    document.querySelectorAll('.h2, .hero__title, .footer__big, .contacts__side .lead').forEach(function (el) {
       var clone = el.cloneNode(true);
       clone.querySelectorAll('.price__num, .step-item__num, .ch, .word').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
       clone.querySelectorAll('.price__num, .step-item__num').forEach(function (n) { n.remove(); });
