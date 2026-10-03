@@ -1864,3 +1864,6 @@ body, .text, .hero__sub, .price__desc, .fact__text, .card__desc, .contacts__hint
 /* Обо мне: вступление, абзац и факты занимают одну и ту же ширину колонки, без искусственного сужения строк */
 .about__body > .lead, .about__body > .text, .about__body .fact__text, .about__body .fact__title { max-width: none !important; text-wrap: wrap !important; }
 .about__body > .lead { margin: 0; }
+
+/* Названия полей в форме: размер обычного текста сайта */
+.field__label, .types .field__label { font-size: var(--fs-text); line-height: var(--lh-text); }
