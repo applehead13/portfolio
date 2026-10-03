@@ -2421,3 +2421,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Этапы работы: у раскрытого пункта заголовок и крестик зелёные, у остальных обычные */
 .step-item.is-open .step-item__head, .step-item.is-open .step-item__head:hover { color: var(--accent-text); }
 .step-item.is-open .step-item__num { color: var(--muted); }
+
+/* Меню-бургер (телефон и планшет): ссылки почты, Telegram, Pinterest, Instagram такого же размера и шрифта, как остальные кнопки сайта на телефоне */
+@media (max-width: 1023px) {
+  .side__foot .blink, .side__foot .blink--mail, .side__foot .blink:not(.blink--mail) {
+    font-size: var(--fs-small) !important; letter-spacing: 0.05em !important;
+    min-height: 2.75rem !important; padding-inline: 1.4rem !important;
+  }
+  .side__foot { gap: 0.5rem !important; }
+}
