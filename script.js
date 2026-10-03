@@ -214,7 +214,7 @@
     }
   });
 
-  /* Курсор-квадрат: плавно догоняет мышь, на ссылках и кнопках увеличивается */
+  /* Курсор: пиксельная стрелка, на ссылках и кнопках пиксельная рука */
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     var cur = document.createElement('div');
     cur.className = 'cursor';
@@ -224,7 +224,7 @@
     var tx = 0, ty = 0, x = 0, y = 0, seen = false;
     document.addEventListener('mousemove', function (e) {
       tx = e.clientX; ty = e.clientY;
-      if (!seen) { x = tx; y = ty; seen = true; cur.classList.add('is-on'); }
+      if (!seen) { seen = true; cur.classList.add('is-on'); }
       cur.classList.toggle('is-hover', !!e.target.closest('a, button, label, input, select, textarea, .price'));
     });
     document.addEventListener('mousedown', function () { cur.classList.add('is-down'); });
@@ -232,8 +232,8 @@
     document.addEventListener('mouseleave', function () { cur.classList.remove('is-on'); });
     document.addEventListener('mouseenter', function () { if (seen) cur.classList.add('is-on'); });
     (function loop() {
-      x += (tx - x) * 0.28; y += (ty - y) * 0.28;
-      cur.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)';
+      /* стрелка без запаздывания: остриё ровно там, где мышь */
+      cur.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
       requestAnimationFrame(loop);
     })();
   }
@@ -758,27 +758,4 @@
     });
   }
 
-  /* Временная сетка-подсказка: 12 прозрачных колонок поверх прокручиваемой части (без левой панели).
-     Клавиша G включает и выключает; адрес с ?grid=0 открывает сайт без неё. */
-  (function () {
-    var pane = document.querySelector('.pane');
-    if (!pane || /[?&]grid=0/.test(location.search)) { return; }
-    var ov = document.createElement('div');
-    ov.className = 'grid-overlay';
-    ov.setAttribute('aria-hidden', 'true');
-    for (var i = 0; i < 12; i++) { ov.appendChild(document.createElement('i')); }
-    document.body.appendChild(ov);
-    function place() {
-      var r = pane.getBoundingClientRect();
-      ov.style.left = r.left + 'px';
-      ov.style.width = r.width + 'px';
-    }
-    place();
-    window.addEventListener('resize', place);
-    document.addEventListener('keydown', function (e) {
-      if ((e.key === 'g' || e.key === 'G' || e.key === 'п' || e.key === 'П') && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) {
-        ov.classList.toggle('is-off');
-      }
-    });
-  })();
 })();
