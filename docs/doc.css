@@ -1,7 +1,9 @@
 /* Документы в стиле сайта: левая панель и правая часть; печати и появления здесь нет */
 .docpage .doc { max-width: none; margin: 0; padding: 0 var(--gutter) var(--section); }
 .docpage .doc__head { padding-top: calc(var(--section) * 0.5); }
-@media (max-width: 1023px) { .docpage .doc__head { padding-top: calc(var(--section) * 0.4); } }
+/* Планшет и телефон: над документом закреплённая панель меню, под ней верхняя строка с кнопкой; отступ сверху оставляем под панель */
+@media (max-width: 1023px) { .docpage .doc { padding-top: var(--bar-h); } .docpage .doc__head { padding-top: calc(var(--section) * 0.5); } }
+
 
 /* «Документ»: подсказка в квадратных скобках сверху справа у заголовка, как показатель степени (так же, как «Важно» в брифе) */
 .doc__title--tag { display: block; width: max-content; max-width: 100%; position: relative; padding-right: calc(var(--tag-w, 6rem) + 0.5rem); }
@@ -21,3 +23,6 @@
 }
 @media (max-width: 1023px) { .top { top: var(--bar-h); } }
 .top__back { flex: none; }
+
+/* Телефон: кнопка «На сайт» по центру */
+@media (max-width: 767px) { .top { justify-content: center; } }

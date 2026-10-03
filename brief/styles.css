@@ -173,3 +173,11 @@ body.brief .footer__inner { transform: none; }
 
 /* «Далее» всегда залита зелёным сразу (и на компьютере тоже) */
 .dock .btn:not(.btn--ghost)::before { transform: scaleX(1); }
+
+/* Телефон: верхняя строка — кнопки по центру, «Стереть ответы» не переносится на две строки; номер этапа виден внизу по квадратам */
+@media (max-width: 599px) {
+  .top { justify-content: center; }
+  .top__count { display: none; }
+  .top__right { gap: 0.5rem; }
+  .top .btn { white-space: nowrap; }
+}
