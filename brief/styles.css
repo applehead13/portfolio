@@ -181,3 +181,6 @@ body.brief .footer__inner { transform: none; }
   .top__right { gap: 0.5rem; }
   .top .btn { white-space: nowrap; }
 }
+
+/* Меню-бургер поверх верхней строки и нижней навигации, иначе они закрывают текст в открытом меню */
+@media (max-width: 1023px) { .side { z-index: 60; } }
