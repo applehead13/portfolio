@@ -87,8 +87,9 @@
   document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); });
   var sendBtn = document.querySelector('#lead-form .btn--wide');
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); }
-  /* «Работы»: заголовок блока, плитки с названием работы и годом проявляются сразу, как только попали на экран, не ожидая очереди; в очереди печатается только текст под ними */
-  document.querySelectorAll('#works .section__head, #works .card, #prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
+  document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
+  /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
+  document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); });
   document.querySelectorAll('.gallery').forEach(function (el) {
     if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
   });
