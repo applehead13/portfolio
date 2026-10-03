@@ -2397,3 +2397,10 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   .js .fact::before, .js .side__note .mark, .js .footer__meta .sq { opacity: 1 !important; }
 }
+
+/* Всё, что раньше стояло на месте с самого начала (ссылки меню, кнопки первого экрана, фото, «Наверх»), теперь проявляется в общей очереди вместе с печатью */
+.js .hero [data-reveal]:not(.is-in), .js .nav__link[data-reveal]:not(.is-in), .js .side__foot .blink[data-reveal]:not(.is-in),
+.js .hero__figure[data-reveal]:not(.is-in), .js .gallery[data-reveal]:not(.is-in), .js .footer__up[data-reveal]:not(.is-in) { opacity: 0 !important; }
+.js .hero [data-reveal].is-in, .js .nav__link[data-reveal].is-in, .js .side__foot .blink[data-reveal].is-in,
+.js .hero__figure[data-reveal].is-in, .js .gallery[data-reveal].is-in, .js .footer__up[data-reveal].is-in { animation: qfade 0.4s var(--ease) both; }
+@keyframes qfade { from { opacity: 0; } to { opacity: 1; } }

@@ -6,6 +6,36 @@
   var side = document.getElementById('side');
   var footer = document.getElementById('footer');
 
+  /* Единая очередь появления: тексты печатаются, остальные элементы (кнопки, фото, плитки, ссылки меню) проявляются,
+     и всё это строго по порядку сверху вниз: следующий начинает, когда предыдущий закончил.
+     То, что уже ушло с экрана, проявляется сразу, чтобы очередь не копилась. */
+  var seq = [], seqBusy = true;
+  setTimeout(function () { seqBusy = false; seqNext(); }, 350);
+  function seqOnScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
+  function seqOrder(a, b) {
+    if (a.el === b.el) { return a.kind === 'reveal' ? -1 : 1; }
+    return (a.el.compareDocumentPosition(b.el) & 4) ? -1 : 1;
+  }
+  function seqNext() {
+    if (seqBusy || !seq.length) { return; }
+    seq.sort(seqOrder);
+    var it = seq.shift(), el = it.el, dur;
+    if (it.kind === 'type') {
+      el.classList.add('is-typed');
+      var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
+      if (host) { host.classList.add('is-typed'); }
+      dur = el.__typeDur || 0;
+    } else {
+      el.classList.add('is-in');
+      dur = el.hasAttribute('data-fx') ? Math.min(900, el.textContent.split(/\s+/).length * 55) : 90;
+    }
+    if (window.innerWidth < 1024 && el.closest('.side')) { dur = Math.min(dur, 40); }
+    if (!seqOnScreen(el)) { seqNext(); return; }
+    seqBusy = true;
+    setTimeout(function () { seqBusy = false; seqNext(); }, dur);
+  }
+  function seqAdd(el, kind) { seq.push({ el: el, kind: kind }); seqNext(); }
+
   /* Заголовок: каждое слово в своей маске, чтобы выезжало по очереди */
   document.querySelectorAll('[data-split]').forEach(function (el) {
     var words = el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '').split(/[ \t\r\n]+/);
@@ -47,18 +77,25 @@
     el.setAttribute('data-fx', '');
   });
 
+  /* Элементы, которые раньше стояли на месте с самого начала, теперь тоже появляются по очереди */
+  document.querySelectorAll('.nav__link, .side__foot .blink, .hero__figure, .gallery, .footer__up').forEach(function (el) {
+    if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
+  });
+
   /* Появление блоков при прокрутке */
   var items = document.querySelectorAll('[data-reveal], [data-fx]');
   if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
-    items.forEach(function (el, i) {
-      /* Небольшая задержка внутри сетки работ, чтобы карточки шли волной */
-      io.observe(el);
-    });
+    var onReveal = function (obs) {
+      return function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { obs.unobserve(e.target); seqAdd(e.target, 'reveal'); }
+        });
+      };
+    };
+    var io = new IntersectionObserver(function (entries) { onReveal(io)(entries); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    /* Подвал у самого края страницы: без отступа снизу, иначе нижние элементы никогда не «войдут» в экран */
+    var ioEnd = new IntersectionObserver(function (entries) { onReveal(ioEnd)(entries); }, { rootMargin: '0px', threshold: 0.05 });
+    items.forEach(function (el) { (el.closest('.footer') ? ioEnd : io).observe(el); });
   } else {
     items.forEach(function (el) { el.classList.add('is-in'); });
   }
@@ -558,8 +595,11 @@
         entries.forEach(function (e) {
           if (!e.isIntersecting) { return; }
           glitchIo.unobserve(e.target);
-          /* Заголовки сразу с помехами, без печати */
-          setTimeout(function () { played(e.target); }, 0);
+          /* Заголовки сразу с помехами, без печати; но только когда их блок уже проявился в очереди */
+          (function wait(el) {
+            var host = el.closest('[data-reveal]');
+            if (!host || host.classList.contains('is-in')) { played(el); } else { setTimeout(function () { wait(el); }, 80); }
+          })(e.target);
         });
       }, { threshold: 0.6 });
       document.querySelectorAll('.glitch').forEach(function (el) { glitchIo.observe(el); });
@@ -740,26 +780,10 @@
       el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
 
-    /* Тексты печатаются по очереди, сверху вниз, сплошным полотном: следующий начинает, когда предыдущий допечатался.
-       Тексты, которые уже ушли с экрана, проявляются сразу, чтобы очередь не копилась. */
-    var typeQueue = [], typeBusy = false;
-    function onScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
-    function typeNext() {
-      if (typeBusy || !typeQueue.length) { return; }
-      typeQueue.sort(function (a, b) { return (a.compareDocumentPosition(b) & 4) ? -1 : 1; });
-      var el = typeQueue.shift();
-      el.classList.add('is-typed');
-      var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
-      if (host) { host.classList.add('is-typed'); }
-      if (!onScreen(el)) { typeNext(); return; }
-      typeBusy = true;
-      setTimeout(function () { typeBusy = false; typeNext(); }, el.__typeDur || 0);
-    }
     var typeObs = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { typeObs.unobserve(e.target); typeQueue.push(e.target); }
+        if (e.isIntersecting) { typeObs.unobserve(e.target); seqAdd(e.target, 'type'); }
       });
-      typeNext();
     }, { rootMargin: '0px', threshold: 0 });
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
