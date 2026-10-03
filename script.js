@@ -78,7 +78,9 @@
   });
 
   /* Элементы, которые раньше стояли на месте с самого начала, теперь тоже появляются по очереди */
-  document.querySelectorAll('.nav__link, .side__foot .blink, .hero__figure, .gallery, .footer__up').forEach(function (el) {
+  /* Элементы первого экрана ведёт отдельный сценарий (см. ниже), общая очередь их не трогает */
+  document.querySelectorAll('.hero__sub, .hero__actions').forEach(function (el) { el.setAttribute('data-hero', ''); });
+  document.querySelectorAll('.gallery, .footer__up').forEach(function (el) {
     if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
   });
 
@@ -95,7 +97,7 @@
     var io = new IntersectionObserver(function (entries) { onReveal(io)(entries); }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
     /* Подвал у самого края страницы: без отступа снизу, иначе нижние элементы никогда не «войдут» в экран */
     var ioEnd = new IntersectionObserver(function (entries) { onReveal(ioEnd)(entries); }, { rootMargin: '0px', threshold: 0.05 });
-    items.forEach(function (el) { (el.closest('.footer') ? ioEnd : io).observe(el); });
+    items.forEach(function (el) { if (el.hasAttribute('data-hero')) { return; } (el.closest('.footer') ? ioEnd : io).observe(el); });
   } else {
     items.forEach(function (el) { el.classList.add('is-in'); });
   }
@@ -740,7 +742,6 @@
      Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
-      '.hero__sub', '.hero__cap span', '.side__role', '.side__note',
       '.about__body > .text', '.fact__p', '.contacts__side .lead',
       '.card__desc', '.card__tags',
       '.price__desc', '.price__label', '.price__value',
@@ -785,6 +786,28 @@
         if (e.isIntersecting) { typeObs.unobserve(e.target); seqAdd(e.target, 'type'); }
       });
     }, { rootMargin: '0px', threshold: 0 });
+
+    /* Первый экран: сразу заголовок и фото вместе, затем под фото печатается подпись и одновременно с ней печатается текст, потом кнопки.
+       Левое меню не печатается и не проявляется, оно стоит на месте сразу. */
+    (function () {
+      var fig = document.querySelector('.hero__figure');
+      var sub = document.querySelector('.hero__sub');
+      var caps = Array.prototype.slice.call(document.querySelectorAll('.hero__cap span'));
+      var acts = document.querySelector('.hero__actions');
+      var typed = [sub].concat(caps).filter(Boolean);
+      typed.forEach(function (el) { typeify(el); el.classList.add('typing'); });
+      if (fig) { fig.setAttribute('data-reveal', ''); }
+      var go = function () {
+        if (fig) { fig.classList.add('is-in'); }                         // фото вместе с заголовком
+        setTimeout(function () {
+          var longest = 0;
+          if (sub) { sub.classList.add('is-in'); }
+          typed.forEach(function (el) { el.classList.add('is-typed'); longest = Math.max(longest, el.__typeDur || 0); });  // подпись и текст печатаются одновременно
+          setTimeout(function () { if (acts) { acts.classList.add('is-in'); } }, longest + 80);
+        }, 450);
+      };
+      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(go); } else { go(); }
+    })();
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
       /* Вложенные блоки (например «ИНН» внутри строки подвала) не оборачиваем второй раз: печатается внешний */

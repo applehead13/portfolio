@@ -85,9 +85,8 @@
   }
 
   /* Что проявляется блоками и что печатается */
-  var REVEAL_SEL = '.nav__link, .side__foot .blink, .intro__list li, .intro__actions .btn, .q, .stage__clear, .done__photo, .done__steps li, .done__actions .btn, .legal__row .blink';
+  var REVEAL_SEL = '.intro__list li, .intro__actions .btn, .q, .stage__clear, .done__photo, .done__steps li, .done__actions .btn, .legal__row .blink';
   var TYPE_SEL = [
-    '.side__role', '.side__note',
     '.intro__lead', '.intro__list strong', '.intro__list span',
     '.stage__lead', '.q__label', '.q__hint', '.drop__title', '.drop__hint', '.check__text',
     '.done__lead', '.done__steps strong', '.done__steps span', '.done__note',
