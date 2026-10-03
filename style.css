@@ -1907,3 +1907,21 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Логотип: «— веб-дизайнер» приглушённым светлым, как остальной серый текст на зелёной панели */
 .side__name span:last-child { color: var(--side-soft) !important; }
+
+/* Телефон и сенсорные экраны: все кнопки залиты (у каждой свой цвет заливки по месту), контурная только «Написать мне» */
+@media (hover: none), (max-width: 767px) {
+  .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
+  .btn:not(.btn--ghost):active::before { background: color-mix(in srgb, var(--accent) 70%, black); }
+  .blink { background-size: 100% 100% !important; }
+  .blink:active { filter: brightness(1.25); }
+}
+
+/* Подвал: политика и согласие того же шрифта, веса и цвета, что копирайт (обычный, светлый); капс сохранён */
+.footer__docs .doclink { font-family: var(--f-text) !important; font-weight: 400 !important; font-size: var(--fs-small) !important; color: var(--text) !important; letter-spacing: 0.04em; }
+.footer__copy, .footer__copy span { color: var(--text); font-size: var(--fs-small); }
+
+/* Левая панель на ПК: ссылки сразу залиты чёрным; при наведении чуть светлеют */
+@media (min-width: 1024px) {
+  .side .blink, .side .blink:hover, .side .blink:focus-visible { background-image: none !important; background-color: var(--bg); transition: background-color 0.3s var(--ease); }
+  .side .blink:hover, .side .blink:focus-visible { background-color: color-mix(in srgb, var(--text) 16%, var(--bg)); color: var(--text); }
+}

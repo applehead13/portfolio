@@ -404,3 +404,9 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
 
 /* Сенсорные экраны: главные кнопки сразу залиты акцентом */
 @media (hover: none) { .btn:not(.btn--ghost)::before { transform: scaleX(1); } }
+
+/* Телефон: кнопки залиты, контурные только «Назад» и «Скачать копию» */
+@media (hover: none), (max-width: 699px) {
+  .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
+  .blink { background-size: 100% 100%; }
+}
