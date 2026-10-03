@@ -2263,7 +2263,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 }
 
 /* Ссылки в галочке: слова печатаются отдельными блоками, подчёркивание ставим на каждое слово, а не только на пробелы между ними */
-.doclink .tw { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: currentColor; }
+.check__text .doclink .tw { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: currentColor; }
 
 /* Галочка: квадратик стоит по центру первой строки текста, а не по центру всей фразы */
 .check { align-items: flex-start; }
@@ -2319,3 +2319,18 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   /* Кнопка «Отправить» на всю ширину сетки */
   .form .btn--wide { width: 100% !important; align-self: stretch; }
 }
+
+/* Подчёркнуты только ссылки в галочке согласия; в футере ссылки на документы без подчёркивания (в том числе отдельные слова) */
+.footer__docs .doclink, .footer__docs .doclink .tw, .footer__docs a { text-decoration: none !important; }
+
+/* Телефон: раскрытый список «Что нужно сделать» — единый блок на том же фоне, что подсвеченная строка в ценах */
+@media (max-width: 767px) {
+  .types.is-open .types__toggle, .types.is-open .types__list { background: color-mix(in srgb, var(--text) 6%, var(--bg)); margin-inline: -0.75rem; padding-inline: 0.75rem; width: calc(100% + 1.5rem); }
+  .types.is-open .types__toggle { border-bottom-color: transparent; }
+  .types.is-open .types__list { padding-top: 0.25rem; padding-bottom: 0.75rem; }
+}
+
+/* Вместо звёздочки — наш квадратик: в ссылке Instagram белый, в сноске про Meta чёрный; от текста на том же расстоянии, что у остальных квадратиков, и по центру высоты букв */
+.mark { display: inline-block; width: var(--sq); height: var(--sq); vertical-align: calc(0.36em - var(--sq) / 2); background: currentColor; }
+.blink .mark { margin-left: var(--sq-gap); background: var(--text); }
+.side__note .mark { margin-right: var(--sq-gap); background: var(--bg); }
