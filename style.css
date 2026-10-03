@@ -2250,3 +2250,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .side__panel { min-height: min-content; padding-bottom: max(var(--gutter), env(safe-area-inset-bottom)); }
   .side__foot { margin-top: auto; }
 }
+
+/* «Другое»: срок и цена словами, поэтому обычным размером текста и с переносом, чтобы не налезали друг на друга */
+.price--custom .price__value { font-size: var(--fs-text); line-height: 1.2; white-space: normal; overflow-wrap: break-word; hyphens: manual; }
