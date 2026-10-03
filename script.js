@@ -104,6 +104,8 @@
     /* Якорные ссылки едут плавно, с учётом верхней панели на телефоне */
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
+        /* Сначала закрываем меню-бургер: иначе его закрытие перезапускает Lenis и сбрасывает начатую прокрутку */
+        if (side.classList.contains('is-open')) { setOpen(false); }
         var id = a.getAttribute('href');
         var target = id.length > 1 ? document.querySelector(id) : null;
         if (id === '#top') { e.preventDefault(); lenis.scrollTo(0, { force: true }); }
@@ -119,6 +121,7 @@
   var toggle = side.querySelector('.side__toggle');
   var label = toggle.querySelector('.side__toggle-text');
   function setOpen(open) {
+    if (side.classList.contains('is-open') === open) { return; }
     side.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     label.textContent = open ? 'Закрыть' : 'Меню';

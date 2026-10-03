@@ -2244,3 +2244,9 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (hover: none), (max-width: 767px) {
   .price.is-active .price__title, .price.is-active .price__desc { transform: translateX(calc(var(--sq-left) + var(--sq) + var(--sq-gap))); width: calc(100% - var(--sq-left) - var(--sq) - var(--sq-gap)); }
 }
+
+/* Меню-бургер (телефон и планшет): ссылки и сноска про Meta прижаты к низу экрана */
+@media (max-width: 1023px) {
+  .side__panel { min-height: min-content; padding-bottom: max(var(--gutter), env(safe-area-inset-bottom)); }
+  .side__foot { margin-top: auto; }
+}
