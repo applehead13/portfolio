@@ -68,6 +68,8 @@
   document.querySelectorAll('.lead').forEach(function (el) {
     /* Вступление к форме в «Контактах» не проявляется словами: оно печатается по буквам, как обычные тексты */
     if (el.closest('.contacts__side')) { return; }
+    /* «Обо мне»: вступление «Я Полина Гусева…» стоит на месте сразу, без появления */
+    if (el.closest('.about__body')) { el.removeAttribute('data-reveal'); return; }
     var words = el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '').split(/[ \t\r\n]+/);
     el.setAttribute('aria-label', el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ''));
     el.innerHTML = words.map(function (w, i) {
@@ -80,6 +82,8 @@
   /* Элементы, которые раньше стояли на месте с самого начала, теперь тоже появляются по очереди */
   /* Элементы первого экрана ведёт отдельный сценарий (см. ниже), общая очередь их не трогает */
   document.querySelectorAll('.hero__sub, .hero__actions').forEach(function (el) { el.setAttribute('data-hero', ''); });
+  /* «Работы»: заголовок блока, плитки с названием работы и годом проявляются сразу, как только попали на экран, не ожидая очереди; в очереди печатается только текст под ними */
+  document.querySelectorAll('#works .section__head, #works .card, #prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
   document.querySelectorAll('.gallery, .footer__up').forEach(function (el) {
     if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
   });
@@ -90,7 +94,10 @@
     var onReveal = function (obs) {
       return function (entries) {
         entries.forEach(function (e) {
-          if (e.isIntersecting) { obs.unobserve(e.target); seqAdd(e.target, 'reveal'); }
+          if (e.isIntersecting) {
+            obs.unobserve(e.target);
+            if (e.target.hasAttribute('data-now')) { e.target.classList.add('is-in'); } else { seqAdd(e.target, 'reveal'); }
+          }
         });
       };
     };
@@ -744,7 +751,7 @@
     var TYPE_SEL = [
       '.about__body > .text', '.fact__p', '.contacts__side .lead',
       '.card__desc', '.card__tags',
-      '.price__desc', '.price__label', '.price__value',
+      '.price__label', '.price__value',
       '.step-item__inner p',
       '.contacts__hint', '.field__label', '.check__text', '.attach__name',
       '.footer__copy span', '.footer__docs a', '.doc__body p', '.doc__body li'

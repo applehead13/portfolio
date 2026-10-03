@@ -85,12 +85,12 @@
   }
 
   /* Что проявляется блоками и что печатается */
-  var REVEAL_SEL = '.intro__list li, .intro__actions .btn, .q, .stage__clear, .done__photo, .done__steps li, .done__actions .btn, .legal__row .blink';
+  var REVEAL_SEL = '.intro__list li, .intro__actions .btn, .q, .stage__clear, .done__photo, .done__steps li, .done__actions .btn, .footer__up';
   var TYPE_SEL = [
     '.intro__lead', '.intro__list strong', '.intro__list span',
     '.stage__lead', '.q__label', '.q__hint', '.drop__title', '.drop__hint', '.check__text',
     '.done__lead', '.done__steps strong', '.done__steps span', '.done__note',
-    '.legal__row > span', '.legal__docs a'
+    '.footer__copy span', '.footer__docs a'
   ].join(', ');
 
   if (!reduce && 'IntersectionObserver' in window) {

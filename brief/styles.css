@@ -49,8 +49,8 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .done__title:focus { outline: 0; }
 @media (min-width: 700px) {
   .view--intro, .view--done { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
-  .intro__head { grid-column: 1 / span 6; }
-  .intro__body { grid-column: 7 / -1; margin-top: 0; }
+  .intro__head { grid-column: 1 / span 6; grid-row: 1; }
+  .intro__body { grid-column: 7 / -1; grid-row: 2; margin-top: var(--pad); }
   .done__photo { grid-column: 1 / span 2; width: auto; }
   .done__body { grid-column: 4 / -1; margin-top: 0; }
 }
@@ -138,15 +138,11 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .dot:hover::before { border-color: var(--text); }
 @media (max-width: 479px) { .dot { width: 1.4rem; } .dock .btn { padding-inline: 1.1rem; } }
 
-/* ===== Подвал с документами ===== */
-.legal { margin-top: auto; padding: var(--pad) 0 calc(var(--pad) * 1.5); display: flex; flex-direction: column; gap: var(--pad); font-size: var(--fs-small); color: var(--muted); border-top: 1px solid var(--line); }
-.legal__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
-.legal__docs { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
-.legal__docs .doclink { font-family: var(--f-head); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none !important; color: var(--text); transition: color 0.3s var(--ease); }
-.legal__docs .doclink .tw { text-decoration: none !important; }
-.legal__docs .doclink:hover, .legal__docs .doclink:focus-visible { color: var(--accent-bright); }
-.legal .blink { color: var(--text); }
-@media (max-width: 699px) { .legal__row { justify-content: center; text-align: center; } .legal__docs { justify-content: center; text-align: center; } }
+/* ===== Подвал: тот же, что на основном сайте (стили из ../style.css), без большой фразы и без эффекта выезда: виден сразу ===== */
+.footer { margin-top: auto; min-height: clamp(11rem, 26vh, 16rem); }
+.footer__veil { display: none; }
+body.brief .footer__inner { transform: none; }
+.top__back { flex: none; }
 
 /* Подсказка: над нижней навигацией */
 .toast { bottom: 5.5rem; }
