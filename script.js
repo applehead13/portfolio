@@ -6,35 +6,49 @@
   var side = document.getElementById('side');
   var footer = document.getElementById('footer');
 
-  /* Единая очередь появления: тексты печатаются, остальные элементы (кнопки, фото, плитки, ссылки меню) проявляются,
-     и всё это строго по порядку сверху вниз: следующий начинает, когда предыдущий закончил.
-     То, что уже ушло с экрана, проявляется сразу, чтобы очередь не копилась. */
-  var seq = [], seqBusy = true;
-  setTimeout(function () { seqBusy = false; seqNext(); }, 350);
+  /* Очередь появления: тексты печатаются, остальные элементы (кнопки, фото, плитки) проявляются, и всё это по порядку сверху вниз.
+     У каждого блока страницы своя очередь: дошли до следующего блока, и там всё начинает появляться почти сразу, не дожидаясь предыдущего.
+     Если элемент уже ушёл с экрана, очередь не ждёт его и идёт дальше. */
+  var seqState = new Map(), seqReady = false;
+  setTimeout(function () { seqReady = true; seqState.forEach(function (st, k) { seqNext(k); }); }, 350);
   function seqOnScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
   function seqOrder(a, b) {
     if (a.el === b.el) { return a.kind === 'reveal' ? -1 : 1; }
     return (a.el.compareDocumentPosition(b.el) & 4) ? -1 : 1;
   }
-  function seqNext() {
-    if (seqBusy || !seq.length) { return; }
-    seq.sort(seqOrder);
-    var it = seq.shift(), el = it.el, dur;
-    if (it.kind === 'type') {
+  function seqKey(el) { return el.closest('section, footer') || document.body; }
+  function seqNext(k) {
+    var st = seqState.get(k);
+    if (!seqReady || !st || st.busy || !st.q.length) { return; }
+    st.q.sort(seqOrder);
+    var it = st.q.shift(), el = it.el, dur;
+    if (it.kind === 'ph') {
+      var phText = el.__ph, phI = 0;
+      var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, 28);
+      dur = phText.length * 28 + 60;
+    } else if (it.kind === 'type') {
       el.classList.add('is-typed');
       var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
       if (host) { host.classList.add('is-typed'); }
       dur = el.__typeDur || 0;
     } else {
       el.classList.add('is-in');
-      dur = el.hasAttribute('data-fx') ? Math.min(900, el.textContent.split(/\s+/).length * 55) : 90;
+      dur = el.hasAttribute('data-fx') ? Math.min(700, el.textContent.split(/\s+/).length * 45) : 60;
     }
-    if (window.innerWidth < 1024 && el.closest('.side')) { dur = Math.min(dur, 40); }
-    if (!seqOnScreen(el)) { seqNext(); return; }
-    seqBusy = true;
-    setTimeout(function () { seqBusy = false; seqNext(); }, dur);
+    if (!seqOnScreen(el)) { seqNext(k); return; }
+    st.busy = true;
+    var t0 = Date.now();
+    (function wait() {
+      if (Date.now() - t0 >= dur || !seqOnScreen(el)) { st.busy = false; seqNext(k); }
+      else { setTimeout(wait, 60); }
+    })();
   }
-  function seqAdd(el, kind) { seq.push({ el: el, kind: kind }); seqNext(); }
+  function seqAdd(el, kind) {
+    var k = seqKey(el), st = seqState.get(k);
+    if (!st) { st = { q: [], busy: false }; seqState.set(k, st); }
+    st.q.push({ el: el, kind: kind });
+    seqNext(k);
+  }
 
   /* Заголовок: каждое слово в своей маске, чтобы выезжало по очереди */
   document.querySelectorAll('[data-split]').forEach(function (el) {
@@ -88,6 +102,8 @@
   var sendBtn = document.querySelector('#lead-form .btn--wide');
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); }
   document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
+  /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
+  document.querySelectorAll('#about .section__head, #about .about__body > .text').forEach(function (el) { el.removeAttribute('data-reveal'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
   document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); });
   document.querySelectorAll('.gallery').forEach(function (el) {
@@ -755,11 +771,11 @@
      Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
-      '.about__body > .text', '.fact__p',
+      '.fact__p',
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
       '.step-item__inner p',
-      '.contacts__hint', '.attach__name',
+      '.contacts__hint', '.field__label', '.attach__name',
       '.doc__body p', '.doc__body li'
     ].join(', ');
 
@@ -789,7 +805,7 @@
         });
         node.parentNode.replaceChild(frag, node);
       });
-      var ts = Math.min(0.016, 1.5 / Math.max(total, 1));
+      var ts = Math.min(0.014, 0.9 / Math.max(total, 1));   // не дольше 0.9 с на текст
       el.style.setProperty('--ts', ts.toFixed(4) + 's');
       el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
@@ -831,6 +847,18 @@
       };
       if (document.fonts && document.fonts.ready) { document.fonts.ready.then(go); } else { go(); }
     })();
+
+    /* «Контакты»: подсказки в самих полях («Ваше имя», «Telegram или телефон», «Чем занимаетесь…») тоже печатаются по очереди */
+    var phObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { phObs.unobserve(e.target); seqAdd(e.target, 'ph'); } });
+    }, { rootMargin: '0px', threshold: 0 });
+    document.querySelectorAll('#lead-form .field__input').forEach(function (inp) {
+      var ph = inp.getAttribute('placeholder');
+      if (!ph) { return; }
+      inp.__ph = ph;
+      inp.setAttribute('placeholder', '');
+      phObs.observe(inp);
+    });
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
       /* Вложенные блоки (например «ИНН» внутри строки подвала) не оборачиваем второй раз: печатается внешний */
