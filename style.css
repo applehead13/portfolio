@@ -1786,3 +1786,24 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .about .gallery { grid-row: 1 / span 2 !important; }
   .facts__list { column-gap: var(--gutter); }
 }
+
+/* ===== Телефон: кнопки обычной ширины и по центру, а не на всю ширину экрана ===== */
+@media (max-width: 767px) {
+  .hero__actions { width: 100%; flex-direction: column; align-items: center; }
+  .hero__actions .btn, .contacts__brief .btn, .attach__btn, .form .btn--wide, .footer__up,
+  .types .chip span, .side__foot .blink { width: auto !important; }
+  .hero__actions .btn { flex: 0 0 auto; }
+  .contacts__brief { width: 100%; justify-items: center; text-align: center; }
+  .contacts__brief .btn { justify-self: center; }
+  .contacts__hint { width: auto; min-width: 0; max-width: 32ch; text-align: center; text-align-last: center; }
+  .attach { justify-content: center; text-align: center; }
+  .attach__btn { margin-inline: auto; }
+  .form .btn--wide { align-self: center; }
+  .footer__up { justify-self: center; justify-content: center; }
+  .types { justify-content: center; }
+  .types .chip { flex: 0 0 auto; }
+  .side__foot .blink { flex: 0 0 auto; }
+  .side__foot { justify-content: center; }
+  .hero__lower { align-items: center; }
+  .done__actions, .intro__actions { justify-content: center; }
+}

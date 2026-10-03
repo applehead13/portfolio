@@ -392,3 +392,9 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
 .intro__list strong::before, .done__steps strong::before {
   vertical-align: baseline; position: relative; top: -0.6em; margin-top: 0; margin-right: 0.35rem; font-size: 0.72rem;
 }
+
+/* Телефон: кнопки вступления и финала обычной ширины, по центру */
+@media (max-width: 699px) {
+  .intro__actions, .done__actions { align-items: center; justify-content: center; }
+  .intro__actions .btn, .done__actions .btn { width: auto; }
+}
