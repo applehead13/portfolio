@@ -2256,7 +2256,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Галочка: квадратик стоит по центру первой строки текста, а не по центру всей фразы */
 .check { align-items: flex-start; }
-.check__box { margin-top: calc((var(--fs-small) * var(--lh-text) - 1.5rem) / 2); }
+.check__box { margin-top: calc((var(--fs-text) * var(--lh-text) - 1.5rem) / 2); }
 
 /* Телефон: сначала заголовок, ниже фото (подписи под ним), затем описание и кнопки */
 @media (max-width: 767px) {
@@ -2414,3 +2414,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* «Отправить»: проявляется последней, так же, как кнопки первого экрана */
 .js .form .btn--wide[data-reveal]:not(.is-in) { opacity: 0 !important; pointer-events: none; }
 .js .form .btn--wide[data-reveal].is-in { animation: qfade 0.4s var(--ease) both; }
+
+/* Согласие на обработку персональных данных: размер шрифта как у остального текста */
+.check, .check__text { font-size: var(--fs-text); line-height: var(--lh-text); }
