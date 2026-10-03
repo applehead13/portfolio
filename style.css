@@ -2151,3 +2151,25 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* ===== Типографика: ровные переносы, без висячих предлогов ===== */
 h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
 p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* ===== Мини-футер в мобильном меню ===== */
+.side__mini { display: none; }
+@media (max-width: 1023px) {
+  .side.is-open { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .side.is-open .side__panel { min-height: calc(100dvh - var(--bar-h)); }
+  .side__mini {
+    display: block; position: relative; overflow: hidden; flex: none;
+    margin-inline: calc(var(--gutter) * -1);
+    background: linear-gradient(to top, var(--accent) 0%, var(--bg) 100%);
+  }
+  .side__mini::before { content: ""; position: absolute; inset: 0; background: var(--bg); opacity: calc(1 - var(--mp, 0)); pointer-events: none; z-index: 2; }
+  .side__mini { --mp: 0; }
+  .side__mini-inner { padding: 3.5rem var(--gutter) 1.5rem; transform: translate3d(0, calc((var(--mp) - 1) * 35%), 0); }
+  .side__mini-big { margin: 0 0 1.5rem; font-family: var(--f-head); font-weight: 700; text-transform: uppercase; line-height: 0.98; white-space: nowrap; }
+  .side__mini-big span { display: block; width: max-content; }
+  .mini__docs { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .mini__docs .doclink { font-family: var(--f-text); font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); }
+  .mini__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .mini__copy { display: flex; flex-direction: column; gap: 0.3rem; font-size: var(--fs-small); color: var(--text); }
+}
+@media (max-width: 1023px) { .mini__row .blink { flex: none; white-space: nowrap; } .mini__copy span { white-space: nowrap; } }
