@@ -794,7 +794,9 @@
       var sub = document.querySelector('.hero__sub');
       var caps = Array.prototype.slice.call(document.querySelectorAll('.hero__cap span'));
       var acts = document.querySelector('.hero__actions');
-      var typed = [sub].concat(caps).filter(Boolean);
+      /* В левой панели печатаются только тексты (имя, должность и строка про Санкт-Петербург), сама панель стоит на месте */
+      var sideTexts = Array.prototype.slice.call(document.querySelectorAll('.side__name > span, .side__role'));
+      var typed = [sub].concat(caps).concat(sideTexts).filter(Boolean);
       typed.forEach(function (el) { typeify(el); el.classList.add('typing'); });
       if (fig) { fig.setAttribute('data-reveal', ''); }
       var go = function () {
@@ -809,6 +811,13 @@
             el.style.setProperty('--ts', '0.07s');
             (function (e, at) { setTimeout(function () { e.classList.add('is-typed'); }, at); })(el, offset);
             offset += n * 70 + 120;
+          });
+          sideTexts.forEach(function (el) {
+            var n = el.querySelectorAll('.tc').length;
+            var step = el.classList.contains('side__role') ? 45 : 70;   // имя печатается медленнее, как подпись под фото
+            el.style.setProperty('--ts', (step / 1000) + 's');
+            el.classList.add('is-typed');
+            longest = Math.max(longest, n * step + 60);
           });
           longest = Math.max(longest, offset);
           setTimeout(function () { if (acts) { acts.classList.add('is-in'); } }, longest + 80);
