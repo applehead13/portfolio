@@ -2380,3 +2380,17 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .footer__big { position: relative; margin-top: calc(7 * 0.16 * var(--fs-h1) + 0.65em) !important; }
   .footer__big .ok { position: absolute; top: calc(-7 * 0.16 * var(--fs-h1) - 0.65em); right: 0; margin-left: 0; }
 }
+
+/* Телефон, список «Что нужно сделать»: значок рядом со словом; варианты на всю ширину блока, выбранный и наведённый подсвечены нейтральным фоном (как активное поле), без зелёного и скобок */
+@media (max-width: 767px) {
+  .types__toggle { justify-content: flex-start; gap: 0.75rem; }
+  .types.is-open .types__list { padding-inline: 0; gap: 0; }
+  .types__list .chip { display: block; }
+  .types__list .chip span {
+    display: flex; width: 100% !important; min-height: 2.75rem; padding: 0.3rem 0.75rem;
+    background-image: none !important; background-color: transparent;
+    font-size: var(--fs-text); text-transform: none; transition: background-color 0.3s var(--ease);
+  }
+  .types__list .chip span::before, .types__list .chip span::after { display: none; }
+  .types__list .chip:hover span, .types__list .chip input:checked + span { background-color: color-mix(in srgb, var(--text) 12%, var(--bg)); }
+}

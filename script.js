@@ -384,7 +384,8 @@
      Когда фото стоит на месте, холст полностью скрыт, никаких помех нет. */
   (function () {
     var gal = document.querySelector('.about .gallery');
-    if (!gal || reduce) { return; }
+    /* На телефоне и планшете (без наведения мыши) помехи на фото отключены: отвлекают при прокрутке */
+    if (!gal || reduce || !window.matchMedia('(hover: hover)').matches) { return; }
     var cv = document.createElement('canvas');
     cv.className = 'gallery__fx';
     cv.setAttribute('aria-hidden', 'true');
@@ -577,7 +578,8 @@
     });
     var heroFig = document.querySelector('.hero__figure');
     if (heroFig) { items.push({ box: heroFig, img: heroFig.querySelector('.hero__photo'), hoverHost: null, cls: 'hero__fx', insert: 'overImg' }); }
-    if (!items.length || reduce) { return; }
+    /* На телефоне и планшете помехи на фото отключены; остаются только помехи на заголовках */
+    if (!items.length || reduce || !canHover) { return; }
 
     var VS = 'attribute vec2 a_pos; varying vec2 v_uv; void main(){ v_uv = a_pos * 0.5 + 0.5; gl_Position = vec4(a_pos, 0., 1.); }';
     var FS = [
