@@ -2173,3 +2173,4 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .mini__copy { display: flex; flex-direction: column; gap: 0.3rem; font-size: var(--fs-small); color: var(--text); }
 }
 @media (max-width: 1023px) { .mini__row .blink { flex: none; white-space: nowrap; } .mini__copy span { white-space: nowrap; } }
+@media (max-width: 1023px) { .mini__copy { flex: 1 1 auto; min-width: 0; } .mini__copy span { white-space: normal; } .mini__row .blink { padding-inline: 1rem; } }
