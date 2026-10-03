@@ -10,9 +10,15 @@
   document.querySelectorAll('[data-split]').forEach(function (el) {
     var words = el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '').split(/[ \t\r\n]+/);
     el.setAttribute('aria-label', el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ''));
-    el.innerHTML = words.map(function (w, i) {
+    var wordHtml = words.map(function (w, i) {
       return '<span class="word" aria-hidden="true"><span style="--i:' + i + '">' + w + '</span></span>';
-    }).join(' ');
+    });
+    /* Пиксельная улыбка после последнего слова главного заголовка: через пробел и чуть ниже строки, как будто немного сползла */
+    if (el.classList.contains('hero__title')) {
+      wordHtml.push(wordHtml.pop() + '<span class="smile" aria-hidden="true"></span>');
+      wordHtml[wordHtml.length - 1] = '<span class="hero__tail">' + wordHtml[wordHtml.length - 1] + '</span>';
+    }
+    el.innerHTML = wordHtml.join(' ');
   });
 
   /* Стартовая анимация после загрузки шрифтов */

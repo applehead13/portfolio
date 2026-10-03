@@ -2334,3 +2334,31 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .mark { display: inline-block; width: var(--sq); height: var(--sq); vertical-align: calc(0.36em - var(--sq) / 2); background: currentColor; }
 .blink .mark { margin-left: var(--sq-gap); background: var(--text); }
 .side__note .mark { margin-right: var(--sq-gap); background: var(--bg); }
+
+/* Пиксельная улыбка у главного заголовка: зелёные квадраты, глаза сверху, улыбка снизу; стоит через пробел от последнего слова и чуть ниже строки, будто сползла */
+.hero__tail { white-space: nowrap; }
+.hero__title .smile {
+  display: inline-block; width: 0.62em; height: 0.62em; margin-left: 0.32em; vertical-align: -0.14em;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%207%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%222%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%226%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%226%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%226%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+/* Все квадратики на сайте одного размера (--sq): маркеры меню, цен, фактов, футера, галочки, ссылок в подвале и сноски */
+.nav__link::before, .skills__row::before, .card__title::before, .check__box::after, .flink::before, .fact::before, .fact::after,
+.price::before, .footer__meta .sq, .mark { width: var(--sq) !important; height: var(--sq) !important; }
+
+/* Улыбка у заголовка: помехи с тем же поведением, что у самого заголовка (один раз при появлении, дальше на ПК по наведению) */
+.hero__title .smile { position: relative; }
+.hero__title .smile::before {
+  content: ""; position: absolute; inset: 0; background: inherit; image-rendering: pixelated; pointer-events: none; opacity: 0;
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(10% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+}
+.hero__title.is-glitching .smile::before { opacity: 1; animation: glitch-scroll 0.8s steps(2, end) 2 forwards; }
+@media (min-width: 1100px) and (hover: hover) {
+  .hero__title:hover .smile::before { opacity: 1; animation: glitch-scroll 0.8s steps(2, end) forwards; }
+}
