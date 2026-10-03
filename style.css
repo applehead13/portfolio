@@ -2417,3 +2417,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Согласие на обработку персональных данных: размер шрифта как у остального текста */
 .check, .check__text { font-size: var(--fs-text); line-height: var(--lh-text); }
+
+/* Этапы работы: у раскрытого пункта заголовок и крестик зелёные, у остальных обычные */
+.step-item.is-open .step-item__head, .step-item.is-open .step-item__head:hover { color: var(--accent-text); }
+.step-item.is-open .step-item__num { color: var(--muted); }

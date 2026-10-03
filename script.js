@@ -639,6 +639,12 @@
         if (d < bestD) { bestD = d; best = r; }
       });
       priceRows.forEach(function (r) { r.classList.toggle('is-active', r === best && bestD < window.innerHeight * 0.38); });
+      /* Телефон: у подсвеченной услуги печатаются «Срок» и «Стоимость», по мере прокрутки, а не наперёд */
+      var act = priceList.querySelector('.price.is-active');
+      if (act && !act.__printed) {
+        act.__printed = true;
+        act.querySelectorAll('.price__label, .price__value').forEach(function (el) { el.classList.add('is-typed'); });
+      }
       priceList.classList.toggle('has-active', !!priceList.querySelector('.is-active'));
     };
     var schedulePrices = function () { if (!priceTick) { priceTick = true; requestAnimationFrame(updatePrices); } };
@@ -911,6 +917,8 @@
       if (el.parentElement && el.parentElement.closest('[data-typed]')) { return; }
       typeify(el);
       el.classList.add('typing');
+      /* Телефон: «Срок» и «Стоимость» в ценах запускаются прокруткой (см. updatePrices), а не общей очередью */
+      if (touchMq.matches && el.closest('#prices .price') && /price__(label|value)/.test(el.className)) { return; }
       typeObs.observe(el);
     });
 
