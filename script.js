@@ -143,8 +143,8 @@
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); sendBtn.setAttribute('data-after', ''); }
   /* Факты: белое начало («Первое образование…») и квадратик стоят сразу, печатается только продолжение-описание */
   document.querySelectorAll('.fact').forEach(function (el) { el.classList.add('is-typed'); });
-  /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
-  document.querySelectorAll('#about .section__head, #about .about__body > .text, #about .about__body > .facts').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
+  /* «Обо мне»: заголовок блока, вступление, абзац, этапы работы (Знакомство, Структура, Дизайн…) стоят на месте сразу; печатаются только факты и описание открытого этапа */
+  document.querySelectorAll('#about .section__head, #about .about__body > .text, #about .about__body > .facts, #about .skills').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
   document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   document.querySelectorAll('.gallery').forEach(function (el) {
