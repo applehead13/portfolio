@@ -38,3 +38,6 @@
   .doc__title--tag { width: auto !important; max-width: 100%; padding-right: 0 !important; margin-top: 1.6rem; }
   .doc__title--tag .tag { top: -1.7em; right: 0; }
 }
+
+/* Совсем узкие экраны: длинное слово «КОНФИДЕНЦИАЛЬНОСТИ» не должно шире экрана */
+@media (max-width: 359px) { .docpage .doc__title { font-size: 1.3rem; } }

@@ -131,7 +131,13 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .dot.is-done::before { background: var(--muted); }
 .dot.is-current::before { background: var(--accent-text); border-color: var(--accent-text); transform: scale(1.4); }
 .dot:hover::before { border-color: var(--text); }
-@media (max-width: 479px) { .dot { width: 1.4rem; } .dock .btn { padding-inline: 1.1rem; } }
+/* Узкие телефоны: «Назад», квадраты этапов и «Далее / Отправить» должны умещаться в ширину экрана, иначе страница расширяется и телефон уменьшает всё, в том числе меню */
+@media (max-width: 479px) {
+  .dock__inner { gap: 0.4rem; }
+  .dock .btn { padding-inline: 0.85rem; }
+  .dots { gap: 0; }
+  .dot { width: 1.05rem; }
+}
 
 /* ===== Подвал: тот же, что на основном сайте (стили из ../style.css), без большой фразы и без эффекта выезда: виден сразу ===== */
 .footer { margin-top: auto; min-height: clamp(11rem, 26vh, 16rem); }
@@ -187,3 +193,6 @@ body.brief .footer__inner { transform: none; }
 
 /* Пока открыто меню-бургер, верхняя строка и нижняя навигация не видны и не нажимаются */
 .menu-open .dock, .menu-open .top { visibility: hidden; }
+
+/* Совсем узкие телефоны: нижняя навигация ещё компактнее */
+@media (max-width: 359px) { .dock .btn { padding-inline: 0.6rem; letter-spacing: 0.02em; } .dot { width: 0.95rem; } }
