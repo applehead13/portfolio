@@ -2268,3 +2268,11 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Галочка: квадратик стоит по центру первой строки текста, а не по центру всей фразы */
 .check { align-items: flex-start; }
 .check__box { margin-top: calc((var(--fs-small) * var(--lh-text) - 1.5rem) / 2); }
+
+/* Телефон: сначала заголовок, ниже фото (подписи под ним), затем описание и кнопки */
+@media (max-width: 767px) {
+  .hero { grid-template-rows: auto auto 1fr; }
+  .hero__text { grid-column: 1; grid-row: 1; }
+  .hero__figure { grid-column: 1; grid-row: 2; order: 0; }
+  .hero__lower { grid-column: 1; grid-row: 3; }
+}

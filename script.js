@@ -723,6 +723,24 @@
     });
   }
 
+  /* Телефон: «Сделаем крутой проект вместе?» в подвале как можно крупнее — по ширине экрана, по высоте без ограничений */
+  (function () {
+    var big = document.querySelector('.footer__big');
+    if (!big) { return; }
+    var mq = window.matchMedia('(max-width: 699px)');
+    function fit() {
+      if (!mq.matches) { big.style.fontSize = ''; return; }
+      big.style.fontSize = '100px';
+      var avail = big.getBoundingClientRect().width, widest = 0;
+      Array.prototype.forEach.call(big.children, function (s) { widest = Math.max(widest, s.getBoundingClientRect().width); });
+      if (widest > 0 && avail > 0) { big.style.fontSize = (Math.floor(100 * avail / widest * 0.995 * 10) / 10) + 'px'; }
+    }
+    fit();
+    window.addEventListener('resize', fit);
+    window.addEventListener('orientationchange', fit);
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+  })();
+
   /* Временная сетка-подсказка: 12 прозрачных колонок поверх прокручиваемой части (без левой панели).
      Клавиша G включает и выключает; адрес с ?grid=0 открывает сайт без неё. */
   (function () {
