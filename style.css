@@ -1884,3 +1884,26 @@ body, .text, .hero__sub, .price__desc, .fact__text, .card__desc, .contacts__hint
   .btn:not(.btn--ghost):active::before { background: color-mix(in srgb, var(--accent) 70%, black); }
   .blink.attach__btn, .footer__up { background-size: 100% 100%; }
 }
+
+/* Этапы работы вместо списка навыков: название с номером-индексом, под ним описание */
+.stages { list-style: none; margin-top: calc(var(--pad) * 0.5); counter-reset: none; }
+.stage-row { display: block; padding: clamp(1.1rem, 0.9rem + 0.8vw, 1.75rem) 0; border-top: 1px solid var(--line); position: relative; transition: padding-left 0.45s var(--ease); }
+.stage-row:last-child { border-bottom: 1px solid var(--line); }
+.stage-row::before { content: none !important; }
+.stage-row:hover { padding-left: 0; }
+.stage-row__title { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.25; }
+.stage-row__num { display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; color: var(--muted); }
+.stage-row__num::before { content: "[ "; } .stage-row__num::after { content: " ]"; }
+.stage-row__desc { margin-top: 0.5rem; max-width: 60ch; color: var(--muted); font-size: var(--fs-text); line-height: var(--lh-text); transition: color 0.3s var(--ease); }
+.stage-row:hover .stage-row__desc, .stage-row:hover .stage-row__num { color: var(--text); }
+@media (min-width: 768px) {
+  .stage-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--gutter); align-items: start; }
+  .stage-row__desc { margin-top: 0.25rem; }
+}
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* Логотип: «— веб-дизайнер» приглушённым светлым, как остальной серый текст на зелёной панели */
+.side__name span:last-child { color: var(--side-soft) !important; }
