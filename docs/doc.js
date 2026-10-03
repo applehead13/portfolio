@@ -1,6 +1,25 @@
 /* Документы: меню-бургер на телефоне и пиксельный курсор, как на сайте. Никакой печати и появления. */
 (function () {
   var root = document.documentElement;
+
+  /* «Документ» стоит у верхнего правого угла всего заголовка: ширина подгоняется под самую длинную строку */
+  function fitTag() {
+    var h = document.querySelector('.doc__title--tag');
+    if (!h) { return; }
+    h.style.width = '';
+    var rg = document.createRange();
+    rg.selectNodeContents(h.firstChild);
+    var rects = Array.prototype.slice.call(rg.getClientRects());
+    if (!rects.length) { return; }
+    var left = h.getBoundingClientRect().left;
+    var textW = Math.max.apply(null, rects.map(function (r) { return r.right; })) - left;
+    var tw = h.querySelector('.tag').getBoundingClientRect().width;
+    h.style.setProperty('--tag-w', tw + 'px');
+    h.style.width = Math.ceil(textW + tw + 8) + 1 + 'px';
+  }
+  fitTag();
+  window.addEventListener('resize', fitTag);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fitTag); }
   var side = document.getElementById('side');
   var toggle = side.querySelector('.side__toggle');
   var label = toggle.querySelector('.side__toggle-text');

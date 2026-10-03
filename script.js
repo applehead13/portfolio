@@ -11,7 +11,7 @@
      Если элемент уже ушёл с экрана, очередь не ждёт его и идёт дальше. */
   var TYPE_STEP = 22;   // мс на букву: одна скорость печати везде
   var seqState = new Map(), seqReady = false;
-  setTimeout(function () { seqReady = true; seqState.forEach(function (st, k) { seqNext(k); }); }, 350);
+  setTimeout(function () { seqReady = true; seqState.forEach(function (st, k) { seqNext(k); }); }, 150);
   function seqOnScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
   function seqOrder(a, b) {
     if (a.el === b.el) { return a.kind === 'reveal' ? -1 : 1; }
@@ -44,7 +44,27 @@
       else { setTimeout(wait, 60); }
     })();
   }
+  /* Элементы с data-par печатаются одновременно, не вставая в очередь; элемент с data-after ждёт, пока они все допечатаются */
+  var parEnd = 0;
+  function startPar(el, kind) {
+    var dur;
+    el.__started = true;
+    if (kind === 'ph') {
+      var phText = el.__ph, phI = 0;
+      var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, TYPE_STEP);
+      dur = phText.length * TYPE_STEP + 60;
+    } else { el.classList.add('is-typed'); dur = el.__typeDur || 0; }
+    parEnd = Math.max(parEnd, Date.now() + dur);
+  }
+  function afterPar(el, fn) {
+    (function chk() {
+      var pending = Array.prototype.some.call(document.querySelectorAll('#contacts [data-par]'), function (e) { return !e.__started && seqOnScreen(e); });
+      if (pending || Date.now() < parEnd) { setTimeout(chk, 80); } else { fn(); }
+    })();
+  }
   function seqAdd(el, kind) {
+    if (el.hasAttribute('data-par') && (kind === 'type' || kind === 'ph')) { startPar(el, kind); return; }
+    if (el.hasAttribute('data-after')) { afterPar(el, function () { el.classList.add('is-in'); }); return; }
     var k = seqKey(el), st = seqState.get(k);
     if (!st) { st = { q: [], busy: false }; seqState.set(k, st); }
     st.q.push({ el: el, kind: kind });
@@ -101,8 +121,11 @@
      печатаются только подсказки: надписи в полях и пояснения под кнопкой брифа и у вложения ТЗ */
   document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
+  document.querySelectorAll('#contacts .contacts__hint, #contacts .attach__name').forEach(function (el) { el.setAttribute('data-par', ''); });
+  var sendBtn = document.querySelector('#lead-form .btn--wide');
+  if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); sendBtn.setAttribute('data-after', ''); }
   /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
-  document.querySelectorAll('#about .section__head, #about .about__body > .text').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
+  document.querySelectorAll('#about .section__head, #about .about__body > .text, #about .about__body > .facts').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
   document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   document.querySelectorAll('.gallery').forEach(function (el) {
@@ -854,6 +877,7 @@
       var ph = inp.getAttribute('placeholder');
       if (!ph) { return; }
       inp.__ph = ph;
+      inp.setAttribute('data-par', '');
       inp.setAttribute('placeholder', '');
       phObs.observe(inp);
     });

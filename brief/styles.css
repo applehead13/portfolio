@@ -32,10 +32,12 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .done__lead { margin-top: var(--pad); max-width: 32em; font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.25; }
 .intro__body, .done__body { margin-top: var(--pad); }
 .intro__list, .done__steps { display: flex; flex-direction: column; gap: 1.5rem; counter-reset: li; }
-.intro__list li, .done__steps li { position: relative; counter-increment: li; display: flex; flex-direction: column; gap: 0.15rem; padding-left: calc(var(--sq) + var(--sq-gap)); }
+.intro__list li, .done__steps li { position: relative; counter-increment: li; display: block; padding-left: calc(var(--sq) + var(--sq-gap)); font-size: var(--fs-text); line-height: var(--lh-text); }
 .intro__list li::before, .done__steps li::before { content: ""; position: absolute; left: 0; top: calc(var(--fs-text) * 0.675 - 0.275rem); width: var(--sq); height: var(--sq); background: var(--accent-text); transition: opacity 0.25s var(--ease); }
-.intro__list strong, .done__steps strong { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-text); line-height: 1.3; }
-.intro__list span, .done__steps span { color: var(--muted); font-size: var(--fs-small); }
+/* Как в фактах на сайте: весь текст обычным шрифтом и белым, начало фразы чуть выделено */
+.intro__list strong, .done__steps strong { font-family: var(--f-text); font-weight: 600; font-size: inherit; line-height: inherit; color: var(--text); }
+.intro__list span, .done__steps span { font-size: inherit; color: var(--text); }
+.intro__list strong::after, .done__steps strong::after { content: " "; }
 .intro__actions, .done__actions { margin-top: var(--pad); display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; }
 .done__next { margin-top: var(--pad); }
 .done__photo { width: min(100%, 22rem); }

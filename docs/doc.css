@@ -1,3 +1,12 @@
 /* Документы в стиле сайта: левая панель и правая часть; печати и появления здесь нет */
 .docpage .doc { max-width: none; margin: 0; padding: calc(var(--section) * 0.5) var(--gutter) var(--section); }
 @media (max-width: 1023px) { .docpage .doc { padding-top: calc(var(--section) * 0.4); } }
+
+/* «Документ»: подсказка в квадратных скобках сверху справа у заголовка, как показатель степени (так же, как «Важно» в брифе) */
+.doc__title--tag { display: block; width: max-content; max-width: 100%; position: relative; padding-right: calc(var(--tag-w, 6rem) + 0.5rem); }
+.doc__title--tag .tag {
+  position: absolute; right: 0; top: 0.2em;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap;
+}
+.doc__title--tag .tag::before { content: "[ "; }
+.doc__title--tag .tag::after { content: " ]"; }
