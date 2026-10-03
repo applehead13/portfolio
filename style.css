@@ -2253,3 +2253,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* «Другое»: срок и цена словами, поэтому обычным размером текста и с переносом, чтобы не налезали друг на друга */
 .price--custom .price__value { font-size: var(--fs-text); line-height: 1.2; white-space: normal; overflow-wrap: break-word; hyphens: manual; }
+
+/* Заголовки блоков не печатаются по буквам: стоят сразу, а помехи играют сразу при появлении */
+.js .ch { opacity: 1 !important; transition: none !important; }

@@ -516,7 +516,8 @@
         entries.forEach(function (e) {
           if (!e.isIntersecting) { return; }
           glitchIo.unobserve(e.target);
-          setTimeout(function () { played(e.target); }, 900);
+          /* Заголовки сразу с помехами, без печати; вступление к форме ждёт, пока его слова проявятся */
+          setTimeout(function () { played(e.target); }, e.target.classList.contains('lead') ? 900 : 0);
         });
       }, { threshold: 0.6 });
       document.querySelectorAll('.glitch').forEach(function (el) { glitchIo.observe(el); });
@@ -658,9 +659,9 @@
     var TYPE_SEL = [
       '.hero__sub', '.hero__cap span', '.side__role', '.side__note',
       '.about__body > .text', '.fact__p',
-      '.card__title', '.card__desc', '.card__tags',
-      '.price__title', '.price__desc', '.price__label', '.price__value',
-      '.step-item__title', '.step-item__inner p',
+      '.card__desc', '.card__tags',
+      '.price__desc', '.price__label', '.price__value',
+      '.step-item__inner p',
       '.contacts__hint', '.field__label', '.check__text', '.attach__name',
       '.footer__copy span', '.footer__docs a', '.doc__body p', '.doc__body li'
     ].join(', ');
