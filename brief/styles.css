@@ -398,3 +398,6 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
   .intro__actions, .done__actions { align-items: center; justify-content: center; }
   .intro__actions .btn, .done__actions .btn { width: auto; }
 }
+
+/* Телефон: кнопка Telegram в подвале брифа по центру, обычной ширины */
+@media (max-width: 699px) { .legal__row { justify-content: center; text-align: center; } .legal__row .blink { margin-inline: auto; } .legal__docs { justify-content: center; } }
