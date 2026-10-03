@@ -243,6 +243,33 @@
   ta.addEventListener('input', grow);
   form.addEventListener('reset', function () { setTimeout(grow, 0); });
 
+  /* Телефон: варианты «Что нужно сделать» сворачиваются в выпадающий список; на планшете и компьютере остаются плашками (кнопка скрыта стилями) */
+  (function () {
+    var box = form.querySelector('.types');
+    if (!box) { return; }
+    var legend = box.querySelector('legend');
+    var radios = Array.prototype.slice.call(box.querySelectorAll('input[type="radio"]'));
+    var list = document.createElement('div');
+    list.className = 'types__list'; list.id = 'types-list';
+    Array.prototype.slice.call(box.querySelectorAll('.chip')).forEach(function (c) { list.appendChild(c); });
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'types__toggle';
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', 'types-list');
+    btn.innerHTML = '<span class="types__value"></span><span class="types__icon" aria-hidden="true"></span>';
+    var val = btn.querySelector('.types__value');
+    box.appendChild(btn); box.appendChild(list);
+    function sync() {
+      var on = radios.filter(function (r) { return r.checked; })[0];
+      val.textContent = on ? on.parentNode.querySelector('span').textContent : '';
+    }
+    function setOpen(open) { box.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    btn.addEventListener('click', function () { setOpen(!box.classList.contains('is-open')); });
+    radios.forEach(function (r) { r.addEventListener('change', function () { sync(); setOpen(false); }); });
+    form.addEventListener('reset', function () { setTimeout(function () { sync(); setOpen(false); }, 0); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setOpen(false); } });
+    sync();
+  })();
+
   /* Почта: ссылка открывает письмо сразу, а адрес заодно копируется на случай, если почтовой программы нет */
   var toast = document.getElementById('toast');
   var toastTimer = null;

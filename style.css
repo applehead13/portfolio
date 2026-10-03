@@ -2284,3 +2284,38 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (min-width: 1024px) {
   .hero__photo { width: calc((100cqw - 11 * var(--gap)) / 6 + var(--gap)); }
 }
+
+/* Контакты: вступление к форме тем же шрифтом и размером, что вступление в «Обо мне» («Я Полина Гусева, веб-дизайнер…») — на всех экранах */
+.contacts__side .lead {
+  font-family: var(--f-head); font-weight: 700;
+  font-size: var(--fs-sub); line-height: 1.25;
+  text-transform: none; letter-spacing: normal;
+  text-wrap: wrap;
+}
+
+/* Телефон: «Что нужно сделать» — выпадающий список; кнопка видна только здесь */
+.types__toggle { display: none; }
+.types__list { display: contents; }
+@media (max-width: 767px) {
+  .types { display: block; }
+  .types__toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    width: 100%; min-height: 2.75rem; padding: 0.5rem 0; text-align: left;
+    border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+    color: var(--text); font: inherit; font-size: var(--fs-text);
+    transition: border-color 0.3s var(--ease);
+  }
+  .types__toggle:hover, .types.is-open .types__toggle { border-bottom-color: var(--muted); }
+  .types__icon { position: relative; flex: none; width: 0.9rem; height: 0.9rem; }
+  .types__icon::before, .types__icon::after { content: ""; position: absolute; top: 50%; left: 50%; width: 0.9rem; height: 1px; background: currentColor; transition: transform 0.35s var(--ease); }
+  .types__icon::before { transform: translate(-50%, -50%); }
+  .types__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .types.is-open .types__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+  .types__list { display: none; flex-direction: column; gap: 0.5rem; padding-top: 0.75rem; }
+  .types.is-open .types__list { display: flex; }
+  .types .chip { flex: 0 0 auto; }
+  .types .chip span { width: 100% !important; justify-content: flex-start; }
+
+  /* Кнопка «Отправить» на всю ширину сетки */
+  .form .btn--wide { width: 100% !important; align-self: stretch; }
+}
