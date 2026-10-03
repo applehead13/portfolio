@@ -801,8 +801,16 @@
         if (fig) { fig.classList.add('is-in'); }                         // фото вместе с заголовком
         setTimeout(function () {
           var longest = 0;
-          if (sub) { sub.classList.add('is-in'); }
-          typed.forEach(function (el) { el.classList.add('is-typed'); longest = Math.max(longest, el.__typeDur || 0); });  // подпись и текст печатаются одновременно
+          if (sub) { sub.classList.add('is-in'); sub.classList.add('is-typed'); longest = sub.__typeDur || 0; }
+          /* Подпись под фото печатается медленно, по одной строке за другой, чтобы это было хорошо видно */
+          var offset = 0;
+          caps.forEach(function (el) {
+            var n = el.querySelectorAll('.tc').length;
+            el.style.setProperty('--ts', '0.07s');
+            (function (e, at) { setTimeout(function () { e.classList.add('is-typed'); }, at); })(el, offset);
+            offset += n * 70 + 120;
+          });
+          longest = Math.max(longest, offset);
           setTimeout(function () { if (acts) { acts.classList.add('is-in'); } }, longest + 80);
         }, 450);
       };
