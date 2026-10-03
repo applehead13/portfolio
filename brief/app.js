@@ -226,9 +226,10 @@ function buildQuestion(q) {
   const head = el('div', { class: 'q__head' });
   const label = el('label', { class: 'q__label', for: fid }, nb(q.label));
   /* «Важно» стоит сверху справа от вопроса, как показатель степени (так же, как номера в ценах на сайте) */
-  if (q.important) { label.append(el('span', { class: 'tag' }, 'Важно')); }
+  /* «Важно» и «Обязательно» одинаково: в квадратных скобках сверху справа от вопроса, как показатель степени */
+  if (q.important) { label.append(el('span', { class: 'tag' }, 'Важно')); label.classList.add('q__label--tag'); }
+  else if (q.required && q.type !== 'consent') { label.append(el('span', { class: 'tag' }, 'Обязательно')); label.classList.add('q__label--tag'); }
   head.append(label);
-  if (!q.important && q.required && q.type !== 'consent') { head.append(el('span', { class: 'req' }, 'обязательно')); }
   wrap.append(head);
   if (q.hint) { wrap.append(el('p', { class: 'q__hint', id: fid + '-hint' }, nb(q.hint))); }
 
@@ -466,12 +467,31 @@ function updateChrome() {
   }
 }
 
+/* «Важно» стоит сверху справа у всего заголовка вопроса, а не на второй строке: ширина подписи подгоняется под самую длинную строку */
+function fitTags() {
+  $$('.step:not([hidden]) .q__label--tag').forEach(l => {
+    l.style.width = '';
+    const rg = document.createRange();
+    rg.selectNodeContents(l.firstChild);
+    const rects = Array.from(rg.getClientRects());
+    if (!rects.length) { return; }
+    const left = l.getBoundingClientRect().left;
+    const textW = Math.max.apply(null, rects.map(r => r.right)) - left;
+    const tw = l.querySelector('.tag').getBoundingClientRect().width;
+    l.style.setProperty('--tag-w', tw + 'px');
+    l.style.width = Math.ceil(textW + tw + 8) + 1 + 'px';
+  });
+}
+window.addEventListener('resize', fitTags);
+if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fitTags); }
+
 function showView(name) {
   state.view = name;
   $('#view-intro').hidden = name !== 'intro';
   $('#view-done').hidden = name !== 'done';
   $$('.step').forEach((s, i) => { s.hidden = !(name === 'step' && i === state.step); });
   updateChrome();
+  fitTags();
 }
 
 function go(i, focusTitle) {

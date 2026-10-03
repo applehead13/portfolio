@@ -10,7 +10,7 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .top {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  min-height: 3rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  min-height: 3.5rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
   background: var(--bg); border-bottom: 1px solid var(--line);
   font-size: var(--fs-small); color: var(--muted);
 }
@@ -72,9 +72,10 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .q__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.9rem; }
 .q__label { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.25; text-wrap: balance; }
 /* «Важно»: сверху справа от вопроса, как показатель степени (так же, как номера в ценах на сайте) */
+.q__label--tag { display: block; width: max-content; max-width: 100%; position: relative; padding-right: calc(var(--tag-w, 5.4rem) + 0.5rem); }
 .q__label .tag {
-  display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em;
-  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; text-transform: none; color: var(--muted);
+  position: absolute; right: 0; top: 0.2em;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap;
 }
 .q__label .tag::before { content: "[ "; }
 .q__label .tag::after { content: " ]"; }
@@ -92,7 +93,7 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .q.is-invalid .drop { border-color: var(--bad); }
 .q.is-invalid .check__box { border-color: var(--bad) !important; }
 .q.is-valid .field::after { background: var(--ok); transform: scaleX(1); }
-.q.is-valid .req { color: var(--ok); }
+.q.is-valid .q__label .tag { color: var(--ok); }
 
 /* Загрузка файлов */
 .drop {

@@ -9,17 +9,48 @@
   <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=1791038313">
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png?v=1791038313">
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=1791038313">
-  <link rel="stylesheet" href="../style.css?v=1791045127">
+  <link rel="stylesheet" href="../style.css?v=1791045482">
+  <link rel="stylesheet" href="doc.css?v=1791045482">
 </head>
-<body>
+<body class="docpage">
 <!--
   ЧЕРНОВИК ДОКУМЕНТА. Текст составлен по структуре политики на zharikovadesign.ru и переработан под этот сайт:
   здесь нет аналитики и рекламных cookie, зато есть форма заявки, бриф с файлами и отправка через Telegram.
   Всё, что в квадратных скобках [...], нужно заменить на свои данные.
   Перед публикацией документ стоит показать юристу: см. заметки в чате про хранение данных и трансграничную передачу.
 -->
-<main class="doc">
-  <a class="blink doc__back" href="../">На сайт</a>
+<div class="layout" id="top">
+
+  <!-- Левая закреплённая колонка: та же, что на сайте; один подсвеченный пункт -->
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel">
+        <span class="side__toggle-text">Меню</span>
+      </button>
+    </div>
+
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link is-active" href="privacy.html" aria-current="page"><span class="nav__text">Политика конфиденциальности</span></a>
+      </nav>
+
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="pane doc">
 
   <header class="doc__head">
     <span class="kicker">Документ</span>
@@ -107,5 +138,7 @@
 
   </article>
 </main>
+</div>
+<script src="doc.js?v=1791045482"></script>
 </body>
 </html>

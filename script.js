@@ -9,6 +9,7 @@
   /* Очередь появления: тексты печатаются, остальные элементы (кнопки, фото, плитки) проявляются, и всё это по порядку сверху вниз.
      У каждого блока страницы своя очередь: дошли до следующего блока, и там всё начинает появляться почти сразу, не дожидаясь предыдущего.
      Если элемент уже ушёл с экрана, очередь не ждёт его и идёт дальше. */
+  var TYPE_STEP = 22;   // мс на букву: одна скорость печати везде
   var seqState = new Map(), seqReady = false;
   setTimeout(function () { seqReady = true; seqState.forEach(function (st, k) { seqNext(k); }); }, 350);
   function seqOnScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
@@ -83,7 +84,7 @@
     /* Вступление к форме в «Контактах» не проявляется словами: оно печатается по буквам, как обычные тексты */
     if (el.closest('.contacts__side')) { return; }
     /* «Обо мне»: вступление «Я Полина Гусева…» стоит на месте сразу, без появления */
-    if (el.closest('.about__body')) { el.removeAttribute('data-reveal'); return; }
+    if (el.closest('.about__body')) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); return; }
     var words = el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '').split(/[ \t\r\n]+/);
     el.setAttribute('aria-label', el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ''));
     el.innerHTML = words.map(function (w, i) {
@@ -98,14 +99,14 @@
   document.querySelectorAll('.hero__sub, .hero__actions').forEach(function (el) { el.setAttribute('data-hero', ''); });
   /* «Контакты»: заголовок, вступление, кнопка «Заполнить бриф» и вся форма стоят на месте сразу, без появления;
      печатаются только подсказки, а главная кнопка «Отправить» проявляется последней, как кнопки первого экрана */
-  document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); });
+  document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   var sendBtn = document.querySelector('#lead-form .btn--wide');
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); }
   document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
   /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
-  document.querySelectorAll('#about .section__head, #about .about__body > .text').forEach(function (el) { el.removeAttribute('data-reveal'); });
+  document.querySelectorAll('#about .section__head, #about .about__body > .text').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
-  document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); });
+  document.querySelectorAll('#works .section__head, #works .card').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   document.querySelectorAll('.gallery').forEach(function (el) {
     if (!el.hasAttribute('data-reveal')) { el.setAttribute('data-reveal', ''); }
   });
@@ -805,7 +806,7 @@
         });
         node.parentNode.replaceChild(frag, node);
       });
-      var ts = Math.min(0.014, 0.9 / Math.max(total, 1));   // не дольше 0.9 с на текст
+      var ts = TYPE_STEP / 1000;   // одна скорость печати для всех текстов
       el.style.setProperty('--ts', ts.toFixed(4) + 's');
       el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
@@ -833,8 +834,7 @@
           if (sub) { sub.classList.add('is-in'); sub.classList.add('is-typed'); longest = sub.__typeDur || 0; }
           /* Подпись под фото печатается в том же темпе, что текст рядом: строки по очереди и заканчивает она вместе с текстом */
           var offset = 0;
-          var capChars = caps.reduce(function (n, el) { return n + el.querySelectorAll('.tc').length; }, 0);
-          var step = Math.max(12, Math.round(((sub ? sub.__typeDur - 60 : 1500)) / Math.max(capChars, 1)));
+          var step = TYPE_STEP;
           caps.forEach(function (el) {
             var n = el.querySelectorAll('.tc').length;
             el.style.setProperty('--ts', (step / 1000) + 's');

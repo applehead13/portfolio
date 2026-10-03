@@ -79,7 +79,7 @@
       });
       node.parentNode.replaceChild(frag, node);
     });
-    var ts = Math.min(0.016, 1.5 / Math.max(total, 1));
+    var ts = 0.022;   // одна скорость печати везде
     el.style.setProperty('--ts', ts.toFixed(4) + 's');
     el.__typeDur = total * ts * 1000 + 60;
   }
