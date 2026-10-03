@@ -2206,3 +2206,21 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   90%  { clip-path: var(--move4); transform: translate(-0.2em, 0.2em); }
   100% { clip-path: var(--move1); transform: translate(0); opacity: 0; }
 }
+
+/* Квадратики: одинаковый размер и отступ до слова, как в фактах (0.55rem квадрат, 0.85rem до текста) — в ценах при наведении и на телефоне */
+:root { --sq: 0.55rem; --sq-gap: 0.85rem; }
+.price::before { width: var(--sq); height: var(--sq); }
+@media (hover: hover) and (min-width: 768px) {
+  /* квадрат стоит на left: -0.75rem, текст отъезжает ровно на «квадрат + отступ» */
+  .price:hover .price__num, .price:hover .price__body,
+  .price:hover .price__title, .price:hover .price__desc { transform: translateX(calc(var(--sq) + var(--sq-gap) - 0.75rem)); }
+  .price:hover .price__fact { transform: none; }
+  .price:hover .price__title .price__num { transform: none; }
+}
+@media (hover: none), (max-width: 767px) {
+  .price.is-active .price__title, .price.is-active .price__desc { transform: translateX(calc(0.3rem + var(--sq) + var(--sq-gap))); width: calc(100% - 0.3rem - var(--sq) - var(--sq-gap)); }
+}
+
+/* Ссылки в галочке согласия: подчёркнуты и приглушённого цвета проекта; при наведении светлеют */
+.check__text .doclink { color: var(--muted); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: currentColor; }
+.check__text .doclink:hover, .check__text .doclink:focus-visible { color: var(--text); }
