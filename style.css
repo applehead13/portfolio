@@ -2276,3 +2276,11 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .hero__figure { grid-column: 1; grid-row: 2; order: 0; }
   .hero__lower { grid-column: 1; grid-row: 3; }
 }
+
+/* Фото на главном экране по ширине колонок сетки: на ПК две колонки (11–12), на планшете и телефоне одна (из четырёх). Подпись остаётся под фото своей ширины, у правого края */
+.hero { container-type: inline-size; }
+.hero__figure { width: auto; align-items: flex-end; justify-self: end; }
+.hero__photo { width: calc((100cqw - 3 * var(--gap)) / 4); }
+@media (min-width: 1024px) {
+  .hero__photo { width: calc((100cqw - 11 * var(--gap)) / 6 + var(--gap)); }
+}
