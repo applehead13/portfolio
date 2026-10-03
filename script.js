@@ -814,13 +814,15 @@
         setTimeout(function () {
           var longest = 0;
           if (sub) { sub.classList.add('is-in'); sub.classList.add('is-typed'); longest = sub.__typeDur || 0; }
-          /* Подпись под фото печатается медленно, по одной строке за другой, чтобы это было хорошо видно */
+          /* Подпись под фото печатается в том же темпе, что текст рядом: строки по очереди и заканчивает она вместе с текстом */
           var offset = 0;
+          var capChars = caps.reduce(function (n, el) { return n + el.querySelectorAll('.tc').length; }, 0);
+          var step = Math.max(12, Math.round(((sub ? sub.__typeDur - 60 : 1500)) / Math.max(capChars, 1)));
           caps.forEach(function (el) {
             var n = el.querySelectorAll('.tc').length;
-            el.style.setProperty('--ts', '0.07s');
+            el.style.setProperty('--ts', (step / 1000) + 's');
             (function (e, at) { setTimeout(function () { e.classList.add('is-typed'); }, at); })(el, offset);
-            offset += n * 70 + 120;
+            offset += n * step;
           });
           longest = Math.max(longest, offset);
           setTimeout(function () { if (acts) { acts.classList.add('is-in'); } }, longest + 80);
