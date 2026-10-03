@@ -2025,3 +2025,16 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Сноска про Instagram: размер подсказок сайта, на всю ширину панели */
 .side__note { font-size: var(--fs-small); line-height: var(--lh-text); max-width: none; width: 100%; }
+
+/* Факты: без цифр, у первой строки каждого факта зелёный квадратик, как в меню */
+.fact__title::after { content: none !important; }
+.fact, .about__body .fact { position: relative; padding-left: 1.4rem !important; }
+.fact::before {
+  content: "" !important; display: block !important; position: absolute; left: 0; top: calc(var(--fs-text) * 0.675 - 0.275rem);
+  width: 0.55rem; height: 0.55rem; margin: 0 !important; padding: 0 !important; background: var(--accent-text);
+}
+
+/* Этапы: номер в скобках стоит в степени после названия, как в ценах */
+.step-item__head { grid-template-columns: minmax(0, 1fr) 2rem !important; }
+.step-item__num { display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; text-transform: none; }
+.step-item__inner { padding-left: 0 !important; }
