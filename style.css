@@ -2038,3 +2038,47 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .step-item__head { grid-template-columns: minmax(0, 1fr) 2rem !important; }
 .step-item__num { display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; text-transform: none; }
 .step-item__inner { padding-left: 0 !important; }
+
+/* ===== Пиксельные помехи на заголовках при наведении (как на vlad-sn.space): поверх текста вспыхивает его копия, нарезанная полосами и сдвинутая ===== */
+@media (min-width: 1100px) and (hover: hover) {
+  .glitch { position: relative; }
+  .glitch::before {
+    content: attr(data-text);
+    position: absolute; top: 0; left: 0; width: 100%;
+    opacity: 0; pointer-events: none;
+    text-transform: inherit; letter-spacing: inherit; line-height: inherit; text-wrap: inherit;
+    --move1: inset(50% 50% 50% 50%);
+    --move2: inset(31% 0 40% 0);
+    --move3: inset(39% 0 15% 0);
+    --move4: inset(45% 0 40% 0);
+    --move5: inset(10% 0 6% 0);
+    --move6: inset(14% 0 61% 0);
+  }
+  .glitch:hover::before,
+  .price:hover .price__title.glitch::before,
+  .step-item__head:hover .glitch::before,
+  .card:hover .card__title.glitch::before {
+    opacity: 1;
+    animation: glitch 0.8s ease forwards;
+    animation-timing-function: steps(2, end);
+  }
+  @keyframes glitch {
+    0%   { clip-path: var(--move1); transform: translate(0, -0.2em); }
+    10%  { clip-path: var(--move2); transform: translate(-0.2em, 0.2em); }
+    20%  { clip-path: var(--move3); transform: translate(0.2em, 0); }
+    30%  { clip-path: var(--move4); transform: translate(-0.2em, 0.2em); }
+    40%  { clip-path: var(--move5); transform: translate(0.2em, -0.2em); }
+    50%  { clip-path: var(--move6); transform: translate(-0.2em, 0.2em); }
+    60%  { clip-path: var(--move1); transform: translate(0.2em, -0.2em); }
+    70%  { clip-path: var(--move3); transform: translate(-0.2em, 0.2em); }
+    80%  { clip-path: var(--move2); transform: translate(0.2em, -0.2em); }
+    90%  { clip-path: var(--move4); transform: translate(-0.2em, 0.2em); }
+    100% { clip-path: var(--move1); transform: translate(0); }
+  }
+}
+
+/* Этапы в общем виде с ценами: название обычными буквами, тот же размер, номер в степени */
+.step-item__title { font-size: var(--fs-h2) !important; line-height: 1.1 !important; text-transform: none !important; }
+.step-item__head { padding-block: clamp(1rem, 0.8rem + 0.9vw, 1.75rem); }
+.step-item__icon { align-self: start; margin-top: 0.7em; }
+.step-item__inner p { font-size: var(--fs-text); }

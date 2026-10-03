@@ -486,4 +486,19 @@
     window.addEventListener('resize', schedulePrices);
     updatePrices();
   }
+
+  /* Помехи на заголовках: копия текста в атрибуте data-text (без номеров в скобках) */
+  if (!reduce) {
+    document.querySelectorAll('.h2, .price__title, .step-item__title, .card__title, .hero__title').forEach(function (el) {
+      var clone = el.cloneNode(true);
+      clone.querySelectorAll('.price__num, .step-item__num, .ch, .word').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
+      clone.querySelectorAll('.price__num, .step-item__num').forEach(function (n) { n.remove(); });
+      var text = (el.getAttribute('aria-label') || clone.textContent).replace(/\s+/g, ' ').trim();
+      if (el.classList.contains('price__title') || el.classList.contains('step-item__title')) {
+        text = text.replace(/\s*0\d$/, '');
+      }
+      el.setAttribute('data-text', text);
+      el.classList.add('glitch');
+    });
+  }
 })();
