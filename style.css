@@ -2377,6 +2377,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 }
 /* Телефон: палец над всем заголовком (справа), чтобы не разъединять строки */
 @media (max-width: 699px) {
-  .footer__big { position: relative; padding-top: calc(7 * 0.16 * var(--fs-h1) + 0.65em); }
-  .footer__big .ok { position: absolute; top: 0; right: 0; margin-left: 0; }
+  .footer__big { position: relative; margin-top: calc(7 * 0.16 * var(--fs-h1) + 0.65em) !important; }
+  .footer__big .ok { position: absolute; top: calc(-7 * 0.16 * var(--fs-h1) - 0.65em); right: 0; margin-left: 0; }
 }
