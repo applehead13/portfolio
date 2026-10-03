@@ -2197,7 +2197,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 }
 
 /* Квадратики: одинаковый размер и отступ до слова, как в фактах (0.55rem квадрат, 0.85rem до текста) — в ценах при наведении и на телефоне */
-:root { --sq: 0.55rem; --sq-gap: 0.85rem; }
+:root { --sq: 9px; --sq-gap: 0.85rem; }
 .price::before { width: var(--sq); height: var(--sq); }
 @media (hover: hover) and (min-width: 768px) {
   /* квадрат стоит на left: -0.75rem, текст отъезжает ровно на «квадрат + отступ» */
