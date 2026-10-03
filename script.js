@@ -98,10 +98,8 @@
   /* Элементы первого экрана ведёт отдельный сценарий (см. ниже), общая очередь их не трогает */
   document.querySelectorAll('.hero__sub, .hero__actions').forEach(function (el) { el.setAttribute('data-hero', ''); });
   /* «Контакты»: заголовок, вступление, кнопка «Заполнить бриф» и вся форма стоят на месте сразу, без появления;
-     печатаются только подсказки, а главная кнопка «Отправить» проявляется последней, как кнопки первого экрана */
+     печатаются только подсказки: надписи в полях и пояснения под кнопкой брифа и у вложения ТЗ */
   document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
-  var sendBtn = document.querySelector('#lead-form .btn--wide');
-  if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); }
   document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
   /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
   document.querySelectorAll('#about .section__head, #about .about__body > .text').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
@@ -776,7 +774,7 @@
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
       '.step-item__inner p',
-      '.contacts__hint', '.field__label', '.attach__name',
+      '.contacts__hint', '.attach__name',
       '.doc__body p', '.doc__body li'
     ].join(', ');
 
