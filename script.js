@@ -502,12 +502,19 @@
     });
   }
 
-  /* Плитки работ: при наведении фото получает небольшие помехи (тот же шейдер, что на фото в «Обо мне»), логотип остаётся читаемым.
-     Фото больше не размывается. Без наведения холст скрыт. */
+  /* Помехи на фото: плитки работ и фото на первом экране.
+     Тот же шейдер, что на фото в «Обо мне». Помехи появляются при прокрутке (сила зависит от скорости),
+     а на плитках ещё и при наведении мыши. Эффекта появления у фото нет: они просто на месте.
+     В покое холст скрыт, помех нет. */
   (function () {
-    var canHover = window.matchMedia('(hover: hover) and (min-width: 768px)').matches;
-    var tiles = document.querySelectorAll('.card__media--photo');
-    if (!tiles.length || reduce || !canHover) { return; }
+    var canHover = window.matchMedia('(hover: hover)').matches;
+    var items = [];
+    document.querySelectorAll('.card__media--photo').forEach(function (tile) {
+      items.push({ box: tile, img: tile.querySelector('.work__img'), hoverHost: tile.closest('.card') || tile, cls: 'work__fx', insert: 'afterImg' });
+    });
+    var heroFig = document.querySelector('.hero__figure');
+    if (heroFig) { items.push({ box: heroFig, img: heroFig.querySelector('.hero__photo'), hoverHost: null, cls: 'hero__fx', insert: 'overImg' }); }
+    if (!items.length || reduce) { return; }
 
     var VS = 'attribute vec2 a_pos; varying vec2 v_uv; void main(){ v_uv = a_pos * 0.5 + 0.5; gl_Position = vec4(a_pos, 0., 1.); }';
     var FS = [
@@ -527,13 +534,13 @@
       '}'
     ].join('\n');
 
-    tiles.forEach(function (tile, index) {
-      var img = tile.querySelector('.work__img');
+    items.forEach(function (item, index) {
+      var img = item.img, box = item.box;
       if (!img) { return; }
       var cv = document.createElement('canvas');
-      cv.className = 'work__fx';
+      cv.className = item.cls;
       cv.setAttribute('aria-hidden', 'true');
-      tile.insertBefore(cv, tile.firstChild.nextSibling);
+      if (item.insert === 'overImg') { img.insertAdjacentElement('afterend', cv); } else { box.insertBefore(cv, box.firstChild.nextSibling); }
       var gl = cv.getContext('webgl', { premultipliedAlpha: false, alpha: false });
       if (!gl) { cv.remove(); return; }
       function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
@@ -560,25 +567,38 @@
       gl.uniform1i(U.u_texture, 0);
       gl.uniform1f(U.u_id, index + 1);
 
-      var ready = false, w = 0, h = 0, hovering = false, level = 0, running = false, lastT = 0, rnd = [0, 0, 0, 0];
-      function size() {
-        var r = tile.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+      var ready = false, w = 0, h = 0, hovering = false, hoverLevel = 0, J = 0;
+      var running = false, lastT = 0, lastY = window.scrollY, visible = false, rnd = [0, 0, 0, 0];
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(box);
+
+      function place() {
+        /* холст точно поверх фото */
+        if (item.insert === 'overImg') {
+          cv.style.left = img.offsetLeft + 'px'; cv.style.top = img.offsetTop + 'px';
+          cv.style.width = img.offsetWidth + 'px'; cv.style.height = img.offsetHeight + 'px';
+        }
+        var r = img.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
         var nw = Math.max(1, Math.round(r.width * d)), nh = Math.max(1, Math.round(r.height * d));
         if (nw !== w || nh !== h) { w = nw; h = nh; cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
       }
       function upload() {
-        if (ready || !img.naturalWidth) { return ready; }
+        if (ready) { return true; }
+        if (!img.complete || !img.naturalWidth) { return false; }
         try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img); ready = true; } catch (e) { return false; }
         return true;
       }
       function tick() {
         var t = performance.now() / 1000, dt = Math.min(0.1, t - lastT); lastT = t;
-        /* наведение держит небольшой уровень помех с редкими всплесками; без наведения плавно затухает */
-        if (hovering) { level = Math.max(level * Math.exp(-dt * 4), 0.22 + (Math.random() > 0.93 ? 0.35 : 0)); }
-        else { level *= Math.exp(-dt * 7); }
-        if (level < 0.03 && !hovering) { cv.style.opacity = '0'; running = false; return; }
-        if (upload()) {
-          size();
+        var y = window.scrollY, dy = y - lastY; lastY = y;
+        J *= Math.exp(-dt * 10);
+        J += Math.min(Math.abs(dy) * 10 / window.innerHeight, 5);
+        if (hovering) { hoverLevel = Math.max(hoverLevel * Math.exp(-dt * 4), 0.22 + (Math.random() > 0.93 ? 0.35 : 0)); }
+        else { hoverLevel *= Math.exp(-dt * 7); }
+        var level = Math.max(Math.min(1, J), hoverLevel);
+        var active = hovering || J > 0.004 || hoverLevel > 0.03;
+        if (!active) { cv.style.opacity = '0'; running = false; return; }
+        if (level > 0.012 && (visible || hovering) && upload()) {
+          place();
           var ia = img.naturalWidth / img.naturalHeight, ba = w / h, sx = 1, sy = 1;
           if (ia > ba) { sx = ba / ia; } else { sy = ia / ba; }
           var pos = (getComputedStyle(img).objectPosition || '50% 50%').split(' ');
@@ -590,13 +610,17 @@
           gl.uniform1f(U.u_strength, Math.min(1, level));
           gl.drawArrays(gl.TRIANGLES, 0, 6);
           cv.style.opacity = '1';
+        } else {
+          cv.style.opacity = '0';
         }
         requestAnimationFrame(tick);
       }
-      function start() { if (!running) { running = true; lastT = performance.now() / 1000; requestAnimationFrame(tick); } }
-      var host = tile.closest('.card') || tile;
-      host.addEventListener('mouseenter', function () { hovering = true; level = 1; start(); });
-      host.addEventListener('mouseleave', function () { hovering = false; start(); });
+      function start() { if (!running) { running = true; lastT = performance.now() / 1000; lastY = window.scrollY; requestAnimationFrame(tick); } }
+      window.addEventListener('scroll', start, { passive: true });
+      if (item.hoverHost && canHover) {
+        item.hoverHost.addEventListener('mouseenter', function () { hovering = true; hoverLevel = 1; start(); });
+        item.hoverHost.addEventListener('mouseleave', function () { hovering = false; start(); });
+      }
     });
   })();
 
