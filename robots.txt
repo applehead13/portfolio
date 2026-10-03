@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /brief/
+Disallow: /docs/
+
+Sitemap: https://polinaguseva.ru/sitemap.xml
