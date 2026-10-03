@@ -501,4 +501,102 @@
       el.classList.add('glitch');
     });
   }
+
+  /* Плитки работ: при наведении фото получает небольшие помехи (тот же шейдер, что на фото в «Обо мне»), логотип остаётся читаемым.
+     Фото больше не размывается. Без наведения холст скрыт. */
+  (function () {
+    var canHover = window.matchMedia('(hover: hover) and (min-width: 768px)').matches;
+    var tiles = document.querySelectorAll('.card__media--photo');
+    if (!tiles.length || reduce || !canHover) { return; }
+
+    var VS = 'attribute vec2 a_pos; varying vec2 v_uv; void main(){ v_uv = a_pos * 0.5 + 0.5; gl_Position = vec4(a_pos, 0., 1.); }';
+    var FS = [
+      '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
+      'uniform sampler2D u_texture; uniform vec4 u_rands; uniform float u_strength; uniform float u_id;',
+      'uniform vec2 u_scale; uniform vec2 u_offset; varying vec2 v_uv;',
+      '#define NUM_SAMPLES 5',
+      'vec4 hash43(vec3 p){ vec4 p4 = fract(vec4(p.xyzx) * vec4(.1031,.1030,.0973,.1099)); p4 += dot(p4, p4.wzxy + 33.33); return fract((p4.xxyz + p4.yzzw) * p4.zywx); }',
+      'void main(){',
+      '  vec4 noises = hash43(vec3(gl_FragCoord.xy, u_id));',
+      '  vec4 rands = hash43(vec3(floor(sin(v_uv.x * 2. + u_rands.x * 6.283) * mix(3., 40., u_rands.y)) * 30., u_id, u_rands.z));',
+      '  vec2 uvOffset = vec2(0., (rands.x - .5) * 0.5 * (rands.y > .7 ? 1. : 0.)) / float(NUM_SAMPLES) * (0.05 + u_strength * 0.3);',
+      '  vec2 uv = v_uv + noises.xy * uvOffset;',
+      '  vec3 color = vec3(0.);',
+      '  for (int i = 0; i < NUM_SAMPLES; i++) { color += texture2D(u_texture, uv * u_scale + u_offset).rgb; uv += uvOffset; }',
+      '  gl_FragColor = vec4(color / float(NUM_SAMPLES), 1.);',
+      '}'
+    ].join('\n');
+
+    tiles.forEach(function (tile, index) {
+      var img = tile.querySelector('.work__img');
+      if (!img) { return; }
+      var cv = document.createElement('canvas');
+      cv.className = 'work__fx';
+      cv.setAttribute('aria-hidden', 'true');
+      tile.insertBefore(cv, tile.firstChild.nextSibling);
+      var gl = cv.getContext('webgl', { premultipliedAlpha: false, alpha: false });
+      if (!gl) { cv.remove(); return; }
+      function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
+      var vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS);
+      if (!vs || !fs) { cv.remove(); return; }
+      var pr = gl.createProgram();
+      gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
+      gl.useProgram(pr);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+      var loc = gl.getAttribLocation(pr, 'a_pos');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      var U = {};
+      ['u_texture', 'u_rands', 'u_strength', 'u_id', 'u_scale', 'u_offset'].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
+      var tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.uniform1i(U.u_texture, 0);
+      gl.uniform1f(U.u_id, index + 1);
+
+      var ready = false, w = 0, h = 0, hovering = false, level = 0, running = false, lastT = 0, rnd = [0, 0, 0, 0];
+      function size() {
+        var r = tile.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+        var nw = Math.max(1, Math.round(r.width * d)), nh = Math.max(1, Math.round(r.height * d));
+        if (nw !== w || nh !== h) { w = nw; h = nh; cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+      }
+      function upload() {
+        if (ready || !img.naturalWidth) { return ready; }
+        try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img); ready = true; } catch (e) { return false; }
+        return true;
+      }
+      function tick() {
+        var t = performance.now() / 1000, dt = Math.min(0.1, t - lastT); lastT = t;
+        /* наведение держит небольшой уровень помех с редкими всплесками; без наведения плавно затухает */
+        if (hovering) { level = Math.max(level * Math.exp(-dt * 4), 0.22 + (Math.random() > 0.93 ? 0.35 : 0)); }
+        else { level *= Math.exp(-dt * 7); }
+        if (level < 0.03 && !hovering) { cv.style.opacity = '0'; running = false; return; }
+        if (upload()) {
+          size();
+          var ia = img.naturalWidth / img.naturalHeight, ba = w / h, sx = 1, sy = 1;
+          if (ia > ba) { sx = ba / ia; } else { sy = ia / ba; }
+          var pos = (getComputedStyle(img).objectPosition || '50% 50%').split(' ');
+          var px = parseFloat(pos[0]) / 100, py = parseFloat(pos[1] || '50') / 100;
+          gl.uniform2f(U.u_scale, sx, sy);
+          gl.uniform2f(U.u_offset, (1 - sx) * px, (1 - sy) * (1 - py));
+          if (Math.random() > Math.exp(-dt * 25 * (1 + level))) { rnd = [Math.random(), Math.random(), Math.random(), Math.random()]; }
+          gl.uniform4f(U.u_rands, rnd[0], rnd[1], rnd[2], rnd[3]);
+          gl.uniform1f(U.u_strength, Math.min(1, level));
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+          cv.style.opacity = '1';
+        }
+        requestAnimationFrame(tick);
+      }
+      function start() { if (!running) { running = true; lastT = performance.now() / 1000; requestAnimationFrame(tick); } }
+      var host = tile.closest('.card') || tile;
+      host.addEventListener('mouseenter', function () { hovering = true; level = 1; start(); });
+      host.addEventListener('mouseleave', function () { hovering = false; start(); });
+    });
+  })();
 })();

@@ -2089,3 +2089,10 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .glitch::before { white-space: inherit; }
   .footer__big.glitch::before { white-space: nowrap; font-size: inherit; }
 }
+
+/* Плитки работ: вместо размытия при наведении помехи на фото (холст с шейдером), логотип остаётся поверх */
+.work__fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; z-index: 1; }
+.card:hover .work__img, .card:focus-visible .work__img { filter: none !important; transform: scale(1.001) !important; }
+@media (hover: none) { .work__img { filter: none !important; } }
+.card__media--photo::after { z-index: 1; }
+.work__logo { z-index: 3; }
