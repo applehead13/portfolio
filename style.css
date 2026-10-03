@@ -1810,3 +1810,20 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Подвал: «Веб-дизайнер» обычными буквами, не капсом */
 .footer__meta .caps { text-transform: none; }
+
+/* ===== Телефон: подвал компактнее, подсказка в поле «О проекте» видна целиком ===== */
+@media (max-width: 599px) {
+  .footer__bottom { grid-template-columns: minmax(0, 1fr) auto !important; grid-template-areas: "copy up" "docs docs"; align-items: center; row-gap: 1.25rem; }
+  .footer__copy { grid-area: copy; }
+  .footer__up { grid-area: up; width: auto !important; justify-self: end !important; }
+  .footer__bottom .footer__docs { grid-area: docs; align-items: flex-start !important; justify-self: start !important; }
+  .footer__meta { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .footer__meta .sq { display: none; }
+}
+@media (max-width: 767px) {
+  .field__area { min-height: 6rem; }
+}
+
+/* Логотип в левой панели: «— веб-дизайнер» зелёным. Сама панель зелёная, поэтому берём светлый оттенок нашего зелёного, иначе надпись не видна */
+:root { --accent-mint: #9be3bd; }
+.side__name span:last-child { color: var(--accent-mint) !important; }
