@@ -1757,3 +1757,32 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .fact__title, .fact__text { margin: 0; }
 .fact__title { line-height: 1.35; }
 .fact__text { line-height: 1.5; }
+
+/* Цены: линии между услугами начинаются ровно там, где начинается текст, и заканчиваются там, где он кончается (без боковых отступов) */
+.price { padding-inline: 0 !important; }
+.price:hover { padding-left: 0 !important; background: transparent; box-shadow: -0.75rem 0 0 color-mix(in srgb, var(--text) 6%, var(--bg)), 0.75rem 0 0 color-mix(in srgb, var(--text) 6%, var(--bg)); background-color: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+.price::before { left: -0.75rem; }
+
+/* Факты: без заголовка блока; номер в скобках слева, на одной строке с названием, текст под названием */
+.facts__label { display: none !important; }
+.facts { margin-top: 0; }
+.fact, .about__body .fact { display: grid !important; grid-template-columns: 4.4rem minmax(0, 1fr) !important; grid-template-areas: "num title" ". text"; column-gap: 0.25rem; row-gap: 0.6rem !important; align-items: baseline; }
+.fact::before { grid-area: num; align-self: baseline; white-space: nowrap; font-size: var(--fs-small); }
+.fact__title { grid-area: title; }
+.fact__text { grid-area: text; }
+@media (max-width: 1099px) { .fact, .about__body .fact { grid-template-columns: 4.4rem minmax(0, 1fr) !important; } }
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* Факты занимают всю ширину под фото и вступлением, в две колонки: номеру слева хватает места, текст не сжимается */
+@media (min-width: 1100px) {
+  .about { grid-template-areas: "photo intro" "photo text" "facts facts" "skills skills" !important; grid-template-rows: auto 1fr auto auto !important; }
+  .about__body { display: contents !important; }
+  .about__body > .lead { grid-area: intro; }
+  .about__body > .text { grid-area: text; align-self: start; }
+  .about__body > .facts { grid-area: facts; margin-top: calc(var(--pad) * 0.5); }
+  .about .gallery { grid-row: 1 / span 2 !important; }
+  .facts__list { column-gap: var(--gutter); }
+}
