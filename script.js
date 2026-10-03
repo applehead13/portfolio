@@ -18,15 +18,13 @@
     return (a.el.compareDocumentPosition(b.el) & 4) ? -1 : 1;
   }
   function seqKey(el) { return el.closest('section, footer') || document.body; }
-  function seqNext(k) {
-    var st = seqState.get(k);
-    if (!seqReady || !st || st.busy || !st.q.length) { return; }
-    st.q.sort(seqOrder);
-    var it = st.q.shift(), el = it.el, dur;
+  /* Запуск одного элемента очереди: возвращает, сколько миллисекунд он занимает */
+  function seqStart(it) {
+    var el = it.el, dur;
     if (it.kind === 'ph') {
       var phText = el.__ph, phI = 0;
-      var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, 28);
-      dur = phText.length * 28 + 60;
+      var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, TYPE_STEP);
+      dur = phText.length * TYPE_STEP + 60;
     } else if (it.kind === 'type') {
       el.classList.add('is-typed');
       var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
@@ -36,6 +34,14 @@
       el.classList.add('is-in');
       dur = el.hasAttribute('data-fx') ? Math.min(700, el.textContent.split(/\s+/).length * 45) : 60;
     }
+    return dur;
+  }
+  function seqNext(k) {
+    var st = seqState.get(k);
+    if (!seqReady || !st || st.busy || !st.q.length) { return; }
+    st.q.sort(seqOrder);
+    var it = st.q.shift(), el = it.el;
+    var dur = seqStart(it);
     if (!seqOnScreen(el)) { seqNext(k); return; }
     st.busy = true;
     var t0 = Date.now();
@@ -44,6 +50,17 @@
       else { setTimeout(wait, 60); }
     })();
   }
+  /* Страховка от пустых экранов: если элемент уже виден на экране, но очередь его ещё не взяла дольше ~0.9 с
+     (человек прокрутил дальше, а прошлый блок ещё печатается), он начинает свою анимацию сам, не дожидаясь остальных. */
+  setInterval(function () {
+    if (!seqReady) { return; }
+    seqState.forEach(function (st) {
+      for (var i = st.q.length - 1; i >= 0; i--) {
+        var it = st.q[i];
+        if (Date.now() - it.t > 900 && seqOnScreen(it.el)) { st.q.splice(i, 1); seqStart(it); }
+      }
+    });
+  }, 200);
   /* Элементы с data-par печатаются одновременно, не вставая в очередь; элемент с data-after ждёт, пока они все допечатаются */
   var parEnd = 0;
   function startPar(el, kind) {
@@ -67,7 +84,7 @@
     if (el.hasAttribute('data-after')) { afterPar(el, function () { el.classList.add('is-in'); }); return; }
     var k = seqKey(el), st = seqState.get(k);
     if (!st) { st = { q: [], busy: false }; seqState.set(k, st); }
-    st.q.push({ el: el, kind: kind });
+    st.q.push({ el: el, kind: kind, t: Date.now() });
     seqNext(k);
   }
 
@@ -124,6 +141,8 @@
   document.querySelectorAll('#contacts .contacts__hint, #contacts .attach__name').forEach(function (el) { el.setAttribute('data-par', ''); });
   var sendBtn = document.querySelector('#lead-form .btn--wide');
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); sendBtn.setAttribute('data-after', ''); }
+  /* Факты: белое начало («Первое образование…») и квадратик стоят сразу, печатается только продолжение-описание */
+  document.querySelectorAll('.fact').forEach(function (el) { el.classList.add('is-typed'); });
   /* «Обо мне»: заголовок блока, вступление и абзац под ним стоят на месте сразу; печатаются только факты */
   document.querySelectorAll('#about .section__head, #about .about__body > .text, #about .about__body > .facts').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
@@ -793,7 +812,7 @@
      Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
-      '.fact__p',
+      '.fact__rest',
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
       '.step-item__inner p',
