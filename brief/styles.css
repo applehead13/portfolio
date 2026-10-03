@@ -36,7 +36,9 @@ body.brief .pane { display: flex; flex-direction: column; min-height: 100vh; min
 .intro__list li::before, .done__steps li::before { content: ""; position: absolute; left: 0; top: calc(var(--fs-text) * 0.675 - 0.275rem); width: var(--sq); height: var(--sq); background: var(--accent-text); transition: opacity 0.25s var(--ease); }
 /* Как в фактах на сайте: начало фразы ярко-белое, продолжение приглушённое */
 .intro__list strong, .done__steps strong { font-family: var(--f-text); font-weight: 600; font-size: inherit; line-height: inherit; color: var(--text); }
-.intro__list span, .done__steps span { font-size: inherit; color: var(--muted); }
+.intro__list li > span, .done__steps li > span { font-size: inherit; color: var(--muted); }
+/* буквы внутри выделенного начала (печать) наследуют яркий цвет начала, а не приглушённый цвет продолжения */
+.intro__list strong span, .done__steps strong span { color: inherit; font-weight: inherit; }
 .intro__list strong::after, .done__steps strong::after { content: " "; }
 .intro__actions, .done__actions { margin-top: var(--pad); display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; }
 .done__next { margin-top: var(--pad); }

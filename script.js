@@ -44,6 +44,7 @@
     var dur = seqStart(it);
     if (!seqOnScreen(el)) { seqNext(k); return; }
     st.busy = true;
+    st.cur = el;
     var t0 = Date.now();
     (function wait() {
       if (Date.now() - t0 >= dur || !seqOnScreen(el)) { st.busy = false; seqNext(k); }
@@ -57,6 +58,9 @@
     seqState.forEach(function (st) {
       for (var i = st.q.length - 1; i >= 0; i--) {
         var it = st.q[i];
+        /* Внутри группы (например, факты) тексты идут строго подряд, одним полотном, поэтому страховка их не ускоряет */
+        var grp = it.el.closest('[data-group]');
+        if (grp && st.busy && st.cur && st.cur.closest('[data-group]') === grp && seqOnScreen(st.cur)) { continue; }
         if (Date.now() - it.t > 900 && seqOnScreen(it.el)) { st.q.splice(i, 1); seqStart(it); }
       }
     });
@@ -143,6 +147,7 @@
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); sendBtn.setAttribute('data-after', ''); }
   /* Факты: белое начало («Первое образование…») и квадратик стоят сразу, печатается только продолжение-описание */
   document.querySelectorAll('.fact').forEach(function (el) { el.classList.add('is-typed'); });
+  document.querySelectorAll('#about .facts').forEach(function (el) { el.setAttribute('data-group', ''); });
   /* «Обо мне»: заголовок блока, вступление, абзац, этапы работы (Знакомство, Структура, Дизайн…) стоят на месте сразу; печатаются только факты и описание открытого этапа */
   document.querySelectorAll('#about .section__head, #about .about__body > .text, #about .about__body > .facts, #about .skills').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   /* «Работы»: заголовок блока, плитки, название работы и год стоят на месте сразу, без эффекта появления; по мере прокрутки печатается только текст под ними */
