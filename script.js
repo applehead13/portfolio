@@ -334,37 +334,113 @@
   });
   form.elements.agree.addEventListener('change', function () { form.querySelector('.check').classList.remove('is-invalid'); });
 
-  /* Эффект при прокрутке на фото в «Обо мне»: волна и разъезд цветов зависят от скорости прокрутки.
-     Когда фото стоит на месте, фильтр полностью выключен, помех нет. */
-  var fxTargets = document.querySelectorAll('.about .gallery');
-  var fxDisp = document.getElementById('fx-disp');
-  var fxR = document.getElementById('fx-r');
-  var fxB = document.getElementById('fx-b');
-  if (fxTargets.length && fxDisp && !reduce) {
-    var lastY = window.scrollY, vel = 0, running = false;
-    var onFxScroll = function () {
-      var y = window.scrollY;
-      vel += (y - lastY) * 0.35;
-      lastY = y;
-      if (!running) { running = true; requestAnimationFrame(fxTick); }
-    };
-    var fxTick = function () {
-      vel *= 0.86;                                   /* плавно затухает */
-      var k = Math.min(1, Math.abs(vel) / 45);       /* сила эффекта 0..1 */
-      if (k < 0.015) {
-        fxTargets.forEach(function (t) { t.style.filter = ''; t.style.transform = ''; });
-        vel = 0; running = false; return;
+  /* Эффект помех на фото в «Обо мне» при прокрутке.
+     Шейдер взят с демо Lusion «WebGL Scroll Sync» (вертикальные полосы, которые сдвигаются и смазываются, как помехи)
+     и работает на одном небольшом WebGL-холсте поверх фото. Сила зависит от скорости прокрутки.
+     Когда фото стоит на месте, холст полностью скрыт, никаких помех нет. */
+  (function () {
+    var gal = document.querySelector('.about .gallery');
+    if (!gal || reduce) { return; }
+    var cv = document.createElement('canvas');
+    cv.className = 'gallery__fx';
+    cv.setAttribute('aria-hidden', 'true');
+    gal.appendChild(cv);
+    var gl = cv.getContext('webgl', { premultipliedAlpha: false, alpha: false });
+    if (!gl) { cv.remove(); return; }
+
+    var VS = 'attribute vec2 a_pos; varying vec2 v_uv; void main(){ v_uv = a_pos * 0.5 + 0.5; gl_Position = vec4(a_pos, 0., 1.); }';
+    var FS = [
+      '#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp float;', '#else', 'precision mediump float;', '#endif',
+      'uniform sampler2D u_texture; uniform vec4 u_rands; uniform float u_strength; uniform float u_id;',
+      'uniform vec2 u_scale; uniform vec2 u_offset; varying vec2 v_uv;',
+      '#define NUM_SAMPLES 5',
+      'vec4 hash43(vec3 p){ vec4 p4 = fract(vec4(p.xyzx) * vec4(.1031,.1030,.0973,.1099)); p4 += dot(p4, p4.wzxy + 33.33); return fract((p4.xxyz + p4.yzzw) * p4.zywx); }',
+      'vec2 cover(vec2 uv){ return uv * u_scale + u_offset; }',
+      'void main(){',
+      '  vec4 noises = hash43(vec3(gl_FragCoord.xy, u_id));',
+      '  vec4 rands = hash43(vec3(floor(sin(v_uv.x * 2. + u_rands.x * 6.283) * mix(3., 40., u_rands.y)) * 30., u_id, u_rands.z));',
+      '  vec2 uvOffset = vec2(0., (rands.x - .5) * 0.5 * (rands.y > .7 ? 1. : 0.)) / float(NUM_SAMPLES) * (0.05 + u_strength * 0.3);',
+      '  vec2 uv = v_uv + noises.xy * uvOffset;',
+      '  vec3 color = vec3(0.);',
+      '  for (int i = 0; i < NUM_SAMPLES; i++) { color += texture2D(u_texture, cover(uv)).rgb; uv += uvOffset; }',
+      '  color /= float(NUM_SAMPLES);',
+      '  gl_FragColor = vec4(color * (1. + u_strength * 2.), 1.);',
+      '}'
+    ].join('\n');
+
+    function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
+    var vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS);
+    if (!vs || !fs) { cv.remove(); return; }
+    var pr = gl.createProgram();
+    gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
+    gl.useProgram(pr);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(pr, 'a_pos');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var U = {};
+    ['u_texture', 'u_rands', 'u_strength', 'u_id', 'u_scale', 'u_offset'].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.uniform1i(U.u_texture, 0);
+    gl.uniform1f(U.u_id, 0);
+
+    var uploaded = null, w = 0, h = 0;
+    function size() {
+      var r = gal.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+      var nw = Math.max(1, Math.round(r.width * d)), nh = Math.max(1, Math.round(r.height * d));
+      if (nw !== w || nh !== h) { w = nw; h = nh; cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    }
+    /* Имитация object-fit: cover вместе с object-position у текущего слайда */
+    function bind(img) {
+      if (img !== uploaded) {
+        try { gl.bindTexture(gl.TEXTURE_2D, tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img); uploaded = img; } catch (e) { return false; }
       }
-      var sign = vel < 0 ? -1 : 1;
-      fxDisp.setAttribute('scale', (k * 32).toFixed(1));
-      fxR.setAttribute('dx', (k * 6 * sign).toFixed(1));
-      fxB.setAttribute('dx', (-k * 6 * sign).toFixed(1));
-      fxTargets.forEach(function (t) {
-        t.style.filter = 'url(#scroll-fx)';
-        t.style.transform = 'skewY(' + (sign * k * 1.6).toFixed(2) + 'deg)';
-      });
-      requestAnimationFrame(fxTick);
-    };
-    window.addEventListener('scroll', onFxScroll, { passive: true });
-  }
+      var ia = img.naturalWidth / img.naturalHeight, ba = w / h;
+      var pos = (getComputedStyle(img).objectPosition || '50% 50%').split(' ');
+      var px = parseFloat(pos[0]) / 100, py = parseFloat(pos[1] || '50') / 100;
+      var sx = 1, sy = 1;
+      if (ia > ba) { sx = ba / ia; } else { sy = ia / ba; }
+      gl.uniform2f(U.u_scale, sx, sy);
+      gl.uniform2f(U.u_offset, (1 - sx) * px, (1 - sy) * (1 - py));
+      return true;
+    }
+
+    var J = 0, lastY = window.scrollY, lastT = performance.now() / 1000, running = false, visible = false;
+    var rnd = [0, 0, 0, 0];
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(gal);
+
+    function tick() {
+      var t = performance.now() / 1000, dt = Math.min(0.1, t - lastT); lastT = t;
+      var y = window.scrollY, dy = y - lastY; lastY = y;
+      J *= Math.exp(-dt * 10);
+      J += Math.min(Math.abs(dy) * 10 / window.innerHeight, 5);
+      var strength = Math.min(1, J);
+      var img = gal.querySelector('.gallery__slide.is-active') || gal.querySelector('.gallery__slide');
+      if (visible && strength > 0.012 && img && img.naturalWidth) {
+        size();
+        if (bind(img)) {
+          if (Math.random() > Math.exp(-dt * 25 * (1 + J))) { rnd = [Math.random(), Math.random(), Math.random(), Math.random()]; }
+          gl.uniform4f(U.u_rands, rnd[0], rnd[1], rnd[2], rnd[3]);
+          gl.uniform1f(U.u_strength, strength);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+          cv.style.opacity = '1';
+        }
+      } else {
+        cv.style.opacity = '0';
+      }
+      if (J > 0.004) { requestAnimationFrame(tick); } else { cv.style.opacity = '0'; running = false; }
+    }
+    window.addEventListener('scroll', function () {
+      if (!running) { running = true; lastT = performance.now() / 1000; lastY = window.scrollY; requestAnimationFrame(tick); }
+    }, { passive: true });
+  })();
 })();

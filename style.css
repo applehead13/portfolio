@@ -1974,3 +1974,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Эффект прокрутки на фото в «Обо мне» использует transform: даём ему плавность и не ломаем появление */
 .about .gallery { will-change: filter; }
+
+/* Холст с эффектом помех поверх фото: скрыт, пока нет прокрутки */
+.gallery__fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; z-index: 1; transition: none; }
+.about .gallery { will-change: auto; }
