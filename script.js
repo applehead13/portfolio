@@ -30,6 +30,8 @@
 
   /* Крупные абзацы проявляются из дымки слово за словом */
   document.querySelectorAll('.lead').forEach(function (el) {
+    /* Вступление к форме в «Контактах» не проявляется словами: оно печатается по буквам, как обычные тексты */
+    if (el.closest('.contacts__side')) { return; }
     var words = el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '').split(/[ \t\r\n]+/);
     el.setAttribute('aria-label', el.textContent.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ''));
     el.innerHTML = words.map(function (w, i) {
@@ -493,7 +495,7 @@
 
   /* Помехи на заголовках: копия текста в атрибуте data-text (без номеров в скобках) */
   if (!reduce) {
-    document.querySelectorAll('.h2, .hero__title, .footer__big, .contacts__side .lead').forEach(function (el) {
+    document.querySelectorAll('.h2, .hero__title, .footer__big').forEach(function (el) {
       var clone = el.cloneNode(true);
       clone.querySelectorAll('.price__num, .step-item__num, .ch, .word').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
       clone.querySelectorAll('.price__num, .step-item__num').forEach(function (n) { n.remove(); });
@@ -516,8 +518,8 @@
         entries.forEach(function (e) {
           if (!e.isIntersecting) { return; }
           glitchIo.unobserve(e.target);
-          /* Заголовки сразу с помехами, без печати; вступление к форме ждёт, пока его слова проявятся */
-          setTimeout(function () { played(e.target); }, e.target.classList.contains('lead') ? 900 : 0);
+          /* Заголовки сразу с помехами, без печати */
+          setTimeout(function () { played(e.target); }, 0);
         });
       }, { threshold: 0.6 });
       document.querySelectorAll('.glitch').forEach(function (el) { glitchIo.observe(el); });
@@ -658,7 +660,7 @@
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
       '.hero__sub', '.hero__cap span', '.side__role', '.side__note',
-      '.about__body > .text', '.fact__p',
+      '.about__body > .text', '.fact__p', '.contacts__side .lead',
       '.card__desc', '.card__tags',
       '.price__desc', '.price__label', '.price__value',
       '.step-item__inner p',
