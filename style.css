@@ -2256,3 +2256,15 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Заголовки блоков не печатаются по буквам: стоят сразу, а помехи играют сразу при появлении */
 .js .ch { opacity: 1 !important; transition: none !important; }
+
+/* Обо мне: верх букв вступления на уровне верха фото (убираем пустое место над строкой: половина интерлиньяжа и запас шрифта) */
+@media (min-width: 1100px) {
+  .about__body > .lead { margin-top: -0.25em; }
+}
+
+/* Ссылки в галочке: слова печатаются отдельными блоками, подчёркивание ставим на каждое слово, а не только на пробелы между ними */
+.doclink .tw { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: currentColor; }
+
+/* Галочка: квадратик стоит по центру первой строки текста, а не по центру всей фразы */
+.check { align-items: flex-start; }
+.check__box { margin-top: calc((var(--fs-small) * var(--lh-text) - 1.5rem) / 2); }
