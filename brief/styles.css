@@ -184,3 +184,6 @@ body.brief .footer__inner { transform: none; }
 
 /* Меню-бургер поверх верхней строки и нижней навигации, иначе они закрывают текст в открытом меню */
 @media (max-width: 1023px) { .side { z-index: 60; } }
+
+/* Пока открыто меню-бургер, верхняя строка и нижняя навигация не видны и не нажимаются */
+.menu-open .dock, .menu-open .top { visibility: hidden; }

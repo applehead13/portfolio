@@ -29,6 +29,7 @@
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     label.textContent = open ? 'Закрыть' : 'Меню';
     document.body.style.overflow = open ? 'hidden' : '';
+    document.body.classList.toggle('menu-open', open);
   }
   toggle.addEventListener('click', function () { setOpen(!side.classList.contains('is-open')); });
   side.querySelectorAll('.side__panel a, .side__brand').forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
