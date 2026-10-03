@@ -356,6 +356,10 @@
     var avail = big.clientWidth;
     var widest = big.scrollWidth;   // ширина самой длинной строки при размере 100px
     if (widest > 0 && avail > 0) { big.style.fontSize = Math.floor(100 * avail / widest * 10) / 10 + 'px'; }
+    /* «Окей» в конце фразы имеет свой размер (не зависит от шрифта фразы), поэтому доводим размер несколькими подходами, пока всё не поместится */
+    for (var k = 0; k < 6 && big.scrollWidth > big.clientWidth + 0.5; k++) {
+      big.style.fontSize = Math.floor(parseFloat(big.style.fontSize) * big.clientWidth / big.scrollWidth * 10) / 10 + 'px';
+    }
   }
   if (big) {
     fitBig();
