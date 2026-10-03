@@ -723,29 +723,4 @@
       }
     });
   })();
-
-  /* Мини-футер в мобильном меню: плавно выезжает при прокрутке меню вниз, фраза подгоняется по ширине */
-  var mini = document.getElementById('side-mini');
-  if (mini && side) {
-    var miniBig = mini.querySelector('.side__mini-big');
-    var miniInner = mini.querySelector('.side__mini-inner');
-    var fitMini = function () {
-      if (!miniBig || mini.offsetWidth === 0) { return; }
-      miniBig.style.fontSize = '100px';
-      var widest = 0;
-      Array.prototype.forEach.call(miniBig.children, function (s) { widest = Math.max(widest, s.getBoundingClientRect().width); });
-      var avail = miniBig.clientWidth;
-      if (widest > 0 && avail > 0) { miniBig.style.fontSize = Math.floor(100 * avail / widest * 10) / 10 + 'px'; }
-    };
-    var progressMini = function () {
-      var r = mini.getBoundingClientRect(), s = side.getBoundingClientRect();
-      var p = (s.bottom - r.top) / Math.max(1, r.height);
-      mini.style.setProperty('--mp', Math.min(1, Math.max(0, p)).toFixed(3));
-    };
-    side.addEventListener('scroll', progressMini, { passive: true });
-    window.addEventListener('resize', function () { fitMini(); progressMini(); });
-    toggle.addEventListener('click', function () { setTimeout(function () { fitMini(); progressMini(); side.scrollTop = 0; }, 80); });
-    mini.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setOpen(false); side.scrollTop = 0; }); });
-    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { fitMini(); progressMini(); }); }
-  }
 })();
