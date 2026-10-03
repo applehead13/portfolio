@@ -2151,3 +2151,27 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* ===== Типографика: ровные переносы, без висячих предлогов ===== */
 h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
 p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* Обо мне по сетке: те же 12 колонок и тот же зазор, что у сетки-подсказки. Фото занимает колонки 1–5 до их края, текст начинается с 6-й колонки и стоит вровень с верхом фото */
+@media (min-width: 1100px) {
+  .about { grid-template-areas: none !important; grid-template-columns: repeat(12, minmax(0, 1fr)) !important; column-gap: var(--gap) !important; }
+  .about .gallery { grid-area: auto !important; grid-column: 1 / span 5 !important; grid-row: 1 !important; }
+  .about__body { grid-area: auto !important; grid-column: 6 / -1 !important; grid-row: 1 !important; margin-top: 0; padding-top: 0; }
+  .about__body > :first-child { margin-top: 0; padding-top: 0; }
+  .about .skills { grid-area: auto !important; grid-column: 1 / -1 !important; grid-row: 2 !important; }
+}
+
+/* Контакты по той же сетке: слева колонки 1–5, форма с 6-й колонки до правого края сетки */
+@media (min-width: 1100px) {
+  .contacts { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+  .contacts__side { grid-column: 1 / span 5; }
+  .contacts > .form { grid-column: 6 / -1; }
+}
+
+/* Подвал: «Наверх» начинается с 6-й колонки сетки, документы заканчиваются у правого края */
+@media (min-width: 700px) {
+  .footer__bottom { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; column-gap: var(--gap) !important; }
+  .footer__copy { grid-column: 1 / span 5; }
+  .footer__up { grid-column: 6 / span 2; justify-self: start !important; }
+  .footer__docs { grid-column: 8 / -1; justify-self: end; }
+}
