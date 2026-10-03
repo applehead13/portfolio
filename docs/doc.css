@@ -32,3 +32,9 @@
 
 /* Пока открыто меню-бургер, верхняя строка и нижняя навигация не видны и не нажимаются */
 .menu-open .dock, .menu-open .top { visibility: hidden; }
+
+/* Телефон: «Документ» стоит над всем заголовком (сверху справа), а не рядом с ним, чтобы заголовок помещался в 2–3 строки */
+@media (max-width: 767px) {
+  .doc__title--tag { width: auto !important; max-width: 100%; padding-right: 0 !important; margin-top: 1.6rem; }
+  .doc__title--tag .tag { top: -1.7em; right: 0; }
+}

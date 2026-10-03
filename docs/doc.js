@@ -7,13 +7,15 @@
     var h = document.querySelector('.doc__title--tag');
     if (!h) { return; }
     h.style.width = '';
+    var tag = h.querySelector('.tag');
     var rg = document.createRange();
-    rg.selectNodeContents(h.firstChild);
-    var rects = Array.prototype.slice.call(rg.getClientRects());
+    rg.setStart(h, 0);
+    rg.setEndBefore(tag);
+    var rects = Array.prototype.slice.call(rg.getClientRects()).filter(function (r) { return r.width > 0; });
     if (!rects.length) { return; }
     var left = h.getBoundingClientRect().left;
     var textW = Math.max.apply(null, rects.map(function (r) { return r.right; })) - left;
-    var tw = h.querySelector('.tag').getBoundingClientRect().width;
+    var tw = tag.getBoundingClientRect().width;
     h.style.setProperty('--tag-w', tw + 'px');
     h.style.width = Math.ceil(textW + tw + 8) + 1 + 'px';
   }
