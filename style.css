@@ -2009,3 +2009,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* ===== Типографика: ровные переносы, без висячих предлогов ===== */
 h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
 p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* Сноска про Instagram в панели слева */
+.side__note { flex: 1 1 100%; margin: 0.25rem 0 0; font-size: 0.75rem; line-height: 1.35; color: var(--side-soft, var(--muted)); max-width: 40ch; }
