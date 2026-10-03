@@ -2022,3 +2022,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .price.is-active .price__label { color: var(--text); }
   .prices.has-active .price:not(.is-active) { opacity: 0.4; }
 }
+
+/* Сноска про Instagram: размер подсказок сайта, на всю ширину панели */
+.side__note { font-size: var(--fs-small); line-height: var(--lh-text); max-width: none; width: 100%; }

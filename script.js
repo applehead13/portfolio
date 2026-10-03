@@ -364,7 +364,7 @@
       '  vec3 color = vec3(0.);',
       '  for (int i = 0; i < NUM_SAMPLES; i++) { color += texture2D(u_texture, cover(uv)).rgb; uv += uvOffset; }',
       '  color /= float(NUM_SAMPLES);',
-      '  gl_FragColor = vec4(color * (1. + u_strength * 0.6), 1.);',
+      '  gl_FragColor = vec4(color, 1.);',
       '}'
     ].join('\n');
 
