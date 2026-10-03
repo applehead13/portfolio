@@ -1,6 +1,7 @@
 /* Документы в стиле сайта: левая панель и правая часть; печати и появления здесь нет */
-.docpage .doc { max-width: none; margin: 0; padding: calc(var(--section) * 0.5) var(--gutter) var(--section); }
-@media (max-width: 1023px) { .docpage .doc { padding-top: calc(var(--section) * 0.4); } }
+.docpage .doc { max-width: none; margin: 0; padding: 0 var(--gutter) var(--section); }
+.docpage .doc__head { padding-top: calc(var(--section) * 0.5); }
+@media (max-width: 1023px) { .docpage .doc__head { padding-top: calc(var(--section) * 0.4); } }
 
 /* «Документ»: подсказка в квадратных скобках сверху справа у заголовка, как показатель степени (так же, как «Важно» в брифе) */
 .doc__title--tag { display: block; width: max-content; max-width: 100%; position: relative; padding-right: calc(var(--tag-w, 6rem) + 0.5rem); }
@@ -10,3 +11,13 @@
 }
 .doc__title--tag .tag::before { content: "[ "; }
 .doc__title--tag .tag::after { content: " ]"; }
+
+/* Верхняя строка с кнопкой «На сайт» в правом верхнем углу, такая же, как в брифе */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: flex-end; gap: 1rem;
+  min-height: 3.5rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+@media (max-width: 1023px) { .top { top: var(--bar-h); } }
+.top__back { flex: none; }
