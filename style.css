@@ -2224,3 +2224,23 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Ссылки в галочке согласия: подчёркнуты и приглушённого цвета проекта; при наведении светлеют */
 .check__text .doclink { color: var(--muted); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: currentColor; }
 .check__text .doclink:hover, .check__text .doclink:focus-visible { color: var(--text); }
+
+/* Цены: подсветка — контейнер строго между верхней и нижней линиями (линии остаются снаружи и не закрашиваются), квадратик внутри контейнера с отступом от его края; на ПК и на телефоне */
+:root { --sq-left: -0.25rem; }
+.price { isolation: isolate; }
+.price::after {
+  content: ""; position: absolute; inset: 0 -0.75rem; z-index: -1; pointer-events: none;
+  background: color-mix(in srgb, var(--text) 6%, var(--bg));
+  opacity: 0; transition: opacity 0.45s var(--ease);
+}
+.price:hover::after, .price.is-active::after { opacity: 1; }
+.price:hover, .price.is-active { background: none !important; background-color: transparent !important; box-shadow: none !important; }
+.price::before { left: var(--sq-left); }
+@media (hover: hover) and (min-width: 768px) {
+  .price:hover .price__num, .price:hover .price__body,
+  .price:hover .price__title, .price:hover .price__desc { transform: translateX(calc(var(--sq-left) + var(--sq) + var(--sq-gap))); }
+  .price:hover .price__fact, .price:hover .price__title .price__num { transform: none; }
+}
+@media (hover: none), (max-width: 767px) {
+  .price.is-active .price__title, .price.is-active .price__desc { transform: translateX(calc(var(--sq-left) + var(--sq) + var(--sq-gap))); width: calc(100% - var(--sq-left) - var(--sq) - var(--sq-gap)); }
+}
