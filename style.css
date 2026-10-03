@@ -1925,3 +1925,49 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .side .blink, .side .blink:hover, .side .blink:focus-visible { background-image: none !important; background-color: var(--bg); transition: background-color 0.3s var(--ease); }
   .side .blink:hover, .side .blink:focus-visible { background-color: color-mix(in srgb, var(--text) 16%, var(--bg)); color: var(--text); }
 }
+
+/* Факты: номер в скобках стоит справа после названия, приподнят как индекс (как в ценах и этапах) */
+.fact::before { content: none !important; display: none !important; }
+.fact, .about__body .fact { display: block !important; padding: 0 !important; }
+.fact__title::after {
+  content: "[ 0" counter(fact) " ]";
+  display: inline-block; vertical-align: top; margin-left: 0.5rem; margin-top: 0.15em;
+  font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; color: var(--muted);
+}
+.fact__text { margin-top: 0.5rem !important; }
+.facts__list { gap: 1.6rem; }
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
+
+/* ===== Этапы работы: карточки с прямыми углами. Первые четыре обычные, последняя («Проверка и запуск») шире и залита акцентом ===== */
+.stages--cards { display: grid; grid-template-columns: 1fr; gap: var(--gap); margin-top: var(--pad); border: 0; }
+.stage-card {
+  position: relative; display: flex; flex-direction: column; gap: 0.75rem;
+  min-height: 11rem; padding: var(--pad);
+  border: 1px solid var(--line); background: transparent;
+  transition: border-color 0.4s var(--ease), background-color 0.4s var(--ease);
+}
+.stage-card__num { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-h2); line-height: 1; color: var(--muted); transition: color 0.4s var(--ease); }
+.stage-card__num::before { content: "[ "; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); vertical-align: top; }
+.stage-card__num::after { content: " ]"; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); vertical-align: top; }
+.stage-card__title { margin-top: auto; font-family: var(--f-head); font-weight: 700; font-size: var(--fs-sub); line-height: 1.2; }
+.stage-card__desc { color: var(--muted); font-size: var(--fs-text); line-height: var(--lh-text); transition: color 0.4s var(--ease); }
+.stage-card:hover { border-color: var(--muted); background: color-mix(in srgb, var(--text) 4%, transparent); }
+.stage-card:hover .stage-card__num { color: var(--accent-text); }
+.stage-card:hover .stage-card__desc { color: var(--text); }
+.stage-card:last-child { background: var(--accent); border-color: var(--accent); }
+.stage-card:last-child .stage-card__num, .stage-card:last-child .stage-card__desc { color: var(--text); }
+.stage-card:last-child:hover { background: color-mix(in srgb, var(--accent) 88%, var(--text)); }
+@media (min-width: 768px) {
+  .stages--cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage-card:last-child { grid-column: 1 / -1; min-height: 9rem; }
+}
+@media (min-width: 1100px) {
+  .stages--cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stage-card:last-child { grid-column: span 2; }
+}
+.stage-card__title { margin-top: 1rem; }
+.stage-card__desc { text-wrap: wrap; }
+.stage-card { min-height: 0; }
