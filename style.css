@@ -1867,3 +1867,20 @@ body, .text, .hero__sub, .price__desc, .fact__text, .card__desc, .contacts__hint
 
 /* Названия полей в форме: размер обычного текста сайта */
 .field__label, .types .field__label { font-size: var(--fs-text); line-height: var(--lh-text); }
+
+/* Логотип в панели: «— веб-дизайнер» снова белым */
+.side__name span:last-child { color: var(--text) !important; }
+
+/* Телефон: две кнопки первого экрана в одну строку на всю ширину, каждая половину */
+@media (max-width: 767px) {
+  .hero__actions { flex-direction: row !important; width: 100%; gap: 0.75rem; flex-wrap: nowrap; }
+  .hero__actions .btn { flex: 1 1 0 !important; width: auto !important; min-width: 0; padding-inline: 0.6rem; }
+  .hero__actions .btn__label { font-size: 0.8125rem; letter-spacing: 0.03em; white-space: nowrap; }
+}
+
+/* Сенсорные экраны: наведения нет, поэтому главные кнопки сразу залиты акцентом (контурная «Написать мне» остаётся контурной) */
+@media (hover: none) {
+  .btn:not(.btn--ghost)::before { transform: scaleX(1); }
+  .btn:not(.btn--ghost):active::before { background: color-mix(in srgb, var(--accent) 70%, black); }
+  .blink.attach__btn, .footer__up { background-size: 100% 100%; }
+}

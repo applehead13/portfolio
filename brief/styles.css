@@ -401,3 +401,6 @@ body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100
 
 /* Телефон: кнопка Telegram в подвале брифа по центру, обычной ширины */
 @media (max-width: 699px) { .legal__row { justify-content: center; text-align: center; } .legal__row .blink { margin-inline: auto; } .legal__docs { justify-content: center; } }
+
+/* Сенсорные экраны: главные кнопки сразу залиты акцентом */
+@media (hover: none) { .btn:not(.btn--ghost)::before { transform: scaleX(1); } }
