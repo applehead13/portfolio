@@ -637,7 +637,7 @@
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
       '.hero__sub', '.hero__cap span', '.side__role', '.side__note',
-      '.about__body > .text', '.fact__title', '.fact__text',
+      '.about__body > .text', '.fact__p',
       '.card__title', '.card__desc', '.card__tags',
       '.price__title', '.price__desc', '.price__label', '.price__value',
       '.step-item__title', '.step-item__inner p',

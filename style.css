@@ -2141,3 +2141,13 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (hover: none), (max-width: 767px) {
   .price.is-active .price__title, .price.is-active .price__desc { width: calc(100% - 1.4rem); }
 }
+
+/* Факты: один абзац, начало фразы ярче, продолжение приглушённым цветом */
+.fact__p { margin: 0; font-size: var(--fs-text); line-height: var(--lh-text); }
+.fact__lead { color: var(--text); font-weight: 600; }
+.fact__rest { color: var(--muted); }
+.fact__p, .fact__p * { max-width: none; }
+
+/* ===== Типографика: ровные переносы, без висячих предлогов ===== */
+h1, h2, h3, .lead, .hero__title, .price__title { text-wrap: balance; }
+p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
