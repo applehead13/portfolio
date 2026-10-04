@@ -50,6 +50,8 @@
     a.textContent = 'Настройки cookie';
     a.addEventListener('click', function (e) { e.preventDefault(); show(); });
     nav.appendChild(a);
+    /* подвал стал выше: плавной прокрутке нужно пересчитать конец страницы, иначе последние ссылки остаются за краем */
+    setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50);
   }
 
   function init() {

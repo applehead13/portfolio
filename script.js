@@ -239,6 +239,19 @@
   if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     lenis = new Lenis({ duration: 1.15, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); } });
     (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(performance.now());
+    window.nfLenis = lenis;
+    /* Конец страницы: пересчитываем длину после загрузки шрифтов и картинок, а если колесо остановилось чуть не доехав до низа, доводим до самого конца
+       (иначе на больших экранах последние ссылки подвала оставались за краем) */
+    var endTimer = 0;
+    var fixEnd = function () {
+      lenis.resize();
+      var max = document.documentElement.scrollHeight - window.innerHeight, y = window.scrollY;
+      if (max - y > 1 && max - y < 160) { lenis.scrollTo(max, { duration: 0.45 }); }
+    };
+    lenis.on('scroll', function () { clearTimeout(endTimer); endTimer = setTimeout(fixEnd, 180); });
+    window.addEventListener('load', function () { lenis.resize(); });
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { lenis.resize(); }); }
+    setInterval(function () { lenis.resize(); }, 2000);
     /* Якорные ссылки едут плавно, с учётом верхней панели на телефоне */
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
