@@ -311,6 +311,8 @@
   sent.addEventListener('click', function (e) { if (e.target === sent || e.target.closest('[data-sent-close]')) { closeSent(); } });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sent.hidden) { closeSent(); } });
 
+  /* Для просмотра окошка без отправки: адрес с #demo-sent или #demo-error */
+  if (location.hash === '#demo-sent' || location.hash === '#demo-error') { setTimeout(function () { showSent(location.hash === '#demo-sent'); }, 600); }
   var MAX_FILE = 10 * 1024 * 1024;
   var form = document.getElementById('lead-form');
   var err = document.getElementById('form-error');
