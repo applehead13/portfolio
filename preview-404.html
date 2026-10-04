@@ -7,15 +7,15 @@
   <meta name="description" content="Такой страницы нет. Пока ищем, можно сыграть со смайликом или вернуться на главную.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0d0e0c">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791113515">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791113515">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791113515">
-  <link rel="preload" href="/fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1791113515">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1791113515">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1791113515">
+  <link rel="preload" href="fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add('js')</script>
   <!-- Страница отдаётся по любому несуществующему адресу, поэтому все пути абсолютные -->
-  <link rel="stylesheet" href="/style.css?v=1791113515">
-  <link rel="stylesheet" href="/brief/styles.css?v=1791113515">
+  <link rel="stylesheet" href="style.css?v=1791113515">
+  <link rel="stylesheet" href="brief/styles.css?v=1791113515">
   <style>
     .nf-links { margin-top: var(--pad); }
     .nf-links a { color: inherit; }
@@ -64,8 +64,8 @@
 
   <aside class="side" id="side">
     <div class="side__bar">
-      <a class="side__brand" href="/" aria-label="Полина Гусева, веб-дизайнер. На сайт">
-        <img class="side__photo" src="/img/portrait.jpg" alt="" width="104" height="104">
+      <a class="side__brand" href="./" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="img/portrait.jpg" alt="" width="104" height="104">
         <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
       </a>
       <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel">
@@ -77,10 +77,10 @@
       <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
 
       <nav class="nav" aria-label="Разделы">
-        <a class="nav__link" href="/#works"><span class="nav__text">Работы</span></a>
-        <a class="nav__link" href="/#prices"><span class="nav__text">Цены</span></a>
-        <a class="nav__link" href="/#about"><span class="nav__text">Обо мне</span></a>
-        <a class="nav__link" href="/#contacts"><span class="nav__text">Контакты</span></a>
+        <a class="nav__link" href="#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="#contacts"><span class="nav__text">Контакты</span></a>
       </nav>
 
       <div class="side__foot">
@@ -98,7 +98,7 @@
     <div class="top">
       <span class="top__count">Ошибка 404</span>
       <div class="top__right">
-        <a class="btn btn--ghost top__back" href="/" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+        <a class="btn btn--ghost top__back" href="./" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
       </div>
     </div>
 
@@ -131,8 +131,8 @@
           </div>
           <a class="blink footer__up" href="#top">Наверх</a>
           <nav class="footer__docs" aria-label="Документы">
-            <a class="doclink" href="/docs/privacy.html">Политика конфиденциальности</a>
-            <a class="doclink" href="/docs/consent.html">Согласие на обработку персональных данных</a>
+            <a class="doclink" href="docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="docs/consent.html">Согласие на обработку персональных данных</a>
           </nav>
         </div>
       </div>
@@ -141,7 +141,7 @@
   </main>
 </div>
 
-  <script src="/brief/ui.js?v=1791113515"></script>
+  <script src="brief/ui.js?v=1791113515"></script>
   <script>
   (function () {
     var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), endTimer = 0;
@@ -186,7 +186,7 @@
       msg.hidden = false;
       var title = win ? 'Ошибка исправлена!' : 'Баги дошли до края';
       var text = win ? 'Все баги разбиты, ' + score + ' очк. Страницы всё равно нет, зато вы молодец.' : score + ' очк. Рекорд ' + best + '. Страницы нет, но можно сыграть ещё.';
-      msg.innerHTML = title + '<small>' + text + '</small><div class="msg__actions"><button class="btn" id="restart" type="button"><span class="btn__label">Начать заново</span></button><a class="btn btn--ghost" href="/"><span class="btn__label">На сайт</span></a><a class="btn btn--ghost" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener"><span class="btn__label">Написать мне</span></a></div>';
+      msg.innerHTML = title + '<small>' + text + '</small><div class="msg__actions"><button class="btn" id="restart" type="button"><span class="btn__label">Начать заново</span></button><a class="btn btn--ghost" href="./"><span class="btn__label">На сайт</span></a><a class="btn btn--ghost" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener"><span class="btn__label">Написать мне</span></a></div>';
       /* кнопки включаются не сразу, чтобы случайный тап сразу после конца игры ничего не запускал и табличку можно было прочитать */
       endTimer = setTimeout(function () { msg.classList.add('msg--end'); var r = document.getElementById('restart'); if (r) { r.addEventListener('click', function () { begin(true); }); } }, 1000);
       draw();
