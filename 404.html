@@ -36,7 +36,6 @@
     .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); background: color-mix(in srgb, var(--bg) 55%, transparent); }
     .msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; max-width: 38ch; font-size: var(--fs-small); }
     .msg[hidden] { display: none; }
-    .view--game .game-head, .view--game .arena, .view--game .game-actions { max-width: 40rem; }
     .view--why .intro__list { gap: 0.85rem; }
     .nf-next { margin-top: 1rem; }
     .view--rules { padding-block: 0 var(--section); }
@@ -168,7 +167,7 @@
   (function () {
     var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), again = document.getElementById('again');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, touch = window.matchMedia('(hover: none)').matches;
-    var narrow = stage.clientWidth < 600, W = narrow ? 360 : 640, H = narrow ? 360 : 290;
+    var narrow = stage.clientWidth < 600, W = narrow ? 360 : Math.max(640, Math.round(stage.clientWidth)), H = narrow ? 360 : 290;
     var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; var ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
     var GREEN = '#3f9669', TEXT = '#ececE9', MUTED = '#8a8c86', DARK = '#24593f', LINE = '#2a2c28';
     /* Смайлик ровно как на главной: тот же пиксельный рисунок 7×5 и тот же зелёный */
@@ -231,7 +230,6 @@
       bugs.forEach(function (b) { if (b.on) { glyph(BUG, b.x, b.y, U, b.ch === '0' ? MUTED : GREEN); } });
       bullets.forEach(function (b) { ctx.fillStyle = TEXT; ctx.fillRect(Math.round(b.x), Math.round(b.y), 4, 12); });
       glyph(SMILE, ship.x, H - 46, SU, GREEN);
-      ctx.fillStyle = LINE; ctx.fillRect(0, H - 12, W, 1);
     }
     document.addEventListener('keydown', function (e) { keys[e.code] = true; if (e.code === 'Space') { if (e.target && /^(A|BUTTON|INPUT)$/.test(e.target.tagName)) { return; } e.preventDefault(); begin(); } if (e.code.indexOf('Arrow') === 0) { e.preventDefault(); } });
     document.addEventListener('keyup', function (e) { keys[e.code] = false; });
