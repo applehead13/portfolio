@@ -23,14 +23,14 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ProfessionalService","name":"Полина Гусева — веб-дизайн и разработка сайтов","url":"https://polinaguseva.ru/","image":"https://polinaguseva.ru/img/og3.jpg","areaServed":{"@type":"Country","name":"Россия"},"address":{"@type":"PostalAddress","addressLocality":"Санкт-Петербург","addressCountry":"RU"},"provider":{"@type":"Person","name":"Полина Гусева"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Услуги","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Экспресс-лендинг","description":"Одностраничный сайт с кнопкой заявки, срок от 3 дней"},"priceCurrency":"RUB","price":"30000","priceSpecification":{"@type":"PriceSpecification","priceCurrency":"RUB","price":"30000","minPrice":"30000"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Одностраничный сайт","description":"Лендинг на заказ, срок от 7 дней"},"priceCurrency":"RUB","price":"40000","priceSpecification":{"@type":"PriceSpecification","priceCurrency":"RUB","price":"40000","minPrice":"40000"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Многостраничный сайт","description":"Сайт из нескольких страниц, срок от 14 дней"},"priceCurrency":"RUB","price":"50000","priceSpecification":{"@type":"PriceSpecification","priceCurrency":"RUB","price":"50000","minPrice":"50000"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Интернет-магазин","description":"Каталог, корзина и онлайн-оплата, срок от 21 дня"},"priceCurrency":"RUB","price":"60000","priceSpecification":{"@type":"PriceSpecification","priceCurrency":"RUB","price":"60000","minPrice":"60000"}}]}}
   </script>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1791122101">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1791122101">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1791122101">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1791122977">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=1791122977">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1791122977">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add('js')</script>
-  <link rel="stylesheet" href="style.css?v=1791122101">
+  <link rel="stylesheet" href="style.css?v=1791122977">
 </head>
 <body>
 
@@ -346,7 +346,21 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="vendor/lenis.min.js"></script>
-<script src="script.js?v=1791122101"></script>
-<script src="analytics.js?v=1791122101" defer></script>
+<!-- Окошко после отправки заявки -->
+<div class="sent" id="sent" role="dialog" aria-modal="true" aria-labelledby="sent-title" hidden>
+  <div class="sent__box">
+    <button class="sent__x" type="button" aria-label="Закрыть" data-sent-close>[ × ]</button>
+    <h3 class="sent__title" id="sent-title"><span id="sent-t">Спасибо, всё дошло!</span><span class="smile" aria-hidden="true"></span></h3>
+    <p class="sent__text" id="sent-p">Я уже вижу вашу заявку и отвечу в течение дня. Если хотите, пока заполните бриф: так я смогу назвать точные сроки и стоимость.</p>
+    <div class="sent__actions">
+      <a class="btn" id="sent-main" href="brief/"><span class="btn__label">Заполнить бриф</span></a>
+      <button class="btn btn--ghost" type="button" data-sent-close><span class="btn__label">Закрыть</span></button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js?v=1791122977"></script>
+
+<script src="analytics.js?v=1791122977" defer></script>
 </body>
 </html>

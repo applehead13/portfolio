@@ -263,6 +263,54 @@
      Заявка и файл уходят на send.php (хостинг), а оттуда в Telegram.
      Если FORM_ENDPOINT пустой, открывается письмо с текстом заявки. */
   var FORM_ENDPOINT = '/send.php';
+  /* Окошко после отправки: успех или ошибка */
+  var sent = document.getElementById('sent');
+  var sentBack = null;
+  var sentTimer = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function typeInto(el, text, delay, done) {
+    var i = 0;
+    el.textContent = '';
+    (function step() {
+      el.textContent = text.slice(0, ++i);
+      if (i < text.length) { sentTimer = setTimeout(step, delay); } else if (done) { done(); }
+    })();
+  }
+  function showSent(ok) {
+    clearTimeout(sentTimer);
+    var title = ok ? 'Спасибо, всё дошло!' : 'Не получилось отправить';
+    var text = ok
+      ? 'Я уже вижу вашу заявку и отвечу в течение дня. Если хотите, пока заполните бриф: так я смогу назвать точные сроки и стоимость.'
+      : 'Что-то пошло не так, заявка не ушла. Напишите мне в Telegram или на почту, и я отвечу в течение дня.';
+    var t = document.getElementById('sent-t');
+    var p = document.getElementById('sent-p');
+    var acts = sent.querySelector('.sent__actions');
+    var main = document.getElementById('sent-main');
+    sent.classList.toggle('sent--err', !ok);
+    main.href = ok ? 'brief/' : 'https://t.me/ppolinaguseva';
+    main.querySelector('.btn__label').textContent = ok ? 'Заполнить бриф' : 'Написать в Telegram';
+    sentBack = document.activeElement;
+    sent.hidden = false;
+    document.body.style.overflow = 'hidden';
+    main.focus();
+    if (reduce) { t.textContent = title; p.textContent = text; sent.classList.add('is-done'); acts.classList.add('is-in'); return; }
+    sent.classList.remove('is-done');
+    acts.classList.remove('is-in');
+    p.textContent = '';
+    typeInto(t, title, 38, function () {
+      sent.classList.add('is-done');
+      typeInto(p, text, 12, function () { acts.classList.add('is-in'); });
+    });
+  }
+  function closeSent() {
+    clearTimeout(sentTimer);
+    sent.hidden = true;
+    document.body.style.overflow = '';
+    if (sentBack && sentBack.focus) { sentBack.focus(); }
+  }
+  sent.addEventListener('click', function (e) { if (e.target === sent || e.target.closest('[data-sent-close]')) { closeSent(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sent.hidden) { closeSent(); } });
+
   var MAX_FILE = 10 * 1024 * 1024;
   var form = document.getElementById('lead-form');
   var err = document.getElementById('form-error');
@@ -308,11 +356,9 @@
         .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) { throw new Error('send'); } }); })
         .then(function () {
           form.reset(); attach.classList.remove('has-file'); fileName.textContent = 'Если есть своё ТЗ, прикрепите его. До 10 МБ';
-          note.hidden = false; note.textContent = 'Заявка отправлена. Отвечу в течение дня.'; if (window.nfGoal) { window.nfGoal('lead'); }
+          showSent(true); if (window.nfGoal) { window.nfGoal('lead'); }
         })
-        .catch(function () {
-          err.hidden = false; err.textContent = 'Не получилось отправить. Напишите на почту или в Telegram.';
-        });
+        .catch(function () { showSent(false); });
       return;
     }
 

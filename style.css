@@ -2333,7 +2333,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Пиксельная улыбка у главного заголовка: зелёные квадраты, глаза сверху, улыбка снизу; стоит через пробел от последнего слова и чуть ниже строки, будто сползла */
 .hero__tail { white-space: nowrap; }
-.hero__title .smile {
+.hero__title .smile, .sent__title .smile {
   /* квадрат улыбки = толщина штриха букв заголовка (0.16em): смайлик как будто нарисован шрифтом заголовка, 7×5 квадратов, высота почти как у заглавных */
   display: inline-block; width: calc(7 * 0.16em); height: calc(5 * 0.16em); margin-left: 0.3em; vertical-align: baseline; position: relative; top: 0.56em; /* глаза чуть выше нижней грани букв, улыбка свисает под строку, а высота строки не растёт */
   background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%205%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%221%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%222%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E") center / 100% 100% no-repeat;
@@ -2493,3 +2493,24 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .cc__text a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; }
 .cc__actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 1rem; }
 .cc .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
+
+/* Окошко после отправки заявки */
+.sent { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: var(--gutter); background: rgba(0, 0, 0, 0.72); }
+.sent[hidden] { display: none; }
+.sent__box { position: relative; width: 100%; max-width: 37rem; padding: 2.25rem 2rem 2rem; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.6); }
+.sent__x { position: absolute; top: 0.9rem; right: 1rem; padding: 0.25rem; font-family: var(--f-text); font-size: var(--fs-small); color: var(--muted); }
+.sent__x:hover, .sent__x:focus-visible { color: var(--text); }
+.sent__title { margin: 0 0 1rem; font-family: var(--f-head); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.08; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text); }
+.sent__text { margin: 0; font-size: var(--fs-small); line-height: var(--lh-text); color: var(--muted); }
+.sent__actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 1.75rem; }
+.sent .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
+.sent--err .smile { display: none; }
+.sent .smile { opacity: 0; }
+.sent.is-done .smile { opacity: 1; }
+.sent__actions { opacity: 0; transform: translateY(1.5rem); transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+.sent__actions.is-in { opacity: 1; transform: none; }
+@media (max-width: 600px) {
+  .sent__box { padding: 2rem 1.25rem 1.25rem; }
+  .sent__actions { flex-direction: column; }
+  .sent__actions .btn { width: 100%; justify-content: center; }
+}
