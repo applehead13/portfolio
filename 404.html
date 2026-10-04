@@ -32,24 +32,23 @@
     .game__joke::before { content: ""; display: inline-block; width: var(--sq); height: var(--sq); margin-right: var(--sq-gap); background: var(--accent-text); vertical-align: 0.05em; }
 
     /* Поле сборки: у блоков свои «слоты» в сетке, как макет страницы */
-    .board { --u: 1px; position: relative; width: 100%; aspect-ratio: 16 / 10; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background:
-      repeating-linear-gradient(90deg, transparent 0 calc(100% / 12 - 1px), color-mix(in srgb, var(--text) 5%, transparent) calc(100% / 12 - 1px) calc(100% / 12)), color-mix(in srgb, var(--text) 3%, var(--bg)); overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    .board { --u: 1px; position: relative; width: 100%; aspect-ratio: 16 / 10; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 3%, var(--bg)); overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    /* Наша сетка: 12 колонок с полями 2% и промежутком 1%, плюс горизонтальный ритм */
+    .board::before { content: ""; position: absolute; inset: 0 2%; pointer-events: none; z-index: 0;
+      background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent-text) 16%, transparent) 0, color-mix(in srgb, var(--accent-text) 16%, transparent) calc((100% - 11%) / 12), transparent calc((100% - 11%) / 12), transparent calc((100% - 11%) / 12 + 1%)); }
+    .board::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--text) 7%, transparent) 0, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px, transparent 10%); }
     @media (max-width: 599px) { .board { aspect-ratio: 3 / 4; } }
-    .slot { position: absolute; border: 1px dashed color-mix(in srgb, var(--text) 30%, transparent); display: flex; align-items: flex-start; justify-content: flex-start; pointer-events: none; transition: opacity 0.4s var(--ease); }
+    .slot { z-index: 1; position: absolute; border: 1px dashed color-mix(in srgb, var(--text) 30%, transparent); display: flex; align-items: flex-start; justify-content: flex-start; pointer-events: none; transition: opacity 0.4s var(--ease); }
     .slot span { padding: calc(var(--u) * 0.8) calc(var(--u) * 1.2); font-size: max(0.6rem, calc(var(--u) * 1.5)); color: var(--muted); letter-spacing: 0.04em; }
     .slot span::before { content: "[ "; } .slot span::after { content: " ]"; }
     .board.is-done .slot { opacity: 0; }
-    .pc { position: absolute; display: flex; overflow: hidden; touch-action: none; cursor: grab; z-index: 2; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); background: var(--bg); will-change: left, top; }
-    .pc.is-drag { cursor: grabbing; z-index: 20; transition: none; box-shadow: 0 0 0 1px var(--text), 0 calc(var(--u) * 1.2) calc(var(--u) * 3) rgba(0,0,0,0.5); animation: nfglitch 0.36s steps(2, end) infinite; }
-    .pc.is-placed { cursor: default; z-index: 1; box-shadow: none; transition: left 0.28s var(--ease), top 0.28s var(--ease), transform 0.28s var(--ease); }
-    .pc.is-flash { animation: nfglitch 0.5s steps(2, end) 1; }
-    @keyframes nfglitch {
-      0% { clip-path: inset(0 0 0 0); transform: translate(0, 0) var(--rot, rotate(0)); }
-      25% { clip-path: inset(10% 0 55% 0); transform: translate(calc(var(--u) * -0.9), 0) var(--rot, rotate(0)); }
-      50% { clip-path: inset(48% 0 12% 0); transform: translate(calc(var(--u) * 0.9), 0) var(--rot, rotate(0)); }
-      75% { clip-path: inset(0 0 70% 0); transform: translate(calc(var(--u) * -0.5), 0) var(--rot, rotate(0)); }
-      100% { clip-path: inset(0 0 0 0); transform: translate(0, 0) var(--rot, rotate(0)); }
-    }
+    .pc { position: absolute; display: flex; overflow: hidden; touch-action: none; cursor: grab; z-index: 2; box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); background: var(--bg); will-change: left, top; }
+    .pc.is-hidden { opacity: 0; }
+    .pc.is-drag { cursor: grabbing; z-index: 20; transition: none; box-shadow: 0 0 0 1px var(--text), 0 calc(var(--u) * 1.2) calc(var(--u) * 3) rgba(0,0,0,0.5); }
+    .pc.is-placed { cursor: default; z-index: 1; box-shadow: none; }
+    .pc.is-flash { animation: nfpop 0.4s steps(4, end) 1; }
+    @keyframes nfpop { 0% { transform: scale(1.06); } 100% { transform: scale(1); } }
     .pc img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; filter: grayscale(1) contrast(1.05); pointer-events: none; }
     .pc.is-placed img { filter: none; }
     .pc--header { background: var(--accent); align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 1.6); }
@@ -68,7 +67,23 @@
     .pc__up { background: var(--bg); padding: calc(var(--u) * 0.5) calc(var(--u) * 1.4); text-transform: uppercase; letter-spacing: 0.08em; }
     .board.is-done .pc--btn { cursor: pointer; }
     .board__actions { margin-top: 1rem; }
-    .px { position: absolute; width: 6px; height: 6px; background: var(--accent-text); z-index: 30; pointer-events: none; }
+    .px { position: absolute; z-index: 30; pointer-events: none; }
+    /* Игра сразу на первом экране: короткий заголовок и поле сборки чуть меньше ширины страницы; пояснения ниже */
+    /* Грустный смайлик: тот же пиксельный рисунок и место, рот перевёрнут вниз */
+    .view--top .intro__title .smile { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%205%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%221%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E"); background-size: 100% 100%; }
+    .view--top { padding-block: calc(var(--section) * 0.3) 1.25rem; }
+    .view--top .kicker { margin-bottom: 0.6rem; }
+    .view--top .intro__title { font-size: calc(var(--fs-h1) * 0.62); }
+    .view--game { padding-block: 0 calc(var(--section) * 0.8); }
+    .view--game .game-head, .view--game .board, .view--game .game__joke, .view--game .board__actions { max-width: 44rem; }
+    .view--game .game-head { margin-bottom: 0.75rem; }
+    @media (min-width: 700px) {
+      .view--info { padding-block: 0 var(--section); }
+      .view--info .intro__head { grid-column: 1 / span 5; grid-row: 1; }
+      .view--info .intro__body { grid-column: 7 / -1; grid-row: 1; margin-top: 0; }
+      .view--info .nf-lead { margin-top: 0; }
+    }
+    @media (max-width: 699px) { .view--info .intro__body { margin-top: var(--pad); } }
     .view--why { padding-block: 0 var(--section); }
     .view--why .kicker { margin-bottom: 1.25rem; }
     body.brief .pane { min-height: 100vh; min-height: 100dvh; }
@@ -119,29 +134,15 @@
       </div>
     </div>
 
-    <section class="view view--intro" aria-labelledby="intro-title">
-      <div class="intro__head">
-        <span class="kicker">Страница не найдена</span>
-        <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
-        <p class="nf-lead">Такого адреса на сайте нет. Возможно, <strong>страница переехала</strong>, ссылка устарела или в адресе опечатка. Бывает у всех, даже у веб-дизайнеров.</p>
-        <div class="intro__actions">
-          <a class="btn" href="/"><span class="btn__label">На главную</span></a>
-          <a class="btn btn--ghost" href="/brief/"><span class="btn__label">Заполнить бриф</span></a>
-        </div>
-      </div>
-      <div class="intro__body">
-        <ol class="intro__list nf-links">
-          <li><a href="/#works"><strong>Посмотреть работы</strong><span>сайты, которые уже живут в интернете и приносят пользу.</span></a></li>
-          <li><a href="/#prices"><strong>Узнать цены</strong><span>от лендинга до интернет-магазина, всё по-честному.</span></a></li>
-          <li><a href="/#about"><strong>Познакомиться</strong><span>раньше проектировала здания, теперь сайты.</span></a></li>
-          <li><a href="/#contacts"><strong>Написать мне</strong><span>отвечу в Telegram или на почту и всё расскажу.</span></a></li>
-        </ol>
-      </div>
-    </section>
 
+
+    <section class="view view--top" aria-labelledby="intro-title">
+      <span class="kicker">Ошибка 404. Страница не найдена</span>
+      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+    </section>
     <section class="view view--game" aria-label="Собери страницу">
       <div class="game-head">
-        <span class="kicker">Страница рассыпалась. Соберите её</span>
+        <span class="kicker">Страница рассыпалась. Соберите её по сетке</span>
         <span class="game-hud" id="hud">0 / 6 · 0,0 с</span>
       </div>
       <div class="board" id="board" aria-label="Поле сборки страницы. Перетащите блоки на свои места">
@@ -205,21 +206,73 @@
     var slots = {};
     Array.prototype.forEach.call(board.querySelectorAll('.slot'), function (el) { slots[el.getAttribute('data-k')] = el; });
 
-    /* Раскладки в процентах от поля: широкая и узкая (телефон) */
-    var WIDE = { header: [2, 3, 96, 10], title: [2, 18, 54, 32], photo: [60, 18, 38, 46], text: [2, 54, 54, 18], btn: [2, 78, 24, 9], footer: [2, 90, 96, 8] };
-    var NARROW = { header: [3, 2, 94, 8], title: [3, 13, 94, 18], photo: [3, 35, 44, 28], text: [51, 35, 46, 28], btn: [3, 67, 50, 8], footer: [3, 90, 94, 7] };
-    var L, bw, bh;
+    /* Слоты лежат строго в колонках сетки: поля 2%, колонка 7.083%, промежуток 1% */
+    function col(i) { return 2 + i * 8.0833; }
+    function span(n) { return n * 8.0833 - 1; }
+    var WIDE = { header: [2, 3, 96, 10], title: [col(0), 18, span(7), 32], photo: [col(8), 18, span(4), 46], text: [col(0), 54, span(7), 18], btn: [col(0), 78, span(3), 9], footer: [2, 90, 96, 8] };
+    var NARROW = { header: [2, 2, 96, 8], title: [2, 13, 96, 18], photo: [col(0), 35, span(6), 28], text: [col(6), 35, span(6), 28], btn: [col(0), 67, span(6), 8], footer: [2, 90, 96, 7] };
+    var COLORS = { header: ['#24593f', '#ececE9'], title: ['#ececE9', '#3f9669', '#0d0e0c'], photo: ['#8a8c86', '#c9c9c6', '#4a4a48'], text: ['#8a8c86', '#0d0e0c'], btn: ['#24593f', '#ececE9'], footer: ['#24593f', '#123524', '#ececE9'] };
+    var L, bw, bh, cell;
     function measure() {
-      bw = board.clientWidth; bh = board.clientHeight;
-      L = bw < 600 ? NARROW : WIDE;
-      board.style.setProperty('--u', (bw / (bw < 600 ? 60 : 100) * (bw < 600 ? 1 : 1)) + 'px');
+      bw = board.clientWidth; bh = board.clientHeight; L = bw < 600 ? NARROW : WIDE;
+      cell = Math.max(5, Math.round(bw / 70));
+      board.style.setProperty('--u', (bw / (bw < 600 ? 60 : 100)) + 'px');
       Object.keys(slots).forEach(function (k) { place(slots[k], L[k]); });
     }
     function place(el, r) { el.style.left = r[0] + '%'; el.style.top = r[1] + '%'; el.style.width = r[2] + '%'; el.style.height = r[3] + '%'; }
+    function rectOf(r) { return { x: r[0] / 100 * bw, y: r[1] / 100 * bh, w: r[2] / 100 * bw, h: r[3] / 100 * bh }; }
 
-    var t0 = 0, timer = 0, placed = 0, done = false, finalMs = 0;
+    /* Пиксели: квадратики цвета блока */
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function pxEl(x, y, size, color) {
+      var d = document.createElement('span'); d.className = 'px';
+      d.style.left = x + 'px'; d.style.top = y + 'px'; d.style.width = d.style.height = size + 'px'; d.style.background = color;
+      board.appendChild(d); return d;
+    }
+    function fly(d, dx, dy, dur, fade, delay, done) {
+      var kf = fade ? [{ transform: 'translate(0,0)', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px)', opacity: 0 }]
+                    : [{ transform: 'translate(' + dx + 'px,' + dy + 'px)', opacity: 0 }, { transform: 'translate(0,0)', opacity: 1 }];
+      var a = d.animate(kf, { duration: dur, delay: delay || 0, easing: 'steps(6, end)', fill: 'both' });
+      a.onfinish = function () { d.remove(); if (done) { done(); } };
+    }
+    /* Блок рассыпается на пиксели (из прямоугольника r) */
+    function explode(r, key, power) {
+      if (reduce) { return; }
+      var cols = COLORS[key], n = Math.min(160, Math.round(r.w * r.h / (cell * cell) * 0.5 * (power || 1)));
+      for (var i = 0; i < n; i++) {
+        var sz = cell * (Math.random() < 0.3 ? 2 : 1);
+        var d = pxEl(r.x + rnd(0, r.w - sz), r.y + rnd(0, r.h - sz), sz, cols[Math.floor(Math.random() * cols.length)]);
+        var ang = rnd(0, Math.PI * 2), dist = rnd(30, 160) * (power || 1);
+        fly(d, Math.cos(ang) * dist, Math.sin(ang) * dist, rnd(500, 900), true, rnd(0, 120));
+      }
+    }
+    /* Пиксели слетаются в прямоугольник r, потом появляется блок */
+    function implode(r, key, done) {
+      if (reduce) { done(); return; }
+      var cols = COLORS[key], n = Math.min(160, Math.round(r.w * r.h / (cell * cell) * 0.5)), left = n;
+      for (var i = 0; i < n; i++) {
+        var sz = cell * (Math.random() < 0.3 ? 2 : 1);
+        var tx = r.x + rnd(0, r.w - sz), ty = r.y + rnd(0, r.h - sz);
+        var d = pxEl(tx, ty, sz, cols[Math.floor(Math.random() * cols.length)]);
+        var ang = rnd(0, Math.PI * 2), dist = rnd(40, 200);
+        fly(d, Math.cos(ang) * dist, Math.sin(ang) * dist, rnd(420, 700), false, rnd(0, 150), function () { if (--left === 0) { done(); } });
+      }
+    }
+    /* Блок переезжает: рассыпается на старом месте, собирается из пикселей на новом */
+    function teleport(pc, toLeftPct, toTopPct, rotCss, after) {
+      var k = pc.getAttribute('data-k'), r0 = { x: pc.offsetLeft, y: pc.offsetTop, w: pc.offsetWidth, h: pc.offsetHeight };
+      var r1 = { x: toLeftPct / 100 * bw, y: toTopPct / 100 * bh, w: r0.w, h: r0.h };
+      pc.classList.add('is-hidden'); explode(r0, k, 1);
+      setTimeout(function () {
+        pc.style.left = toLeftPct + '%'; pc.style.top = toTopPct + '%';
+        pc.style.setProperty('--rot', rotCss); pc.style.transform = rotCss;
+        implode(r1, k, function () { pc.classList.remove('is-hidden'); if (after) { after(); } });
+      }, reduce ? 0 : 450);
+    }
+
+    var t0 = 0, timer = 0, placed = 0, done = false, finalMs = 0, busy = false;
     var MSG = [
-      'Перетащите блоки на пунктирные места, как в Figma. Можно и пальцем.',
+      'Перетащите блоки на пунктирные места, по колонкам сетки. Можно и пальцем.',
       'Шапка на месте. Уже не страница-беглянка.',
       'Заголовок встал. Теперь понятно, о чём речь.',
       'Лицо нашлось. Дальше проще.',
@@ -231,83 +284,75 @@
     function hudUpdate() { hud.textContent = placed + ' / ' + pcs.length + ' · ' + fmt(done ? finalMs : (t0 ? performance.now() - t0 : 0)) + ' с'; }
     function startTimer() { if (t0) { return; } t0 = performance.now(); timer = setInterval(hudUpdate, 100); }
 
-    function scatter() {
+    /* Сначала страница стоит собранной, потом рассыпается на пиксели и блоки разъезжаются */
+    function scatter(initial) {
+      busy = true;
       pcs.forEach(function (pc) {
-        var k = pc.getAttribute('data-k'), r = L[k], w = r[2] / 100 * bw, h = r[3] / 100 * bh;
-        var x, y, tries = 0;
-        do {
-          x = Math.random() * (bw - w); y = Math.random() * (bh - h); tries++;
-        } while (tries < 20 && Math.abs(x - r[0] / 100 * bw) < bw * 0.18 && Math.abs(y - r[1] / 100 * bh) < bh * 0.18);
-        var rot = (Math.random() * 14 - 7).toFixed(1);
-        pc.classList.remove('is-placed', 'is-drag', 'is-flash');
+        var k = pc.getAttribute('data-k'), r = L[k];
+        pc.classList.remove('is-placed', 'is-drag', 'is-flash', 'is-hidden');
         pc.style.width = r[2] + '%'; pc.style.height = r[3] + '%';
-        pc.style.left = (x / bw * 100) + '%'; pc.style.top = (y / bh * 100) + '%';
-        pc.style.setProperty('--rot', 'rotate(' + rot + 'deg)'); pc.style.transform = 'rotate(' + rot + 'deg)';
+        pc.style.transform = 'none'; pc.style.setProperty('--rot', 'rotate(0)');
+        if (initial) { pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; }
         pc.__placed = false;
       });
-    }
-
-    /* Пиксельный взрыв на месте, когда блок встал */
-    function burst(cx, cy) {
-      if (reduce) { return; }
-      for (var i = 0; i < 14; i++) {
-        var d = document.createElement('span'); d.className = 'px';
-        d.style.left = cx + 'px'; d.style.top = cy + 'px';
-        var s = 4 + Math.floor(Math.random() * 6); d.style.width = d.style.height = s + 'px';
-        board.appendChild(d);
-        var ang = Math.random() * Math.PI * 2, dist = 20 + Math.random() * 60;
-        var anim = d.animate([{ transform: 'translate(0,0)', opacity: 1 }, { transform: 'translate(' + Math.cos(ang) * dist + 'px,' + Math.sin(ang) * dist + 'px)', opacity: 0 }], { duration: 500 + Math.random() * 300, easing: 'steps(6)' });
-        anim.onfinish = (function (n) { return function () { n.remove(); }; })(d);
-      }
+      var left = pcs.length;
+      setTimeout(function () {
+        pcs.forEach(function (pc, i) {
+          var k = pc.getAttribute('data-k'), r = L[k], w = r[2] / 100 * bw, h = r[3] / 100 * bh, x, y, tries = 0;
+          do { x = rnd(0, bw - w); y = rnd(0, bh - h); tries++; }
+          while (tries < 20 && Math.abs(x - r[0] / 100 * bw) < bw * 0.18 && Math.abs(y - r[1] / 100 * bh) < bh * 0.18);
+          var rot = 'rotate(' + rnd(-7, 7).toFixed(1) + 'deg)';
+          setTimeout(function () { teleport(pc, x / bw * 100, y / bh * 100, rot, function () { if (--left === 0) { busy = false; } }); }, reduce ? 0 : i * 90);
+        });
+      }, initial ? (reduce ? 0 : 1100) : 0);
     }
 
     function snap(pc, quiet) {
       var k = pc.getAttribute('data-k'), r = L[k];
       pc.__placed = true; pc.classList.remove('is-drag'); pc.classList.add('is-placed');
       pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; pc.style.transform = 'none'; pc.style.setProperty('--rot', 'rotate(0)');
-      if (!quiet) {
-        pc.classList.add('is-flash'); setTimeout(function () { pc.classList.remove('is-flash'); }, 520);
-        burst((r[0] + r[2] / 2) / 100 * bw, (r[1] + r[3] / 2) / 100 * bh);
-      }
+      if (!quiet) { pc.classList.add('is-flash'); setTimeout(function () { pc.classList.remove('is-flash'); }, 420); explode(rectOf(r), k, 0.8); }
       placed = pcs.filter(function (x) { return x.__placed; }).length;
       joke.textContent = MSG[Math.min(placed, MSG.length - 1)];
       hudUpdate();
       if (placed === pcs.length) { finish(); }
     }
-
     function finish() {
       done = true; finalMs = t0 ? performance.now() - t0 : 0; clearInterval(timer); hudUpdate();
       board.classList.add('is-done'); btnAgain.hidden = false; btnAuto.hidden = true;
       joke.textContent = MSG[MSG.length - 1] + ' Время: ' + fmt(finalMs) + ' с.';
-      /* Финальный поворот: заголовок и кнопка собранного макета оживают */
       setTimeout(function () {
         var t = board.querySelector('.pc--title'), b = board.querySelector('.pc--btn');
-        t.classList.add('is-flash');
+        explode(rectOf(L.title), 'title', 0.7);
         t.querySelector('.pc__t1').textContent = 'Другое дело'; t.querySelector('.pc__t2').textContent = 'но не то';
-        b.querySelector('.pc__label').textContent = 'На главную';
-        b.setAttribute('role', 'link'); b.tabIndex = 0;
+        b.querySelector('.pc__label').textContent = 'На главную'; b.setAttribute('role', 'link'); b.tabIndex = 0;
       }, 350);
     }
     function reset() {
+      if (busy) { return; }
       done = false; t0 = 0; placed = 0; clearInterval(timer); finalMs = 0;
       board.classList.remove('is-done'); btnAgain.hidden = true; btnAuto.hidden = false;
       var t = board.querySelector('.pc--title'), b = board.querySelector('.pc--btn');
       t.querySelector('.pc__t1').textContent = 'Страница'; t.querySelector('.pc__t2').textContent = 'не найдена';
       b.querySelector('.pc__label').textContent = 'Назад'; b.removeAttribute('role'); b.removeAttribute('tabindex');
-      joke.textContent = MSG[0]; measure(); scatter(); hudUpdate();
+      joke.textContent = MSG[0]; measure();
+      /* блоки сначала собираются на местах, потом рассыпаются заново */
+      pcs.forEach(function (pc) { var r = L[pc.getAttribute('data-k')]; pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; });
+      scatter(true); hudUpdate();
     }
     btnAgain.addEventListener('click', reset);
     btnAuto.addEventListener('click', function () {
+      if (busy) { return; }
       startTimer();
-      pcs.filter(function (x) { return !x.__placed; }).forEach(function (pc, i) { setTimeout(function () { snap(pc); }, i * (reduce ? 0 : 260)); });
+      pcs.filter(function (x) { return !x.__placed; }).forEach(function (pc, i) { setTimeout(function () { snap(pc); }, i * (reduce ? 0 : 280)); });
     });
 
-    /* Перетаскивание */
+    /* Перетаскивание: за блоком тянется след из пикселей */
     pcs.forEach(function (pc) {
-      var dx = 0, dy = 0, drag = false;
+      var dx = 0, dy = 0, drag = false, lastTrail = 0;
       pc.addEventListener('pointerdown', function (e) {
         if (done && pc.classList.contains('pc--btn')) { location.href = '/'; return; }
-        if (pc.__placed) { return; }
+        if (pc.__placed || busy) { return; }
         e.preventDefault(); startTimer();
         var r = pc.getBoundingClientRect();
         dx = e.clientX - r.left; dy = e.clientY - r.top; drag = true;
@@ -320,10 +365,19 @@
         var x = Math.max(0, Math.min(e.clientX - br.left - dx, br.width - pc.offsetWidth));
         var y = Math.max(0, Math.min(e.clientY - br.top - dy, br.height - pc.offsetHeight));
         pc.style.left = x / bw * 100 + '%'; pc.style.top = y / bh * 100 + '%';
+        var now = performance.now();
+        if (!reduce && now - lastTrail > 35) {
+          lastTrail = now;
+          var cols = COLORS[pc.getAttribute('data-k')];
+          for (var i = 0; i < 3; i++) {
+            var d = pxEl(x + rnd(0, pc.offsetWidth), y + rnd(0, pc.offsetHeight), cell * (Math.random() < 0.3 ? 2 : 1), cols[Math.floor(Math.random() * cols.length)]);
+            fly(d, rnd(-24, 24), rnd(-24, 24), rnd(350, 600), true, 0);
+          }
+        }
       });
       function end() {
         if (!drag) { return; } drag = false; pc.classList.remove('is-drag');
-        var k = pc.getAttribute('data-k'), r = L[k];
+        var r = L[pc.getAttribute('data-k')];
         var x = pc.offsetLeft, y = pc.offsetTop;
         var tx = r[0] / 100 * bw, ty = r[1] / 100 * bh, near = Math.max(bw * 0.09, 28);
         if (Math.abs(x - tx) < near && Math.abs(y - ty) < near) { snap(pc); }
@@ -332,8 +386,8 @@
       pc.addEventListener('keydown', function (e) { if (done && pc.classList.contains('pc--btn') && (e.key === 'Enter' || e.key === ' ')) { location.href = '/'; } });
     });
 
-    measure(); scatter(); hudUpdate();
-    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { var was = placed; measure(); pcs.forEach(function (pc) { if (pc.__placed) { snap(pc, true); } else { pc.style.width = L[pc.getAttribute('data-k')][2] + '%'; pc.style.height = L[pc.getAttribute('data-k')][3] + '%'; } }); }, 150); });
+    measure(); scatter(true); hudUpdate();
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { measure(); pcs.forEach(function (pc) { var r = L[pc.getAttribute('data-k')]; pc.style.width = r[2] + '%'; pc.style.height = r[3] + '%'; if (pc.__placed) { pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; } }); }, 150); });
   })();
   </script>
 </body>
