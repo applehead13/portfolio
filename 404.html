@@ -22,6 +22,16 @@
     .nf-links { margin-top: var(--pad); }
     .nf-links a { color: inherit; }
     .nf-links a:hover strong, .nf-links a:focus-visible strong { color: var(--accent-bright, #4fbf85); }
+    /* Слева правила игры, справа причины, как в брифе: колонки 1–6 и 7–12; ниже крупная игра */
+    .view--info { padding-block: 0 var(--pad); }
+    .view--info .nf-next { margin-top: var(--pad); max-width: none; color: var(--text); }
+    .info__right { margin-top: var(--pad); }
+    @media (min-width: 700px) {
+      .view--info { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; row-gap: var(--pad); }
+      .info__left { grid-column: 1 / span 6; }
+      .info__right { grid-column: 7 / -1; margin-top: 0; padding-top: 2.1rem; }
+      .view--info .nf-next { grid-column: 1 / -1; margin-top: 0; }
+    }
     .view--game { padding-block: 0 var(--section); }
     .game-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; margin-bottom: 1rem; }
     .game-head .kicker { margin: 0; }
@@ -36,10 +46,6 @@
     .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); background: color-mix(in srgb, var(--bg) 55%, transparent); }
     .msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; max-width: 38ch; font-size: var(--fs-small); }
     .msg[hidden] { display: none; }
-    .view--why .intro__list { gap: 0.85rem; }
-    .nf-next { margin-top: 1rem; }
-    .view--rules { padding-block: 0 var(--section); }
-    .view--rules .kicker { margin-bottom: 1.25rem; }
     .game-actions { margin-top: var(--pad); display: flex; gap: 0.75rem 1rem; flex-wrap: wrap; }
     .px { position: absolute; z-index: 30; pointer-events: none; }
     /* Игра сразу на первом экране: короткий заголовок и поле сборки чуть меньше ширины страницы; пояснения ниже */
@@ -48,19 +54,16 @@
     .view--top { padding-block: calc(var(--section) * 0.3) var(--pad); }
     .view--top .kicker { margin-bottom: 0.6rem; }
     .view--game { padding-block: 0 var(--section); }
-    .view--why { padding-block: 0 var(--pad); }
     /* Подсказки к игре обычным размером шрифта, как основной текст сайта */
     .game__joke { font-size: var(--fs-text); }
-    .nf-next { margin-top: var(--pad); color: var(--text); max-width: none; }
     .view--game .game-head { margin-bottom: 1.25rem; }
     @media (min-width: 700px) {
-      .view--info { padding-block: 0 var(--section); }
+      .view--info { padding-block: 0 var(--pad); }
       .view--info .intro__head { grid-column: 1 / span 5; grid-row: 1; }
       .view--info .intro__body { grid-column: 7 / -1; grid-row: 1; margin-top: 0; }
       .view--info .nf-lead { margin-top: 0; }
     }
     @media (max-width: 699px) { .view--info .intro__body { margin-top: var(--pad); } }
-    .view--why .kicker { margin-bottom: 1.25rem; }
     body.brief .pane { min-height: 100vh; min-height: 100dvh; }
     .app .footer { margin-top: auto; }
   </style>
@@ -114,14 +117,25 @@
     <section class="view view--top" aria-labelledby="intro-title">
       <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
     </section>
-    <section class="view view--why" aria-labelledby="why-title">
-      <span class="kicker" id="why-title">Куда могла деться страница</span>
-      <ol class="intro__list">
+    <section class="view view--info" aria-label="Правила и причины">
+      <div class="info__left">
+        <span class="kicker">Правила</span>
+        <ol class="intro__list">
+        <li><strong>Двигайтесь.</strong><span>Стрелки ← → или клавиши A и D. Мышью и пальцем смайлик едет за курсором.</span></li>
+        <li><strong>Стреляйте.</strong><span>Пробел или клик мышью. На телефоне огонь идёт сам, нужно только двигать пальцем.</span></li>
+        <li><strong>Баги выстроены в «404».</strong><span>Они ползут вбок и спускаются вниз. Чем меньше их остаётся, тем быстрее они бегут.</span></li>
+        <li><strong>Не дайте им дойти до нижней линии.</strong><span>Если хоть один баг достиг её, игра окончена.</span></li>
+        <li><strong>Разбейте все баги.</strong><span>10 очков за каждый, 100 за победу. Рекорд хранится в вашем браузере.</span></li>
+      </ol>
+      </div>
+      <div class="info__right">
+        <ol class="intro__list">
         <li><strong>Её съел баг.</strong><span>Мы уже строго поговорили с багом.</span></li>
         <li><strong>Она ушла в отпуск без предупреждения.</strong><span>Вернётся загорелой и с новым адресом.</span></li>
         <li><strong>Вы опечатались.</strong><span>Я сама иногда пишу «сйат» вместо «сайт». Это нормально.</span></li>
         <li><strong>Её никогда не было.</strong><span>Но если вы ждали именно её, напишите мне, и я её сделаю.</span></li>
       </ol>
+      </div>
       <p class="nf-lead nf-next">А ниже небольшая игра, чтобы было не так грустно.</p>
     </section>
     <section class="view view--game" aria-label="Игра: баги наступают">
@@ -132,16 +146,7 @@
       <div class="arena" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите пробел или тапните<small>двигайтесь стрелками или мышью, стреляйте пробелом или кликом. Правила ниже.</small></div></div>
       <div class="game-actions"><button class="btn btn--ghost" id="again" type="button" hidden><span class="btn__label">Сыграть ещё раз</span></button></div>
     </section>
-    <section class="view view--rules" aria-labelledby="rules-title">
-      <span class="kicker" id="rules-title">Правила</span>
-      <ol class="intro__list">
-        <li><strong>Двигайтесь.</strong><span>Стрелки ← → или клавиши A и D. Мышью и пальцем смайлик едет за курсором.</span></li>
-        <li><strong>Стреляйте.</strong><span>Пробел или клик мышью. На телефоне огонь идёт сам, нужно только двигать пальцем.</span></li>
-        <li><strong>Баги выстроены в «404».</strong><span>Они ползут вбок и спускаются вниз. Чем меньше их остаётся, тем быстрее они бегут.</span></li>
-        <li><strong>Не дайте им дойти до нижней линии.</strong><span>Если хоть один баг достиг её, игра окончена.</span></li>
-        <li><strong>Разбейте все баги.</strong><span>10 очков за каждый, 100 за победу. Рекорд хранится в вашем браузере.</span></li>
-      </ol>
-    </section>
+    
 
     <footer class="footer" id="footer" style="--fp: 1">
       <div class="footer__inner">
@@ -167,14 +172,14 @@
   (function () {
     var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), again = document.getElementById('again');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, touch = window.matchMedia('(hover: none)').matches;
-    var narrow = stage.clientWidth < 600, W = narrow ? 360 : Math.max(640, Math.round(stage.clientWidth)), H = narrow ? 360 : 290;
+    var narrow = stage.clientWidth < 600, W = narrow ? 360 : Math.max(640, Math.round(stage.clientWidth)), H = narrow ? 380 : 470;
     var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; var ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
     var GREEN = '#3f9669', TEXT = '#ececE9', MUTED = '#8a8c86', DARK = '#24593f', LINE = '#2a2c28';
     /* Смайлик ровно как на главной: тот же пиксельный рисунок 7×5 и тот же зелёный */
     var SMILE = ['.X...X.', '.......', 'X.....X', '.X...X.', '..XXX..'];
     var BUG = ['X.X.X', '.XXX.', 'XXXXX', '.XXX.', 'X...X'];
     var G = { 4: ['X.X', 'X.X', 'XXX', '..X', '..X'], 0: ['XXX', 'X.X', 'X.X', 'X.X', 'XXX'] };
-    var U = narrow ? 3 : 4, SU = narrow ? 4 : 5, SX = narrow ? 30 : 40, SY = narrow ? 26 : 28, BW = 5 * U;
+    var U = narrow ? 3 : 5, SU = narrow ? 4 : 6, SX = narrow ? 30 : 56, SY = narrow ? 26 : 40, BW = 5 * U;
     var bugs, dir, bullets, ship, score, best = 0, state = 'idle', raf, last, keys = {}, cool = 0, total = 0;
     try { best = +localStorage.getItem('nf-404-best') || 0; } catch (e) {}
 
@@ -196,7 +201,7 @@
 
     function build() {
       bugs = []; var cols = 11, x0 = (W - ((cols - 1) * SX + BW)) / 2;
-      '404'.split('').forEach(function (ch, g) { G[ch].forEach(function (row, r) { for (var c = 0; c < 3; c++) { if (row[c] === 'X') { bugs.push({ x: x0 + (g * 4 + c) * SX, y: 20 + r * SY, on: true, ch: ch }); } } }); });
+      '404'.split('').forEach(function (ch, g) { G[ch].forEach(function (row, r) { for (var c = 0; c < 3; c++) { if (row[c] === 'X') { bugs.push({ x: x0 + (g * 4 + c) * SX, y: 24 + r * SY, on: true, ch: ch }); } } }); });
       total = bugs.length;
     }
     function reset() { build(); dir = 1; bullets = []; ship = { x: W / 2 - 3.5 * SU }; score = 0; cool = 0; hud.textContent = '0' + (best ? ' · рекорд ' + best : ''); }
@@ -213,10 +218,10 @@
       var dt = Math.min((now - last) / 1000, 0.04); last = now; if (state !== 'run') { return; } cool -= dt;
       if (keys.ArrowLeft || keys.KeyA) { ship.x -= 380 * dt; } if (keys.ArrowRight || keys.KeyD) { ship.x += 380 * dt; } if (keys.Space) { fire(); } if (touch) { fire(); }
       ship.x = Math.max(0, Math.min(W - 7 * SU, ship.x));
-      var alive = bugs.filter(function (b) { return b.on; }), sp = 24 + (total - alive.length) * 2.2;
+      var alive = bugs.filter(function (b) { return b.on; }), sp = (narrow ? 24 : 32) + (total - alive.length) * (narrow ? 2.2 : 3);
       var minX = Math.min.apply(null, alive.map(function (b) { return b.x; })), maxX = Math.max.apply(null, alive.map(function (b) { return b.x; })) + BW;
-      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 12; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
-      bullets.forEach(function (b) { b.y -= 540 * dt; });
+      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += (narrow ? 12 : 16); }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
+      bullets.forEach(function (b) { b.y -= 620 * dt; });
       bullets = bullets.filter(function (bl) {
         for (var i = 0; i < alive.length; i++) { var b = alive[i]; if (b.on && bl.x > b.x - 3 && bl.x < b.x + BW + 3 && bl.y > b.y && bl.y < b.y + BW) { b.on = false; score += 10; hud.textContent = score + (best ? ' · рекорд ' + best : ''); shatter(b); return false; } }
         return bl.y > -12;
