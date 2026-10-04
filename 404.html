@@ -17,20 +17,9 @@
   <link rel="stylesheet" href="/style.css?v=1791113515">
   <link rel="stylesheet" href="/brief/styles.css?v=1791113515">
   <style>
-    .nf-lead { margin-top: var(--pad); max-width: 46ch; color: var(--muted); }
-    .nf-lead strong { color: var(--text); font-weight: 600; }
     .nf-links { margin-top: var(--pad); }
     .nf-links a { color: inherit; }
     .nf-links a:hover strong, .nf-links a:focus-visible strong { color: var(--accent-bright, #4fbf85); }
-    /* Как в брифе: справа список причин (колонки 7–12), слева короткая подпись; ниже крупная игра */
-    .view--info { padding-block: 0 var(--pad); }
-    .view--info .nf-next { margin-top: var(--pad); max-width: none; color: var(--text); }
-    .info__right { margin-top: 0; }
-    @media (min-width: 700px) {
-      .view--info { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
-      .info__right { grid-column: 7 / -1; grid-row: 1; padding-top: 0.4rem; }
-      .view--info .nf-next { grid-column: 1 / span 6; grid-row: 1; margin-top: 0; padding-top: 0.4rem; }
-    }
     .view--game { padding-block: 0 var(--section); }
     .game-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; margin-bottom: 1rem; }
     .game-head .kicker { margin: 0; }
@@ -45,24 +34,18 @@
     .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); background: color-mix(in srgb, var(--bg) 55%, transparent); }
     .msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; max-width: 38ch; font-size: var(--fs-small); }
     .msg[hidden] { display: none; }
+    .msg--end { pointer-events: auto; background: color-mix(in srgb, var(--bg) 85%, transparent); }
+    .msg__actions .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
+    .msg__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin-top: 1rem; }
     .game-actions { margin-top: var(--pad); display: flex; gap: 0.75rem 1rem; flex-wrap: wrap; }
     .px { position: absolute; z-index: 30; pointer-events: none; }
     /* Игра сразу на первом экране: короткий заголовок и поле сборки чуть меньше ширины страницы; пояснения ниже */
     /* Грустный смайлик: тот же пиксельный рисунок и место, рот перевёрнут вниз */
-    .view--top .intro__title .smile { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%205%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%221%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E"); background-size: 100% 100%; }
-    .view--top { padding-block: calc(var(--section) * 0.3) var(--pad); }
-    .view--top .kicker { margin-bottom: 0.6rem; }
+    .view--intro .intro__title .smile { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%205%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%221%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E"); background-size: 100% 100%; }
     .view--game { padding-block: 0 var(--section); }
     /* Подсказки к игре обычным размером шрифта, как основной текст сайта */
     .game__joke { font-size: var(--fs-text); }
     .view--game .game-head { margin-bottom: 1.25rem; }
-    @media (min-width: 700px) {
-      .view--info { padding-block: 0 var(--pad); }
-      .view--info .intro__head { grid-column: 1 / span 5; grid-row: 1; }
-      .view--info .intro__body { grid-column: 7 / -1; grid-row: 1; margin-top: 0; }
-      .view--info .nf-lead { margin-top: 0; }
-    }
-    @media (max-width: 699px) { .view--info .intro__body { margin-top: var(--pad); } }
     body.brief .pane { min-height: 100vh; min-height: 100dvh; }
     .app .footer { margin-top: auto; }
   </style>
@@ -113,11 +96,13 @@
 
 
 
-    <section class="view view--top" aria-labelledby="intro-title">
-      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
-    </section>
-    <section class="view view--info" aria-label="Куда могла деться страница">
-      <div class="info__right">
+    <section class="view view--intro" aria-labelledby="intro-title">
+      <div class="intro__head">
+        <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+        <p class="intro__lead">Такого адреса на сайте нет. Возможно, страница переехала, ссылка устарела или в адресе опечатка. А ниже небольшая игра, чтобы было не так грустно.</p>
+        <p class="intro__lead">Как играть: двигайтесь стрелками или мышью, стреляйте пробелом или кликом. Баги выстроены в цифры «404». Разбейте их все, пока они не дошли до нижней линии. На телефоне огонь идёт сам, нужно только двигать пальцем.</p>
+      </div>
+      <div class="intro__body">
         <ol class="intro__list">
         <li><strong>Её съел баг.</strong><span>Мы уже строго поговорили с багом.</span></li>
         <li><strong>Она ушла в отпуск без предупреждения.</strong><span>Вернётся загорелой и с новым адресом.</span></li>
@@ -125,15 +110,13 @@
         <li><strong>Её никогда не было.</strong><span>Но если вы ждали именно её, напишите мне, и я её сделаю.</span></li>
       </ol>
       </div>
-      <p class="nf-lead nf-next">А ниже небольшая игра, чтобы было не так грустно.</p>
     </section>
-    <section class="view view--game" aria-label="Игра: баги наступают">
+        <section class="view view--game" aria-label="Игра: баги наступают">
       <div class="game-head">
         <span class="kicker">Баги наступают. Остановите их</span>
         <span class="game-hud" id="hud">0</span>
       </div>
       <div class="arena" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите пробел или тапните<small>← → или мышь: двигаться. Пробел или клик: стрелять. Разбейте все баги и не пускайте их к нижней линии.</small></div></div>
-      <div class="game-actions"><button class="btn btn--ghost" id="again" type="button" hidden><span class="btn__label">Сыграть ещё раз</span></button></div>
     </section>
     
 
@@ -159,7 +142,7 @@
   <script src="/brief/ui.js?v=1791113515"></script>
   <script>
   (function () {
-    var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), again = document.getElementById('again');
+    var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), endTimer = 0;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, touch = window.matchMedia('(hover: none)').matches;
     var narrow = stage.clientWidth < 600, W = narrow ? 360 : 720, H = 440;
     var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; var ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
@@ -194,12 +177,16 @@
       total = bugs.length;
     }
     function reset() { build(); dir = 1; bullets = []; ship = { x: W / 2 - 3.5 * SU }; score = 0; cool = 0; hud.textContent = '0' + (best ? ' · рекорд ' + best : ''); }
-    function begin() { if (state !== 'run') { reset(); state = 'run'; msg.hidden = true; again.hidden = true; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }
+    function begin(force) { if (state === 'over' && !force) { return; } if (state !== 'run') { clearTimeout(endTimer); msg.classList.remove('msg--end'); reset(); state = 'run'; msg.hidden = true; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }
     function end(win) {
       state = 'over'; if (win) { score += 100; } if (score > best) { best = score; try { localStorage.setItem('nf-404-best', String(best)); } catch (e) {} }
       hud.textContent = score + (best ? ' · рекорд ' + best : '');
-      msg.hidden = false; again.hidden = false;
-      msg.innerHTML = win ? 'Ошибка исправлена!<small>Все баги разбиты, ' + score + ' очк. Страницы всё равно нет, зато вы молодец. Нажмите пробел или тапните: ещё раз.</small>' : 'Баги дошли до края<small>' + score + ' очк. Рекорд ' + best + '. Нажмите пробел или тапните: ещё раз.</small>';
+      msg.hidden = false;
+      var title = win ? 'Ошибка исправлена!' : 'Баги дошли до края';
+      var text = win ? 'Все баги разбиты, ' + score + ' очк. Страницы всё равно нет, зато вы молодец.' : score + ' очк. Рекорд ' + best + '. Страницы нет, но можно сыграть ещё.';
+      msg.innerHTML = title + '<small>' + text + '</small><div class="msg__actions"><button class="btn" id="restart" type="button"><span class="btn__label">Начать заново</span></button><a class="btn btn--ghost" href="/"><span class="btn__label">На сайт</span></a><a class="btn btn--ghost" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener"><span class="btn__label">Написать мне</span></a></div>';
+      /* кнопки включаются не сразу, чтобы случайный тап сразу после конца игры ничего не запускал и табличку можно было прочитать */
+      endTimer = setTimeout(function () { msg.classList.add('msg--end'); var r = document.getElementById('restart'); if (r) { r.addEventListener('click', function () { begin(true); }); } }, 1000);
       draw();
     }
     function fire() { if (cool <= 0 && bullets.length < 3) { bullets.push({ x: ship.x + 3.5 * SU - 2, y: H - 52 }); cool = 0.28; } }
@@ -207,9 +194,9 @@
       var dt = Math.min((now - last) / 1000, 0.04); last = now; if (state !== 'run') { return; } cool -= dt;
       if (keys.ArrowLeft || keys.KeyA) { ship.x -= 380 * dt; } if (keys.ArrowRight || keys.KeyD) { ship.x += 380 * dt; } if (keys.Space) { fire(); } if (touch) { fire(); }
       ship.x = Math.max(0, Math.min(W - 7 * SU, ship.x));
-      var alive = bugs.filter(function (b) { return b.on; }), sp = 26 + (total - alive.length) * 2.2;
+      var alive = bugs.filter(function (b) { return b.on; }), sp = 44 + (total - alive.length) * 3;
       var minX = Math.min.apply(null, alive.map(function (b) { return b.x; })), maxX = Math.max.apply(null, alive.map(function (b) { return b.x; })) + BW;
-      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 14; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
+      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 16; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
       bullets.forEach(function (b) { b.y -= 540 * dt; });
       bullets = bullets.filter(function (bl) {
         for (var i = 0; i < alive.length; i++) { var b = alive[i]; if (b.on && bl.x > b.x - 3 && bl.x < b.x + BW + 3 && bl.y > b.y && bl.y < b.y + BW) { b.on = false; score += 10; hud.textContent = score + (best ? ' · рекорд ' + best : ''); shatter(b); return false; } }
@@ -225,13 +212,12 @@
       bullets.forEach(function (b) { ctx.fillStyle = TEXT; ctx.fillRect(Math.round(b.x), Math.round(b.y), 4, 12); });
       glyph(SMILE, ship.x, H - 46, SU, GREEN);
     }
-    document.addEventListener('keydown', function (e) { keys[e.code] = true; if (e.code === 'Space') { if (e.target && /^(A|BUTTON|INPUT)$/.test(e.target.tagName)) { return; } e.preventDefault(); begin(); } if (e.code.indexOf('Arrow') === 0) { e.preventDefault(); } });
+    document.addEventListener('keydown', function (e) { keys[e.code] = true; if (e.code === 'Space') { if (e.target && /^(A|BUTTON|INPUT)$/.test(e.target.tagName)) { return; } e.preventDefault(); if (state !== 'over') { begin(); } } if (e.code.indexOf('Arrow') === 0) { e.preventDefault(); } });
     document.addEventListener('keyup', function (e) { keys[e.code] = false; });
     function mv(e) { var r = cv.getBoundingClientRect(); ship.x = Math.max(0, Math.min(W - 7 * SU, (e.clientX - r.left) * (W / r.width) - 3.5 * SU)); }
     stage.addEventListener('pointermove', function (e) { if (state === 'run' || state === 'idle') { mv(e); } });
     stage.addEventListener('pointerdown', function (e) { mv(e); if (state !== 'run') { begin(); } else { fire(); } });
-    again.addEventListener('click', begin);
-    reset(); draw();
+        reset(); draw();
   })();
   </script>
 </body>
