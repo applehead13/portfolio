@@ -11,6 +11,19 @@
      Если элемент уже ушёл с экрана, очередь не ждёт его и идёт дальше. */
   var TYPE_STEP = 22;   // мс на букву: одна скорость печати везде
   var seqState = new Map(), seqReady = false;
+  /* Длинные тексты (больше двух строк) печатаются чуть быстрее; считаем строки в момент запуска, когда раскладка уже final */
+  function speedUp(el) {
+    var letters = el.querySelectorAll('.tc').length;
+    if (!letters) { return; }
+    var lh = parseFloat(getComputedStyle(el).lineHeight) || 20, rows = {};
+    Array.prototype.forEach.call(el.querySelectorAll('.tw'), function (w) {
+      var r = w.getBoundingClientRect();
+      if (r.width > 0) { rows[Math.round((r.top + r.bottom) / 2 / lh)] = 1; }
+    });
+    var step = (Object.keys(rows).length > 2 || el.classList.contains('fact__rest')) ? TYPE_STEP * 0.6 : TYPE_STEP;
+    el.style.setProperty('--ts', (step / 1000).toFixed(4) + 's');
+    el.__typeDur = letters * step + 60;
+  }
   setTimeout(function () { seqReady = true; seqState.forEach(function (st, k) { seqNext(k); }); }, 150);
   function seqOnScreen(el) { var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
   function seqOrder(a, b) {
@@ -26,6 +39,7 @@
       var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, TYPE_STEP);
       dur = phText.length * TYPE_STEP + 60;
     } else if (it.kind === 'type') {
+      speedUp(el);
       el.classList.add('is-typed');
       var host = el.closest('.fact');   // квадратик факта появляется вместе с его текстом
       if (host) { host.classList.add('is-typed'); }
@@ -74,7 +88,7 @@
       var phText = el.__ph, phI = 0;
       var phIv = setInterval(function () { phI++; el.setAttribute('placeholder', phText.slice(0, phI)); if (phI >= phText.length) { clearInterval(phIv); } }, TYPE_STEP);
       dur = phText.length * TYPE_STEP + 60;
-    } else { el.classList.add('is-typed'); dur = el.__typeDur || 0; }
+    } else { speedUp(el); el.classList.add('is-typed'); dur = el.__typeDur || 0; }
     parEnd = Math.max(parEnd, Date.now() + dur);
   }
   function afterPar(el, fn) {
@@ -911,7 +925,7 @@
         });
         node.parentNode.replaceChild(frag, node);
       });
-      var ts = (el.classList.contains('fact__rest') ? TYPE_STEP * 0.6 : TYPE_STEP) / 1000;   // одна скорость печати для всех текстов, факты о себе чуть быстрее
+      var ts = TYPE_STEP / 1000;   // базовая скорость; длинные тексты ускоряются при запуске (speedUp)
       el.style.setProperty('--ts', ts.toFixed(4) + 's');
       el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
@@ -936,7 +950,7 @@
         if (fig) { fig.classList.add('is-in'); }                         // фото вместе с заголовком
         setTimeout(function () {
           var longest = 0;
-          if (sub) { sub.classList.add('is-in'); sub.classList.add('is-typed'); longest = sub.__typeDur || 0; }
+          if (sub) { sub.classList.add('is-in'); speedUp(sub); sub.classList.add('is-typed'); longest = sub.__typeDur || 0; }
           /* Подпись под фото печатается в том же темпе, что текст рядом: строки по очереди и заканчивает она вместе с текстом */
           var offset = 0;
           var step = TYPE_STEP;
@@ -999,7 +1013,7 @@
         if (!p) { return; }
         p.classList.remove('is-typed');
         void p.offsetWidth;
-        setTimeout(function () { if (btn.getAttribute('aria-expanded') === 'true') { p.classList.add('is-typed'); } }, 120);
+        setTimeout(function () { if (btn.getAttribute('aria-expanded') === 'true') { speedUp(p); p.classList.add('is-typed'); } }, 120);
       });
     });
   }

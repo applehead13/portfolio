@@ -40,11 +40,24 @@
     if (a.el === b.el) { return a.kind === 'reveal' ? -1 : 1; }
     return (a.el.compareDocumentPosition(b.el) & 4) ? -1 : 1;
   }
+  /* Длинные тексты (больше двух строк) печатаются чуть быстрее; считаем строки в момент запуска, когда раскладка уже final */
+  function speedUp(el) {
+    var letters = el.querySelectorAll('.tc').length;
+    if (!letters) { return; }
+    var lh = parseFloat(getComputedStyle(el).lineHeight) || 20, rows = {};
+    Array.prototype.forEach.call(el.querySelectorAll('.tw'), function (w) {
+      var r = w.getBoundingClientRect();
+      if (r.width > 0) { rows[Math.round((r.top + r.bottom) / 2 / lh)] = 1; }
+    });
+    var step = (Object.keys(rows).length > 2) ? 22 * 0.6 : 22;
+    el.style.setProperty('--ts', (step / 1000).toFixed(4) + 's');
+    el.__typeDur = letters * step + 60;
+  }
   function seqNext() {
     if (seqBusy || !seq.length) { return; }
     seq.sort(order);
     var it = seq.shift(), el = it.el, dur;
-    if (it.kind === 'type') { el.classList.add('is-typed'); dur = el.__typeDur || 0; }
+    if (it.kind === 'type') { speedUp(el); el.classList.add('is-typed'); dur = el.__typeDur || 0; }
     else { el.classList.add('is-in'); dur = 90; }
     if (window.innerWidth < 1024 && el.closest('.side')) { dur = Math.min(dur, 40); }
     if (!onScreen(el)) { seqNext(); return; }
