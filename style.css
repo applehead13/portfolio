@@ -1912,6 +1912,8 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 @media (max-width: 1023px) {
   .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
   .btn:not(.btn--ghost):active::before { background: color-mix(in srgb, var(--accent) 70%, black); }
+  .footer__up { background-size: 100% 100% !important; }
+  .footer__up:active { filter: brightness(1.25); }
 }
 @media (hover: none), (max-width: 767px) {
   .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
