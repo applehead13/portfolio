@@ -2481,3 +2481,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 }
 .form__error::before, .q__error::before { color: var(--muted) !important; font-size: var(--fs-small) !important; font-family: var(--f-text) !important; font-weight: 400 !important; letter-spacing: normal !important; }
 .slot span { font-size: var(--fs-small) !important; letter-spacing: normal !important; }
+
+/* Кнопка «Заполнить бриф» на главной всегда залита зелёным на любом экране, не только при наведении */
+.contacts__brief .btn::before { transform: scaleX(1) !important; }
+.contacts__brief .btn:active::before { background: color-mix(in srgb, var(--accent) 70%, black); }

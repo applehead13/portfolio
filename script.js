@@ -317,7 +317,7 @@
       return;
     }
 
-    var body = 'Имя: ' + name + '\nКонтакт: ' + contact + '\nЧто нужно: ' + f.type.value +
+    var body = 'Имя: ' + name + '\nКонтакт: ' + contact + '\nЧто нужно: ' + (f.type.value || 'Не выбрано') +
       (file ? '\nТЗ: ' + file.name + ' (прикреплю к этому письму)' : '') +
       '\n\n' + f.message.value.trim();
     window.location.href = 'mailto:polinaguseva13@yandex.ru?subject=' +
@@ -380,7 +380,7 @@
     box.appendChild(btn); box.appendChild(list);
     function sync() {
       var on = radios.filter(function (r) { return r.checked; })[0];
-      val.textContent = on ? on.parentNode.querySelector('span').textContent : '';
+      val.textContent = on ? on.parentNode.querySelector('span').textContent : 'Выберите вариант';
     }
     function setOpen(open) { box.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
     btn.addEventListener('click', function () { setOpen(!box.classList.contains('is-open')); });
