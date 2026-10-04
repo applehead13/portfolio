@@ -259,7 +259,7 @@ function buildQuestion(q) {
     label.append(box, el('span', { class: 'check__box', 'aria-hidden': 'true' }));
     const text = el('span', { class: 'check__text' });
     text.innerHTML =
-      'Согласна на <a class="doclink" href="../docs/consent.html" target="_blank" rel="noopener" data-doc="consent">обработку персональных данных</a> ' +
+      'Согласен(на) на <a class="doclink" href="../docs/consent.html" target="_blank" rel="noopener" data-doc="consent">обработку персональных данных</a> ' +
       'и принимаю <a class="doclink" href="../docs/privacy.html" target="_blank" rel="noopener" data-doc="privacy">политику конфиденциальности</a>';
     label.append(text);
     wrap.append(label);
