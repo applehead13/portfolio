@@ -75,7 +75,16 @@
     .view--top .kicker { margin-bottom: 0.6rem; }
     .view--game { padding-block: 0 var(--section); }
     .view--why { padding-block: 0 var(--pad); }
-    .nf-next { margin-top: var(--pad); color: var(--text); }
+    /* «Ошибка 404» стоит степенью у верхнего правого угла заголовка, как «Документ» на страницах документов */
+    .title-wrap { position: relative; width: max-content; max-width: 100%; padding-right: 8.5rem; }
+    .title-wrap .tag { position: absolute; right: 0; top: 0.2em; font-family: var(--f-text); font-weight: 400; font-size: var(--fs-small); line-height: 1; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap; }
+    .title-wrap .tag::before { content: "[ "; } .title-wrap .tag::after { content: " ]"; }
+    @media (max-width: 767px) { .title-wrap { width: auto; padding-right: 0; margin-top: 1.6rem; } .title-wrap .tag { top: -1.7em; } }
+    /* Подсказки к игре обычным размером шрифта, как основной текст сайта */
+    .game-head .kicker, .game__joke { font-size: var(--fs-text); }
+    .nf-next { margin-top: var(--pad); color: var(--text); max-width: none; }
+    .top { justify-content: flex-end; }
+    @media (max-width: 767px) { .top { justify-content: center; } }
     .view--game .game-head { margin-bottom: 1.25rem; }
     @media (min-width: 700px) {
       .view--info { padding-block: 0 var(--section); }
@@ -127,7 +136,6 @@
   <main class="pane app" id="app">
 
     <div class="top">
-      <span class="top__count">Ошибка 404</span>
       <div class="top__right">
         <a class="btn btn--ghost top__back" href="/" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
       </div>
@@ -136,7 +144,7 @@
 
 
     <section class="view view--top" aria-labelledby="intro-title">
-      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <div class="title-wrap"><h1 class="intro__title" id="intro-title">Страница потерялась</h1><span class="tag">Ошибка 404</span></div>
     </section>
     <section class="view view--why" aria-labelledby="why-title">
       <span class="kicker" id="why-title">Куда могла деться страница</span>
@@ -146,7 +154,7 @@
         <li><strong>Вы опечатались.</strong><span>Я сама иногда пишу «сйат» вместо «сайт». Это нормально.</span></li>
         <li><strong>Её никогда не было.</strong><span>Но если вы ждали именно её, напишите мне, и я её сделаю.</span></li>
       </ol>
-      <p class="nf-lead nf-next">А ниже будет игра.</p>
+      <p class="nf-lead nf-next">А ниже небольшой интерактив, чтобы было не так грустно.</p>
     </section>
     <section class="view view--game" aria-label="Собери страницу">
       <div class="game-head">
