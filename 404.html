@@ -38,6 +38,8 @@
     .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); background: color-mix(in srgb, var(--bg) 55%, transparent); }
     .msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; max-width: 38ch; font-size: var(--fs-small); }
     .msg[hidden] { display: none; }
+    .msg:not([hidden]) { animation: msgin 0.3s ease-out; }
+    @keyframes msgin { from { opacity: 0; } to { opacity: 1; } }
     .msg--end { pointer-events: auto; background: color-mix(in srgb, var(--bg) 85%, transparent); }
     .msg__actions .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
     .msg__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; margin-top: 1rem; }
@@ -214,7 +216,12 @@
     stage.addEventListener('pointermove', function (e) { if (state === 'run' || state === 'idle') { mv(e); } });
     stage.addEventListener('pointerdown', function (e) { mv(e); if (state !== 'run') { begin(); } else { fire(); } });
         /* Сначала «404» из багов видна яркой и без затемнения; когда страницу пролистали к игре, фон темнеет и появляются правила */
-    function showIntro() { if (state === 'idle' && msg.hidden) { var top = stage.getBoundingClientRect().top; if (top < Math.min(window.innerHeight * 0.45, 360)) { msg.hidden = false; } } }
+    function showIntro() {
+      if (state !== 'idle') { return; }
+      var top = stage.getBoundingClientRect().top, lim = Math.min(window.innerHeight * 0.45, 360);
+      if (msg.hidden && top < lim) { msg.hidden = false; }
+      else if (!msg.hidden && top > lim + 40) { msg.hidden = true; }   /* прокрутили обратно наверх: снова яркая «404» без правил */
+    }
     window.addEventListener('scroll', showIntro, { passive: true }); window.addEventListener('resize', showIntro);
     reset(); draw(); showIntro();
   })();
