@@ -4,12 +4,7 @@ DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Редиректы только для боевого домена: технический адрес *.beget.tech работает без https и должен открываться как есть
-  # Всегда https
-  RewriteCond %{HTTP_HOST} ^(www\.)?polinaguseva\.ru$ [NC]
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^ https://polinaguseva.ru%{REQUEST_URI} [L,R=301]
+  # Редирект http -> https включён в панели Beget (настройки сайта), здесь его не дублируем, чтобы не было петли
   # Без www
   RewriteCond %{HTTP_HOST} ^www\.polinaguseva\.ru$ [NC]
   RewriteRule ^ https://polinaguseva.ru%{REQUEST_URI} [L,R=301]

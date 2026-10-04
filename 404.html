@@ -28,12 +28,47 @@
     .game-hud { font-size: var(--fs-small); color: var(--muted); letter-spacing: 0.05em; white-space: nowrap; }
     .game-hud::before { content: "[ "; }
     .game-hud::after { content: " ]"; }
-    .game { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 3%, var(--bg)); cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-    .game canvas { display: block; width: 100%; height: auto; }
-    .game__msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0.4rem; padding: 2.2rem 1rem 0; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); }
-    .game__msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; font-size: var(--fs-small); max-width: 34ch; }
     .game__joke { margin-top: 0.9rem; min-height: 3em; color: var(--muted); font-size: var(--fs-small); }
     .game__joke::before { content: ""; display: inline-block; width: var(--sq); height: var(--sq); margin-right: var(--sq-gap); background: var(--accent-text); vertical-align: 0.05em; }
+
+    /* Поле сборки: у блоков свои «слоты» в сетке, как макет страницы */
+    .board { --u: 1px; position: relative; width: 100%; aspect-ratio: 16 / 10; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background:
+      repeating-linear-gradient(90deg, transparent 0 calc(100% / 12 - 1px), color-mix(in srgb, var(--text) 5%, transparent) calc(100% / 12 - 1px) calc(100% / 12)), color-mix(in srgb, var(--text) 3%, var(--bg)); overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    @media (max-width: 599px) { .board { aspect-ratio: 3 / 4; } }
+    .slot { position: absolute; border: 1px dashed color-mix(in srgb, var(--text) 30%, transparent); display: flex; align-items: flex-start; justify-content: flex-start; pointer-events: none; transition: opacity 0.4s var(--ease); }
+    .slot span { padding: calc(var(--u) * 0.8) calc(var(--u) * 1.2); font-size: max(0.6rem, calc(var(--u) * 1.5)); color: var(--muted); letter-spacing: 0.04em; }
+    .slot span::before { content: "[ "; } .slot span::after { content: " ]"; }
+    .board.is-done .slot { opacity: 0; }
+    .pc { position: absolute; display: flex; overflow: hidden; touch-action: none; cursor: grab; z-index: 2; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); background: var(--bg); will-change: left, top; }
+    .pc.is-drag { cursor: grabbing; z-index: 20; transition: none; box-shadow: 0 0 0 1px var(--text), 0 calc(var(--u) * 1.2) calc(var(--u) * 3) rgba(0,0,0,0.5); animation: nfglitch 0.36s steps(2, end) infinite; }
+    .pc.is-placed { cursor: default; z-index: 1; box-shadow: none; transition: left 0.28s var(--ease), top 0.28s var(--ease), transform 0.28s var(--ease); }
+    .pc.is-flash { animation: nfglitch 0.5s steps(2, end) 1; }
+    @keyframes nfglitch {
+      0% { clip-path: inset(0 0 0 0); transform: translate(0, 0) var(--rot, rotate(0)); }
+      25% { clip-path: inset(10% 0 55% 0); transform: translate(calc(var(--u) * -0.9), 0) var(--rot, rotate(0)); }
+      50% { clip-path: inset(48% 0 12% 0); transform: translate(calc(var(--u) * 0.9), 0) var(--rot, rotate(0)); }
+      75% { clip-path: inset(0 0 70% 0); transform: translate(calc(var(--u) * -0.5), 0) var(--rot, rotate(0)); }
+      100% { clip-path: inset(0 0 0 0); transform: translate(0, 0) var(--rot, rotate(0)); }
+    }
+    .pc img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; filter: grayscale(1) contrast(1.05); pointer-events: none; }
+    .pc.is-placed img { filter: none; }
+    .pc--header { background: var(--accent); align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 1.6); }
+    .pc__brand { font-family: var(--f-head); font-weight: 700; font-size: max(0.6rem, calc(var(--u) * 1.9)); text-transform: uppercase; white-space: nowrap; }
+    .pc__brand i { font-style: normal; opacity: 0.7; }
+    .pc__nav { display: flex; gap: calc(var(--u) * 1); } .pc__nav b { width: calc(var(--u) * 1.4); height: calc(var(--u) * 1.4); background: var(--text); }
+    .pc--title { flex-direction: column; justify-content: center; padding: 0 calc(var(--u) * 2); font-family: var(--f-head); font-weight: 700; text-transform: uppercase; line-height: 1.02; font-size: calc(var(--u) * 5.4); }
+    .pc--title .pc__t2 { color: var(--accent-text); }
+    .pc--text { flex-direction: column; justify-content: center; gap: calc(var(--u) * 1.5); padding: 0 calc(var(--u) * 2); }
+    .pc--text i { display: block; height: calc(var(--u) * 1.1); background: var(--muted); opacity: 0.7; } .pc--text i:nth-child(2) { width: 90%; } .pc--text i:nth-child(3) { width: 75%; } .pc--text i:nth-child(4) { width: 40%; }
+    .pc--btn { background: var(--accent); align-items: center; justify-content: center; box-shadow: none; }
+    .pc--btn::before, .pc--btn::after { content: ""; position: absolute; top: 0; bottom: 0; width: calc(var(--u) * 1.2); border: 1px solid var(--text); }
+    .pc--btn::before { left: 0; border-right: 0; } .pc--btn::after { right: 0; border-left: 0; }
+    .pc__label { font-family: var(--f-head); font-weight: 700; font-size: max(0.6rem, calc(var(--u) * 1.8)); text-transform: uppercase; letter-spacing: 0.1em; }
+    .pc--footer { background: linear-gradient(180deg, #123524, var(--accent)); align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 1.6); font-size: max(0.55rem, calc(var(--u) * 1.4)); }
+    .pc__up { background: var(--bg); padding: calc(var(--u) * 0.5) calc(var(--u) * 1.4); text-transform: uppercase; letter-spacing: 0.08em; }
+    .board.is-done .pc--btn { cursor: pointer; }
+    .board__actions { margin-top: 1rem; }
+    .px { position: absolute; width: 6px; height: 6px; background: var(--accent-text); z-index: 30; pointer-events: none; }
     .view--why { padding-block: 0 var(--section); }
     .view--why .kicker { margin-bottom: 1.25rem; }
     body.brief .pane { min-height: 100vh; min-height: 100dvh; }
@@ -104,16 +139,31 @@
       </div>
     </section>
 
-    <section class="view view--game" aria-label="Мини-игра">
+    <section class="view view--game" aria-label="Собери страницу">
       <div class="game-head">
-        <span class="kicker">Пока ищем, сыграйте</span>
-        <span class="game-hud" id="hud">00000</span>
+        <span class="kicker">Страница рассыпалась. Соберите её</span>
+        <span class="game-hud" id="hud">0 / 6 · 0,0 с</span>
       </div>
-      <div class="game" id="game" role="application" aria-label="Мини-игра: смайлик перепрыгивает цифры. Прыжок: пробел, стрелка вверх или касание экрана">
-        <canvas id="cv" width="720" height="200"></canvas>
-        <div class="game__msg" id="msg">Нажмите пробел или коснитесь<small>смайлик побежит, а вы перепрыгивайте цифры</small></div>
+      <div class="board" id="board" aria-label="Поле сборки страницы. Перетащите блоки на свои места">
+        <div class="slot" data-k="header"><span>шапка</span></div>
+        <div class="slot" data-k="title"><span>заголовок</span></div>
+        <div class="slot" data-k="photo"><span>фото</span></div>
+        <div class="slot" data-k="text"><span>текст</span></div>
+        <div class="slot" data-k="btn"><span>кнопка</span></div>
+        <div class="slot" data-k="footer"><span>подвал</span></div>
+
+        <div class="pc pc--header" data-k="header"><span class="pc__brand">Полина Гусева <i>— веб-дизайнер</i></span><span class="pc__nav"><b></b><b></b><b></b></span></div>
+        <div class="pc pc--title" data-k="title"><span class="pc__t1">Страница</span><span class="pc__t2">не найдена</span></div>
+        <div class="pc pc--photo" data-k="photo"><img src="/img/portrait.jpg" alt="" draggable="false"></div>
+        <div class="pc pc--text" data-k="text"><i></i><i></i><i></i><i></i></div>
+        <div class="pc pc--btn" data-k="btn"><span class="pc__label">Назад</span></div>
+        <div class="pc pc--footer" data-k="footer"><span>© 2026 Полина Гусева</span><span class="pc__up">Наверх</span></div>
       </div>
-      <p class="game__joke" id="joke">Страница ушла за хлебом. Скоро вернётся.</p>
+      <p class="game__joke" id="joke">Перетащите блоки на пунктирные места, как в Figma, только без курсора: можно и пальцем.</p>
+      <div class="intro__actions board__actions">
+        <button class="btn" type="button" id="btn-auto"><span class="btn__label">Собрать за меня</span></button>
+        <button class="btn btn--ghost" type="button" id="btn-again" hidden><span class="btn__label">Рассыпать заново</span></button>
+      </div>
     </section>
 
     <section class="view view--why" aria-labelledby="why-title">
