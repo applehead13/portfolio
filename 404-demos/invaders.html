@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вариант 404: Баги наступают — Полина Гусева</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0e0c">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=1791107257">
+  <link rel="preload" href="../fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="../style.css?v=1791107257">
+  <link rel="stylesheet" href="../brief/styles.css?v=1791107257">
+  <link rel="stylesheet" href="demos.css?v=1791107257">
+  
+</head>
+<body class="brief">
+<div class="layout" id="top">
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel"><span class="side__toggle-text">Меню</span></button>
+    </div>
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="../#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="../#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="../#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="../#contacts"><span class="nav__text">Контакты</span></a>
+      </nav>
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+  <main class="pane app" id="app">
+    <div class="top">
+      <span class="top__count">Ошибка 404</span>
+      <div class="top__right">
+        <a class="btn btn--ghost" href="./" aria-label="Все варианты"><span class="btn__label">Все варианты</span></a>
+        <a class="btn btn--ghost top__back" href="../" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+      </div>
+    </div>
+    <section class="view view--top" aria-labelledby="intro-title">
+      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <p class="nf-lead">Вариант 6 из 7. Space Invaders наоборот: баги наступают, вы их исправляете.</p>
+    </section>
+    <section class="demo" aria-label="Остановите баги">
+      <div class="demo-head"><span class="kicker">Остановите баги</span><span class="hud" id="hud">0</span></div>
+      <div class="stage" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите пробел или тапните<small>← → двигают, пробел стреляет. На телефоне двигайте пальцем, огонь автоматический.</small></div></div>
+      
+      <p class="demo__note" id="note">Баги спускаются всё ниже. Не дайте им дойти до края.</p>
+    </section>
+    <footer class="footer" id="footer" style="--fp: 1">
+      <div class="footer__inner">
+        <div class="footer__bottom">
+          <div class="footer__copy">
+            <span>© 2026 Полина Гусева</span>
+            <span class="footer__meta"><span class="caps">Веб-дизайнер</span><i class="sq" aria-hidden="true"></i><span>ИНН 472600004020</span></span>
+          </div>
+          <a class="blink footer__up" href="#top">Наверх</a>
+          <nav class="footer__docs" aria-label="Документы">
+            <a class="doclink" href="../docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="../docs/consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="../brief/ui.js?v=1791107257"></script>
+<script src="demos.js?v=1791107257"></script>
+<script>
+function setup(cv, w, h) { var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = w * dpr; cv.height = h * dpr; var c = cv.getContext('2d'); c.scale(dpr, dpr); return c; }
+function pt(cv, e) { var r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * (cv.width / (window.devicePixelRatio > 1 ? Math.min(window.devicePixelRatio, 2) : 1)) / r.width, y: (e.clientY - r.top) * (cv.height / (window.devicePixelRatio > 1 ? Math.min(window.devicePixelRatio, 2) : 1)) / r.height }; }
+(function () {
+  var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg');
+  var narrow = stage.clientWidth < 600, W = narrow ? 360 : 720, H = 440, ctx = setup(cv, W, H);
+  var BUG = ['X.X.X', '.XXX.', 'XXXXX', '.XXX.', 'X...X'], SM = ['.X...X.', '.X...X.', '.......', 'X.....X', '.XXXXX.'], U = 4;
+  var cols = narrow ? 6 : 11, rows = 4, bugs, dir, bullets, ship, score, state = 'idle', raf, last, keys = {}, cool = 0, drop;
+  function glyph(a, x, y, u, c) { ctx.fillStyle = c; a.forEach(function (row, r) { for (var k = 0; k < row.length; k++) { if (row[k] === 'X') { ctx.fillRect(Math.round(x + k * u), Math.round(y + r * u), u, u); } } }); }
+  function reset() { bugs = []; for (var r = 0; r < rows; r++) { for (var c = 0; c < cols; c++) { bugs.push({ x: 20 + c * 50 * (narrow ? 0.9 : 1), y: 40 + r * 34, on: true, r: r }); } } dir = 1; bullets = []; ship = { x: W / 2 - 14 }; score = 0; drop = 0; hud.textContent = '0'; }
+  function begin() { if (state !== 'run') { reset(); state = 'run'; msg.hidden = true; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }
+  function end(win) { state = 'over'; msg.hidden = false; msg.innerHTML = win ? 'Все баги исправлены!<small>Сайт спасён. Пробел или тап: ещё раз.</small>' : 'Баги дошли до края<small>' + score + ' очк. Пробел или тап: ещё раз.</small>'; draw(); }
+  function fire() { if (cool <= 0 && bullets.length < 3) { bullets.push({ x: ship.x + 12, y: H - 50 }); cool = 0.28; } }
+  function loop(now) {
+    var dt = Math.min((now - last) / 1000, 0.04); last = now; if (state !== 'run') { return; } cool -= dt;
+    if (keys.ArrowLeft || keys.KeyA) { ship.x -= 360 * dt; } if (keys.ArrowRight || keys.KeyD) { ship.x += 360 * dt; } if (keys.Space) { fire(); } if (narrow || window.matchMedia('(hover: none)').matches) { fire(); }
+    ship.x = Math.max(0, Math.min(W - 28, ship.x));
+    var alive = bugs.filter(function (b) { return b.on; }), sp = 28 + (rows * cols - alive.length) * 1.6;
+    var minX = Math.min.apply(null, alive.map(function (b) { return b.x; })), maxX = Math.max.apply(null, alive.map(function (b) { return b.x; })) + 20;
+    if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 18; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
+    bullets.forEach(function (b) { b.y -= 520 * dt; });
+    bullets = bullets.filter(function (bl) { for (var i = 0; i < alive.length; i++) { var b = alive[i]; if (b.on && bl.x > b.x - 3 && bl.x < b.x + 23 && bl.y > b.y && bl.y < b.y + 20) { b.on = false; score += 10; hud.textContent = String(score); NF.burst(stage, b.x, b.y, 20, 20, [NF.C.accent, NF.C.text], 4, 12); return false; } } return bl.y > -10; });
+    if (!bugs.some(function (b) { return b.on; })) { end(true); return; }
+    if (bugs.some(function (b) { return b.on && b.y + 20 >= H - 56; })) { end(false); return; }
+    draw(); raf = requestAnimationFrame(loop);
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    bugs.forEach(function (b) { if (b.on) { glyph(BUG, b.x, b.y, U, b.r % 2 ? NF.C.muted : NF.C.accent); } });
+    bullets.forEach(function (b) { ctx.fillStyle = NF.C.text; ctx.fillRect(Math.round(b.x), Math.round(b.y), 4, 12); });
+    glyph(SM, ship.x, H - 44, 4, NF.C.text); ctx.fillStyle = NF.C.line; ctx.fillRect(0, H - 8, W, 1);
+  }
+  document.addEventListener('keydown', function (e) { keys[e.code] = true; if (e.code === 'Space') { e.preventDefault(); begin(); } if (e.code.indexOf('Arrow') === 0) { e.preventDefault(); } });
+  document.addEventListener('keyup', function (e) { keys[e.code] = false; });
+  function mv(e) { var p = pt(cv, e); ship.x = Math.max(0, Math.min(W - 28, p.x - 14)); }
+  stage.addEventListener('pointermove', mv); stage.addEventListener('pointerdown', function (e) { mv(e); begin(); fire(); });
+  reset(); draw();
+})();
+</script>
+</body>
+</html>
