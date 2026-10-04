@@ -2515,3 +2515,5 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .sent__actions { flex-direction: column; }
   .sent__actions .btn { width: 100%; justify-content: center; }
 }
+
+.prices__note { margin-top: var(--pad); max-width: 52ch; color: var(--muted); font-family: var(--f-text); font-size: var(--fs-text); line-height: var(--lh-text); }
