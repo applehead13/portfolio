@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вариант 404: Консоль — Полина Гусева</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0e0c">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=1791099954">
+  <link rel="preload" href="../fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="../style.css?v=1791099954">
+  <link rel="stylesheet" href="../brief/styles.css?v=1791099954">
+  <link rel="stylesheet" href="demos.css?v=1791099954">
+  <style>
+.term { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #0a110d; padding: 1rem; min-height: 22rem; max-height: 32rem; overflow-y: auto; font-size: var(--fs-text); line-height: var(--lh-text); cursor: text; }
+.term__out > div { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--text); }
+.term__out .dim { color: var(--muted); }
+.term__out .ok { color: var(--accent-text); }
+.term__out .cmd { color: var(--accent-text); }
+.term__out a { color: var(--text); text-decoration: underline; text-underline-offset: 0.2em; }
+.term__out a:hover { color: var(--accent-bright, #4fbf85); }
+.term__row { display: flex; gap: 0.6rem; align-items: center; margin-top: 0.25rem; }
+.term__ps { color: var(--accent-text); }
+.term__in { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--text); font: inherit; caret-color: var(--accent-text); padding: 0.3rem 0; }
+.chips { margin-top: 1rem; gap: 0.5rem; }
+.chips .btn { min-height: 2.25rem; padding-inline: 1rem; }
+</style>
+</head>
+<body class="brief">
+<div class="layout" id="top">
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel"><span class="side__toggle-text">Меню</span></button>
+    </div>
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="../#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="../#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="../#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="../#contacts"><span class="nav__text">Контакты</span></a>
+      </nav>
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+  <main class="pane app" id="app">
+    <div class="top">
+      <span class="top__count">Ошибка 404</span>
+      <div class="top__right">
+        <a class="btn btn--ghost" href="./" aria-label="Все варианты"><span class="btn__label">Все варианты</span></a>
+        <a class="btn btn--ghost top__back" href="../" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+      </div>
+    </div>
+    <section class="view view--top" aria-labelledby="intro-title">
+      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <p class="nf-lead">Вариант 6 из 7. Печатаете команды, получаете ответы и ссылки.</p>
+    </section>
+    <section class="demo" aria-label="Консоль">
+      <div class="demo-head"><span class="kicker">Введите команду. Начните с help</span><span class="hud" id="hud">консоль</span></div>
+      <div class="term" id="term" tabindex="-1">
+        <div class="term__out" id="out" aria-live="polite"></div>
+        <label class="term__row"><span class="term__ps">$</span><input class="term__in" id="in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Команда"></label>
+      </div>
+      <div class="demo__actions chips" id="chips"></div>
+      <p class="demo__note" id="note">Подсказки: help, works, prices, about, contacts, brief, joke, clear. Стрелка вверх вернёт прошлую команду.</p>
+    </section>
+    <footer class="footer" id="footer" style="--fp: 1">
+      <div class="footer__inner">
+        <div class="footer__bottom">
+          <div class="footer__copy">
+            <span>© 2026 Полина Гусева</span>
+            <span class="footer__meta"><span class="caps">Веб-дизайнер</span><i class="sq" aria-hidden="true"></i><span>ИНН 472600004020</span></span>
+          </div>
+          <a class="blink footer__up" href="#top">Наверх</a>
+          <nav class="footer__docs" aria-label="Документы">
+            <a class="doclink" href="../docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="../docs/consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="../brief/ui.js?v=1791099954"></script>
+<script src="demos.js?v=1791099954"></script>
+<script>
+(function () {
+  var out = document.getElementById('out'), inp = document.getElementById('in'), term = document.getElementById('term'), chips = document.getElementById('chips');
+  var hist = [], hi = 0;
+  var JOKES = ['Почему страница 404 не расстроилась? Она привыкла к потерям.', 'Сайт без бага как лето без дождя: красиво, но не в Петербурге.', 'Дизайнер не опаздывает. Он просто выравнивает дедлайн по сетке.', 'Страница ушла за хлебом в 2019 году. Мы ждём.'];
+  function line(html, cls) { var d = document.createElement('div'); if (cls) { d.className = cls; } d.innerHTML = html; out.appendChild(d); term.scrollTop = term.scrollHeight; }
+  function link(href, text) { return '<a href="' + href + '">' + text + '</a>'; }
+  var CMD = {
+    help: function () { line('Команды:'); [['works', 'мои работы'], ['prices', 'цены'], ['about', 'обо мне'], ['contacts', 'как связаться'], ['brief', 'заполнить бриф'], ['home', 'на главную'], ['joke', 'шутка'], ['clear', 'очистить']].forEach(function (c) { line('  <span class="cmd">' + c[0] + '</span>  <span class="dim">' + c[1] + '</span>'); }); },
+    works: function () { line('Работы: ' + link('../#works', 'открыть раздел «Работы»')); },
+    prices: function () { line('Цены: экспресс-лендинг 30 000 ₽, многостраничный 50 000 ₽, магазин 60 000 ₽. ' + link('../#prices', 'подробнее')); },
+    about: function () { line('Полина Гусева, веб-дизайнер из Санкт-Петербурга. Раньше проектировала здания, теперь сайты. ' + link('../#about', 'читать')); },
+    contacts: function () { line('Telegram: ' + link('https://t.me/ppolinaguseva', '@ppolinaguseva') + '\nПочта: ' + link('mailto:polinaguseva13@yandex.ru', 'polinaguseva13@yandex.ru')); },
+    brief: function () { line('Бриф: ' + link('../brief/', 'открыть анкету') + ' <span class="dim">(15–20 минут)</span>'); },
+    home: function () { line('Иду на главную…', 'ok'); setTimeout(function () { location.href = '../'; }, 500); },
+    joke: function () { line(JOKES[Math.floor(Math.random() * JOKES.length)]); },
+    clear: function () { out.innerHTML = ''; },
+    '404': function () { line('Ошибка 404: страница не найдена.\nЗато найдена консоль. Это уже что-то.', 'dim'); },
+    sudo: function () { line('Не в моём сайте, друг.', 'dim'); },
+    ls: function () { line('works  prices  about  contacts  brief', 'dim'); },
+    whoami: function () { line('Посетитель, который искал страницу и нашёл консоль.', 'dim'); }
+  };
+  function run(v) {
+    v = v.trim(); if (!v) { return; }
+    line('<span class="ok">$</span> ' + v.replace(/</g, '&lt;')); hist.push(v); hi = hist.length;
+    var c = v.toLowerCase().split(/\s+/)[0];
+    if (CMD[c]) { CMD[c](); } else { line('Команда «' + c.replace(/</g, '&lt;') + '» не найдена. Напишите help.', 'dim'); }
+  }
+  inp.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { run(inp.value); inp.value = ''; }
+    else if (e.key === 'ArrowUp') { if (hi > 0) { hi--; inp.value = hist[hi]; } e.preventDefault(); }
+    else if (e.key === 'ArrowDown') { if (hi < hist.length - 1) { hi++; inp.value = hist[hi]; } else { hi = hist.length; inp.value = ''; } e.preventDefault(); }
+  });
+  term.addEventListener('click', function (e) { if (!e.target.closest('a')) { inp.focus(); } });
+  ['help', 'works', 'prices', 'brief', 'joke', 'home'].forEach(function (c) { var b = document.createElement('button'); b.className = 'btn btn--ghost'; b.type = 'button'; b.innerHTML = '<span class="btn__label">' + c + '</span>'; b.addEventListener('click', function () { run(c); }); chips.appendChild(b); });
+  line('Консоль потерянной страницы. Версия 4.0.4', 'dim'); line('Страницу искали? Начните с команды <span class="cmd">help</span>.');
+})();
+</script>
+</body>
+</html>

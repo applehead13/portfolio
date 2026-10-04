@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вариант 404: Смайлик следит — Полина Гусева</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0e0c">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=1791099954">
+  <link rel="preload" href="../fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="../style.css?v=1791099954">
+  <link rel="stylesheet" href="../brief/styles.css?v=1791099954">
+  <link rel="stylesheet" href="demos.css?v=1791099954">
+  
+</head>
+<body class="brief">
+<div class="layout" id="top">
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel"><span class="side__toggle-text">Меню</span></button>
+    </div>
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="../#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="../#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="../#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="../#contacts"><span class="nav__text">Контакты</span></a>
+      </nav>
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+  <main class="pane app" id="app">
+    <div class="top">
+      <span class="top__count">Ошибка 404</span>
+      <div class="top__right">
+        <a class="btn btn--ghost" href="./" aria-label="Все варианты"><span class="btn__label">Все варианты</span></a>
+        <a class="btn btn--ghost top__back" href="../" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+      </div>
+    </div>
+    <section class="view view--top" aria-labelledby="intro-title">
+      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <p class="nf-lead">Вариант 4 из 7. Смайлик следит за курсором и подмигивает у кнопки.</p>
+    </section>
+    <section class="demo" aria-label="Смайлик следит за курсором">
+      <div class="demo-head"><span class="kicker">Он смотрит на ваш курсор</span><span class="hud" id="hud">грустит</span></div>
+      <div class="stage" id="stage"><canvas id="cv"></canvas></div>
+      <p class="demo__note" id="note">Водите мышью по экрану. Подведите курсор к кнопке ниже, и он подмигнёт и улыбнётся.</p>
+      <div class="demo__actions"><a class="btn" id="home" href="../"><span class="btn__label">На главную</span></a><a class="btn btn--ghost" id="brief" href="../brief/"><span class="btn__label">Заполнить бриф</span></a></div>
+    </section>
+    <footer class="footer" id="footer" style="--fp: 1">
+      <div class="footer__inner">
+        <div class="footer__bottom">
+          <div class="footer__copy">
+            <span>© 2026 Полина Гусева</span>
+            <span class="footer__meta"><span class="caps">Веб-дизайнер</span><i class="sq" aria-hidden="true"></i><span>ИНН 472600004020</span></span>
+          </div>
+          <a class="blink footer__up" href="#top">Наверх</a>
+          <nav class="footer__docs" aria-label="Документы">
+            <a class="doclink" href="../docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="../docs/consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="../brief/ui.js?v=1791099954"></script>
+<script src="demos.js?v=1791099954"></script>
+<script>
+(function () {
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d'), stage = document.getElementById('stage'), hud = document.getElementById('hud');
+  var narrow = stage.clientWidth < 600, GW = 21, GH = 15, CELL = Math.max(8, Math.floor(Math.min(stage.clientWidth * (narrow ? 0.9 : 0.6), 560) / GW));
+  var W = stage.clientWidth, H = GH * CELL + CELL * 4, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr); cv.style.height = H + 'px';
+  var ox = Math.round((W - GW * CELL) / 2 / CELL) * CELL, oy = CELL * 2;
+  var mx = W / 2, my = H / 2, mood = 'sad', blinkAt = 0, blinking = false, wink = false;
+  /* Лицо 21×15: овал из пикселей; глаза: белок 5×5 и зрачок 2×2, зрачок смещается к курсору */
+  var EYES = [{ cx: 6, cy: 5 }, { cx: 14, cy: 5 }];
+  function px(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(ox + x * CELL, oy + y * CELL, w * CELL, h * CELL); }
+  function ring() {
+    for (var y = 0; y < GH; y++) { for (var x = 0; x < GW; x++) {
+      var dx = (x - 10) / 10.2, dy = (y - 7) / 7.2, d = dx * dx + dy * dy;
+      if (d <= 1 && d > 0.78) { px(x, y, 1, 1, NF.C.accent); } else if (d <= 0.78) { px(x, y, 1, 1, 'rgba(236,236,233,0.04)'); }
+    } }
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H); ring();
+    EYES.forEach(function (e, i) {
+      var closed = (blinking) || (wink && i === 1);
+      if (closed) { px(e.cx - 2, e.cy, 5, 1, NF.C.text); return; }
+      px(e.cx - 2, e.cy - 2, 5, 5, NF.C.text);
+      var gx = ox + e.cx * CELL + CELL / 2, gy = oy + e.cy * CELL + CELL / 2, ang = Math.atan2(my - gy, mx - gx), dist = Math.min(1, Math.hypot(mx - gx, my - gy) / (CELL * 6));
+      var ex = Math.round(Math.cos(ang) * dist * 1.2), ey = Math.round(Math.sin(ang) * dist * 1.2);
+      px(e.cx - 1 + ex, e.cy - 1 + ey, 2, 2, NF.C.bg);
+    });
+    if (mood === 'happy') { px(5, 10, 1, 1, NF.C.text); px(15, 10, 1, 1, NF.C.text); px(6, 11, 1, 1, NF.C.text); px(14, 11, 1, 1, NF.C.text); px(7, 12, 7, 1, NF.C.text); }
+    else { px(5, 12, 1, 1, NF.C.text); px(15, 12, 1, 1, NF.C.text); px(6, 11, 1, 1, NF.C.text); px(14, 11, 1, 1, NF.C.text); px(7, 10, 7, 1, NF.C.text); }
+  }
+  function loop(t) {
+    if (!blinkAt) { blinkAt = t + 2500; }
+    if (t > blinkAt) { blinking = true; if (t > blinkAt + 140) { blinking = false; blinkAt = t + 2000 + Math.random() * 3000; } }
+    draw(t); requestAnimationFrame(loop);
+  }
+  document.addEventListener('pointermove', function (e) { var r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+  function hover(on) { wink = on; mood = on ? 'happy' : 'sad'; hud.textContent = on ? 'улыбается' : 'грустит'; }
+  ['home', 'brief'].forEach(function (id) { var el = document.getElementById(id); el.addEventListener('pointerenter', function () { hover(true); }); el.addEventListener('pointerleave', function () { hover(false); }); el.addEventListener('focus', function () { hover(true); }); el.addEventListener('blur', function () { hover(false); }); });
+  requestAnimationFrame(loop);
+  window.addEventListener('resize', function () { /* перерисуется при следующем кадре по новой ширине при перезагрузке */ });
+})();
+</script>
+</body>
+</html>

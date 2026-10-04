@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вариант 404: Найди страницу — Полина Гусева</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0e0c">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg?v=1791099954">
+  <link rel="preload" href="../fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="../style.css?v=1791099954">
+  <link rel="stylesheet" href="../brief/styles.css?v=1791099954">
+  <link rel="stylesheet" href="demos.css?v=1791099954">
+  
+</head>
+<body class="brief">
+<div class="layout" id="top">
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="../" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="../img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel"><span class="side__toggle-text">Меню</span></button>
+    </div>
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="../#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="../#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="../#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="../#contacts"><span class="nav__text">Контакты</span></a>
+      </nav>
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
+    </div>
+  </aside>
+  <main class="pane app" id="app">
+    <div class="top">
+      <span class="top__count">Ошибка 404</span>
+      <div class="top__right">
+        <a class="btn btn--ghost" href="./" aria-label="Все варианты"><span class="btn__label">Все варианты</span></a>
+        <a class="btn btn--ghost top__back" href="../" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+      </div>
+    </div>
+    <section class="view view--top" aria-labelledby="intro-title">
+      <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <p class="nf-lead">Вариант 7 из 7. Лабиринт из пикселей: доберитесь до страницы.</p>
+    </section>
+    <section class="demo" aria-label="Лабиринт: найди страницу">
+      <div class="demo-head"><span class="kicker">Доберитесь до страницы</span><span class="hud" id="hud">0,0 с</span></div>
+      <div class="stage" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите стрелку или тапните<small>стрелки или WASD, на телефоне свайп. Смайлик ищет страницу.</small></div></div>
+      <div class="pad" id="pad"><button class="btn btn--ghost" data-d="L" type="button"><span class="btn__label">←</span></button><button class="btn btn--ghost" data-d="U" type="button"><span class="btn__label">↑</span></button><button class="btn btn--ghost" data-d="D" type="button"><span class="btn__label">↓</span></button><button class="btn btn--ghost" data-d="R" type="button"><span class="btn__label">→</span></button></div>
+      <p class="demo__note" id="note">Каждый раз новый лабиринт. Страница в дальнем углу.</p>
+      <div class="demo__actions"><button class="btn btn--ghost" id="again" type="button"><span class="btn__label">Новый лабиринт</span></button></div>
+    </section>
+    <footer class="footer" id="footer" style="--fp: 1">
+      <div class="footer__inner">
+        <div class="footer__bottom">
+          <div class="footer__copy">
+            <span>© 2026 Полина Гусева</span>
+            <span class="footer__meta"><span class="caps">Веб-дизайнер</span><i class="sq" aria-hidden="true"></i><span>ИНН 472600004020</span></span>
+          </div>
+          <a class="blink footer__up" href="#top">Наверх</a>
+          <nav class="footer__docs" aria-label="Документы">
+            <a class="doclink" href="../docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="../docs/consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="../brief/ui.js?v=1791099954"></script>
+<script src="demos.js?v=1791099954"></script>
+<script>
+(function () {
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), note = document.getElementById('note');
+  var narrow = stage.clientWidth < 600, MC = narrow ? 7 : 17, MR = narrow ? 10 : 9;   /* ячеек лабиринта */
+  var COLS = MC * 2 + 1, ROWS = MR * 2 + 1, CELL = Math.max(6, Math.floor(Math.min(stage.clientWidth, 960) / COLS));
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = COLS * CELL * dpr; cv.height = ROWS * CELL * dpr; ctx.scale(dpr, dpr); cv.style.width = COLS * CELL + 'px'; cv.style.maxWidth = '100%';
+  var grid, px, py, state = 'idle', t0 = 0, timer, moves;
+  function gen() {
+    grid = []; for (var y = 0; y < ROWS; y++) { grid.push(new Array(COLS).fill(1)); }
+    var st = [[1, 1]]; grid[1][1] = 0;
+    while (st.length) {
+      var c = st[st.length - 1], n = [[2, 0], [-2, 0], [0, 2], [0, -2]].filter(function (d) { var x = c[0] + d[0], y = c[1] + d[1]; return x > 0 && y > 0 && x < COLS - 1 && y < ROWS - 1 && grid[y][x] === 1; });
+      if (!n.length) { st.pop(); continue; }
+      var d = n[Math.floor(Math.random() * n.length)]; grid[c[1] + d[1] / 2][c[0] + d[0] / 2] = 0; grid[c[1] + d[1]][c[0] + d[0]] = 0; st.push([c[0] + d[0], c[1] + d[1]]);
+    }
+    px = 1; py = 1; state = 'idle'; t0 = 0; clearInterval(timer); hud.textContent = '0,0 с'; msg.hidden = false; msg.innerHTML = 'Нажмите стрелку или тапните<small>стрелки или WASD, на телефоне свайп. Смайлик ищет страницу.</small>'; draw();
+  }
+  function art(a, x, y, color, w) { var u = CELL / a[0].length; ctx.fillStyle = color; a.forEach(function (row, r) { for (var c = 0; c < row.length; c++) { if (row[c] === 'X') { ctx.fillRect(x * CELL + c * u, y * CELL + r * u, Math.ceil(u), Math.ceil(u)); } } }); }
+  function draw() {
+    ctx.clearRect(0, 0, COLS * CELL, ROWS * CELL);
+    for (var y = 0; y < ROWS; y++) { for (var x = 0; x < COLS; x++) { if (grid[y][x]) { ctx.fillStyle = ((x + y) % 2) ? NF.C.dark : NF.C.deep; ctx.fillRect(x * CELL, y * CELL, CELL, CELL); } } }
+    art(NF.PAGE, COLS - 2, ROWS - 2, NF.C.text); art(NF.SMILE, px, py, NF.C.text);
+  }
+  function move(dx, dy) {
+    if (state === 'win') { return; }
+    if (state === 'idle') { state = 'run'; msg.hidden = true; t0 = performance.now(); timer = setInterval(function () { hud.textContent = NF.fmt(performance.now() - t0) + ' с'; }, 100); }
+    var nx = px + dx, ny = py + dy; if (grid[ny] && grid[ny][nx] === 0) { px = nx; py = ny; draw(); }
+    if (px === COLS - 2 && py === ROWS - 2) { win(); }
+  }
+  function win() {
+    state = 'win'; clearInterval(timer); var ms = performance.now() - t0; hud.textContent = NF.fmt(ms) + ' с';
+    NF.burst(stage, (COLS - 2) * CELL, (ROWS - 2) * CELL, CELL, CELL, [NF.C.text, NF.C.accent, NF.C.dark], Math.max(4, Math.round(CELL / 4)), 50);
+    msg.hidden = false; msg.innerHTML = 'Нашли!<small>За ' + NF.fmt(ms) + ' с. Страницы всё равно нет, но дорогу вы теперь знаете.</small>'; note.textContent = 'Нажмите «Новый лабиринт», чтобы сыграть ещё.';
+  }
+  document.addEventListener('keydown', function (e) { var m = { ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0], ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1] }[e.code]; if (m) { e.preventDefault(); move(m[0], m[1]); } });
+  var sx, sy; stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener('touchmove', function (e) { if (sx == null) { return; } var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy; if (Math.abs(dx) > 22 || Math.abs(dy) > 22) { if (Math.abs(dx) > Math.abs(dy)) { move(dx > 0 ? 1 : -1, 0); } else { move(0, dy > 0 ? 1 : -1); } sx = e.touches[0].clientX; sy = e.touches[0].clientY; } e.preventDefault(); }, { passive: false });
+  document.getElementById('pad').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) { return; } var d = { L: [-1, 0], R: [1, 0], U: [0, -1], D: [0, 1] }[b.dataset.d]; move(d[0], d[1]); });
+  document.getElementById('again').addEventListener('click', function () { note.textContent = 'Каждый раз новый лабиринт. Страница в дальнем углу.'; gen(); });
+  gen();
+})();
+</script>
+</body>
+</html>
