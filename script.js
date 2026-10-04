@@ -911,7 +911,7 @@
         });
         node.parentNode.replaceChild(frag, node);
       });
-      var ts = TYPE_STEP / 1000;   // одна скорость печати для всех текстов
+      var ts = (el.classList.contains('fact__rest') ? TYPE_STEP * 0.6 : TYPE_STEP) / 1000;   // одна скорость печати для всех текстов, факты о себе чуть быстрее
       el.style.setProperty('--ts', ts.toFixed(4) + 's');
       el.__typeDur = total * ts * 1000 + 60;   // сколько мс печатается этот текст
     }
@@ -974,6 +974,22 @@
       /* Телефон: «Срок» и «Стоимость» в ценах запускаются прокруткой (см. updatePrices), а не общей очередью */
       if (touchMq.matches && el.closest('#prices .price') && /price__(label|value)/.test(el.className)) { return; }
       typeObs.observe(el);
+    });
+
+
+    /* Клик по пустому месту: всё, что сейчас печатается или ещё ждёт своей очереди в видимых блоках, сразу показывается целиком */
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('a, button, input, textarea, select, label, summary, details, .side, .sent, .cc, .step-item, [data-gallery]')) { return; }
+      document.querySelectorAll('section, footer').forEach(function (sec) {
+        if (!seqOnScreen(sec)) { return; }
+        sec.querySelectorAll('[data-typed]').forEach(function (t) { t.classList.add('is-typed', 'typed-now'); });
+        sec.querySelectorAll('.fact').forEach(function (f) { f.classList.add('is-typed'); });
+        sec.querySelectorAll('[data-reveal]:not(.is-in)').forEach(function (r) { if (!r.hasAttribute('data-after') || true) { r.classList.add('is-in'); } });
+        sec.querySelectorAll('#lead-form .field__input').forEach(function (inp) { if (inp.__ph) { inp.setAttribute('placeholder', inp.__ph); } });
+      });
+      seqState.forEach(function (st, k) {
+        st.q = st.q.filter(function (it) { return !(seqOnScreen(it.el) && seqOnScreen(seqKey(it.el))); });
+      });
     });
 
     /* Описание этапа печатается заново при каждом раскрытии */
