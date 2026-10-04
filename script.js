@@ -620,7 +620,7 @@
 
   /* Телефон: подсвечиваем ту услугу в ценах, которая сейчас ближе всего к середине экрана */
   var priceList = document.querySelector('.prices');
-  var touchMq = window.matchMedia('(hover: none), (max-width: 767px)');
+  var touchMq = window.matchMedia('(hover: none), (max-width: 1023px)');
   if (priceList) {
     var priceRows = Array.prototype.slice.call(priceList.querySelectorAll('.price'));
     var priceTick = false;
