@@ -22,12 +22,8 @@
     .nf-links a:hover strong, .nf-links a:focus-visible strong { color: var(--accent-bright, #4fbf85); }
     /* Заголовок в одну строку на всю ширину, под ним справа текст на месте списка; игра выше, чтобы её начало было видно сразу */
     .view--404 { padding-block: calc(var(--section) * 0.4) var(--pad); }
-    .view--404 .intro__lead { margin-top: 0; }
     .view--404 .intro__lead + .intro__lead { margin-top: 1rem; }
-    @media (min-width: 700px) {
-      .view--404 .intro__head { grid-column: 1 / -1; }
-      .view--404 .intro__body { grid-column: 7 / -1; grid-row: 2; margin-top: var(--pad); }
-    }
+    @media (min-width: 700px) { .view--404 .intro__head { grid-column: 1 / -1; } }
     .view--game { padding-block: 0 var(--section); }
     .game-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; margin-bottom: 1rem; }
     .game-head .kicker { margin: 0; }
@@ -107,8 +103,6 @@
     <section class="view view--intro view--404" aria-labelledby="intro-title">
       <div class="intro__head">
         <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
-      </div>
-      <div class="intro__body">
         <p class="intro__lead">Такого адреса на сайте нет. Возможно, страница переехала, ссылка устарела или в адресе опечатка. А ниже небольшая игра, чтобы было не так грустно.</p>
         <p class="intro__lead">Как играть: двигайтесь стрелками или мышью, стреляйте пробелом или кликом. Баги выстроены в цифры «404». Разбейте их все, пока они не дошли до нижней линии. На телефоне огонь идёт сам, нужно только двигать пальцем.</p>
       </div>
@@ -118,7 +112,7 @@
         <span class="kicker">Баги наступают. Остановите их</span>
         <span class="game-hud" id="hud">0</span>
       </div>
-      <div class="arena" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите пробел или тапните<small>← → или мышь: двигаться. Пробел или клик: стрелять. Разбейте все баги и не пускайте их к нижней линии.</small></div></div>
+      <div class="arena" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg" hidden>Нажмите пробел или тапните<small>← → или мышь: двигаться. Пробел или клик: стрелять. Разбейте все баги и не пускайте их к нижней линии.</small></div></div>
     </section>
     
 
@@ -219,7 +213,10 @@
     function mv(e) { var r = cv.getBoundingClientRect(); ship.x = Math.max(0, Math.min(W - 7 * SU, (e.clientX - r.left) * (W / r.width) - 3.5 * SU)); }
     stage.addEventListener('pointermove', function (e) { if (state === 'run' || state === 'idle') { mv(e); } });
     stage.addEventListener('pointerdown', function (e) { mv(e); if (state !== 'run') { begin(); } else { fire(); } });
-        reset(); draw();
+        /* Сначала «404» из багов видна яркой и без затемнения; когда страницу пролистали к игре, фон темнеет и появляются правила */
+    function showIntro() { if (state === 'idle' && msg.hidden) { var top = stage.getBoundingClientRect().top; if (top < Math.min(window.innerHeight * 0.45, 360)) { msg.hidden = false; } } }
+    window.addEventListener('scroll', showIntro, { passive: true }); window.addEventListener('resize', showIntro);
+    reset(); draw(); showIntro();
   })();
   </script>
 </body>
