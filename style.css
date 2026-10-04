@@ -2437,3 +2437,18 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   }
   .side__foot { gap: 0.5rem !important; }
 }
+
+/* Подвал, планшет и малый ноутбук: длинные названия документов переносятся на две строки и не налезают на «Наверх» */
+@media (min-width: 700px) {
+  .footer__docs .doclink { white-space: normal; }
+  .footer__docs { text-align: right; }
+}
+
+/* «Наверх» никогда не переносит буквы: слово в одну строку, под него отведено три колонки там, где две узкие */
+@media (min-width: 700px) {
+  .footer__up { white-space: nowrap; word-break: keep-all; overflow-wrap: normal; min-width: max-content; }
+}
+@media (min-width: 700px) and (max-width: 1279px) {
+  .footer__up { grid-column: 6 / span 3; }
+  .footer__docs { grid-column: 9 / -1; }
+}
