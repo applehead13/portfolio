@@ -33,19 +33,19 @@
   --line: color-mix(in srgb, var(--text) 14%, transparent);
 
   /* Размеры текста: 375 → 1440 → 2560 */
-  --fs-h1: clamp(2.125rem, 1.578rem + 2.334vw, 5.3125rem);
-  --fs-h2: clamp(1.625rem, 1.303rem + 1.373vw, 3.5rem);
-  --fs-sub: clamp(1.25rem, 1.078rem + 0.732vw, 2.25rem);
-  --fs-text: clamp(1rem, 0.957rem + 0.183vw, 1.25rem);
-  --fs-small: clamp(0.875rem, 0.854rem + 0.0915vw, 1rem);
+  --fs-h1: clamp(2.125rem, 1.578rem + 2.334vw, 7.25rem);
+  --fs-h2: clamp(1.625rem, 1.303rem + 1.373vw, 4.6rem);
+  --fs-sub: clamp(1.25rem, 1.078rem + 0.732vw, 2.85rem);
+  --fs-text: clamp(1rem, 0.957rem + 0.183vw, 1.4rem);
+  --fs-small: clamp(0.875rem, 0.854rem + 0.0915vw, 1.08rem);
 
   /* Воздух */
-  --gutter: clamp(1.25rem, 0.606rem + 2.746vw, 5rem);
-  --section: clamp(3.75rem, 2.675rem + 4.577vw, 10rem);
-  --pad: clamp(1.25rem, 1rem + 1vw, 2.5rem);
-  --gap: clamp(1rem, 0.7rem + 1.2vw, 2rem);
+  --gutter: clamp(1.25rem, 0.606rem + 2.746vw, 7.2rem);
+  --section: clamp(3.75rem, 2.675rem + 4.577vw, 12rem);
+  --pad: clamp(1.25rem, 1rem + 1vw, 3.4rem);
+  --gap: clamp(1rem, 0.7rem + 1.2vw, 3.6rem);
 
-  --side-w: clamp(17rem, 24vw, 30rem);
+  --side-w: clamp(17rem, 24vw, 34rem);
   --bar-h: 3.5rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -77,8 +77,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ===== Каркас: узкая левая колонка + широкая правая ===== */
 .layout {
-  max-width: 2400px;
-  margin-inline: auto;
   display: grid;
   grid-template-columns: var(--side-w) minmax(0, 1fr);
   align-items: start;
@@ -1341,7 +1339,7 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .check__text .doclink:hover { color: var(--text); text-decoration-color: currentColor; }
 
 /* ===== Страницы документов ===== */
-.doc { max-width: 2400px; margin-inline: auto; padding: var(--pad) var(--gutter) var(--section); }
+.doc { margin-inline: auto; padding: var(--pad) var(--gutter) var(--section); }
 .doc__back { margin-bottom: var(--pad); }
 .doc__head { max-width: 75ch; margin-bottom: var(--pad); }
 .doc__title { font-family: var(--f-head); font-weight: 700; font-size: var(--fs-h2); line-height: 1.1; text-transform: uppercase; text-wrap: balance; }
@@ -2531,3 +2529,6 @@ a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-ac
 @media (max-width: 599px) {
   .top:not(:has(.top__clear:not([hidden]))) { display: none; }
 }
+
+/* Очень широкие экраны (4K): всё чуть крупнее, чтобы левая колонка и тексты не терялись */
+@media (min-width: 3200px) { html { font-size: 20px; } }
