@@ -73,9 +73,8 @@
     .view--top .intro__title .smile { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%207%205%22%20shape-rendering%3D%22crispEdges%22%20fill%3D%22%233f9669%22%3E%3Crect%20x%3D%221%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%220%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%223%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%223%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%224%22%20width%3D%221%22%20height%3D%221%22%2F%3E%3C%2Fsvg%3E"); background-size: 100% 100%; }
     .view--top { padding-block: calc(var(--section) * 0.3) 1.25rem; }
     .view--top .kicker { margin-bottom: 0.6rem; }
-    .view--top .intro__title { font-size: calc(var(--fs-h1) * 0.62); }
+    .view--top .nf-lead { margin-top: calc(var(--fs-h1) * 0.5); max-width: none; }
     .view--game { padding-block: 0 calc(var(--section) * 0.8); }
-    .view--game .game-head, .view--game .board, .view--game .game__joke, .view--game .board__actions { max-width: 44rem; }
     .view--game .game-head { margin-bottom: 0.75rem; }
     @media (min-width: 700px) {
       .view--info { padding-block: 0 var(--section); }
@@ -139,6 +138,7 @@
     <section class="view view--top" aria-labelledby="intro-title">
       <span class="kicker">Ошибка 404. Страница не найдена</span>
       <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+      <p class="nf-lead">Куда могла деться страница, расскажем ещё ниже. А сначала ниже будет игра.</p>
     </section>
     <section class="view view--game" aria-label="Собери страницу">
       <div class="game-head">
