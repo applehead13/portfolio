@@ -266,7 +266,7 @@
   /* Окошко после отправки: успех или ошибка */
   var sent = document.getElementById('sent');
   var sentBack = null;
-  var sentTimer = 0;
+  var sentTimer = 0, sentGlitch = 0;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function typeInto(el, text, delay, done) {
     var i = 0;
@@ -292,15 +292,21 @@
     sentBack = document.activeElement;
     sent.hidden = false;
     document.body.style.overflow = 'hidden';
-    main.focus();
-    if (reduce) { t.textContent = title; p.textContent = text; sent.classList.add('is-done'); acts.classList.add('is-in'); return; }
-    sent.classList.remove('is-done');
+    sent.querySelector('.sent__box').focus();
+    t.textContent = title;
+    var h = document.getElementById('sent-title');
+    h.setAttribute('data-text', title);
+    h.classList.add('glitch');
+    h.classList.remove('is-glitching');
+    sent.classList.add('is-done');
     acts.classList.remove('is-in');
+    if (reduce) { p.textContent = text; acts.classList.add('is-in'); return; }
+    void h.offsetWidth;
+    h.classList.add('is-glitching');
+    clearTimeout(sentGlitch);
+    sentGlitch = setTimeout(function () { h.classList.remove('is-glitching'); }, 1700);
     p.textContent = '';
-    typeInto(t, title, 38, function () {
-      sent.classList.add('is-done');
-      typeInto(p, text, 12, function () { acts.classList.add('is-in'); });
-    });
+    typeInto(p, text, 14, function () { acts.classList.add('is-in'); });
   }
   function closeSent() {
     clearTimeout(sentTimer);
