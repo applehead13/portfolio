@@ -41,7 +41,7 @@ $hits[] = $now;
 function esc($s) { return htmlspecialchars((string)$s, ENT_NOQUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
 function clip($s, $n) { $s = trim((string)$s); return mb_strlen($s) > $n ? mb_substr($s, 0, $n) . '…' : $s; }
 
-const SAFE = 3800;
+const SAFE = 4000;
 
 /* Режет блоки на сообщения не длиннее лимита Telegram */
 function splitBlocks($blocks, $title = '') {
@@ -102,19 +102,15 @@ if (isset($_POST['payload'])) {
     if ($by('company')) { $head[] = '<b>Компания:</b> ' . esc($by('company')); }
     if ($by('contact')) { $head[] = '<b>Контакт:</b> ' . esc($by('contact')); }
     $blocks = [implode("\n", $head)];
-    foreach ($sum as $i) {
-        if (in_array($i['key'] ?? '', ['name', 'company', 'contact'], true)) { continue; }
-        $blocks[] = '<b>' . esc($i['label'] ?? '') . "</b>\n" . esc($i['answer'] ?? '');
-    }
     if ($files) { $blocks[] = 'Файлов приложено: ' . count($files) . ' (придут следом)'; }
-    $messages = splitBlocks($blocks);
+    /* Все этапы одним сообщением; если вдруг не помещается в лимит Telegram (4096 знаков), делится на минимум частей */
     foreach (($payload['stages'] ?? []) as $st) {
         if (empty($st['items'])) { continue; }
-        $t = '<b>' . esc($st['num'] ?? '') . ' · ' . esc($st['title'] ?? '') . '</b>';
         $qa = [];
         foreach ($st['items'] as $i) { $qa[] = '<b>' . esc($i['label'] ?? '') . "</b>\n" . esc($i['answer'] ?? ''); }
-        $messages = array_merge($messages, splitBlocks($qa, $t));
+        $blocks[] = '<b>' . esc($st['num'] ?? '') . ' · ' . esc($st['title'] ?? '') . "</b>\n\n" . implode("\n\n", $qa);
     }
+    $messages = splitBlocks($blocks);
     $record = ['kind' => 'brief', 'payload' => $payload];
 } else {
     /* Заявка с главной */

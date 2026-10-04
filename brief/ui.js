@@ -114,6 +114,15 @@
     });
   }
 
+
+  /* Клик по пустому месту: всё, что печатается или ждёт очереди на экране, сразу показывается целиком */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('a, button, input, textarea, select, label, summary, details, .side, .sent, .arena, .dock, .dot')) { return; }
+    document.querySelectorAll('[data-typed]').forEach(function (t) { if (onScreen(t)) { t.classList.add('is-typed', 'typed-now'); } });
+    document.querySelectorAll('[data-reveal]:not(.is-in)').forEach(function (r) { if (onScreen(r)) { r.classList.add('is-in'); } });
+    seq = seq.filter(function (it) { return !onScreen(it.el); });
+  });
+
   /* ===== Помехи на заголовках и пиксельные смайлик и палец ===== */
   function withTail(h, cls) {
     /* последнее слово заголовка вместе с картинкой не переносится по отдельности */
