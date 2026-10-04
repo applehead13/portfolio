@@ -260,10 +260,9 @@
   window.addEventListener('resize', function () { if (window.innerWidth >= 1024) setOpen(false); });
 
   /* Форма заявки.
-     Без сервера письмо с файлом отправить нельзя, поэтому есть два режима:
-     1) FORM_ENDPOINT заполнен (адрес сервиса приёма форм): заявка и файл уходят сразу, без почтового клиента;
-     2) FORM_ENDPOINT пустой: открывается письмо с текстом заявки, файл прикрепляется вручную. */
-  var FORM_ENDPOINT = '';
+     Заявка и файл уходят на send.php (хостинг), а оттуда в Telegram.
+     Если FORM_ENDPOINT пустой, открывается письмо с текстом заявки. */
+  var FORM_ENDPOINT = '/send.php';
   var MAX_FILE = 10 * 1024 * 1024;
   var form = document.getElementById('lead-form');
   var err = document.getElementById('form-error');
@@ -306,8 +305,8 @@
     if (FORM_ENDPOINT) {
       var data = new FormData(form);
       fetch(FORM_ENDPOINT, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
-        .then(function (r) {
-          if (!r.ok) { throw new Error('send'); }
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) { throw new Error('send'); } }); })
+        .then(function () {
           form.reset(); attach.classList.remove('has-file'); fileName.textContent = 'Если есть своё ТЗ, прикрепите его. До 10 МБ';
           note.hidden = false; note.textContent = 'Заявка отправлена. Отвечу в течение дня.'; if (window.nfGoal) { window.nfGoal('lead'); }
         })
