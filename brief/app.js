@@ -522,13 +522,15 @@ function validateStage(si, mark) {
 
 function focusFirst(wrap) {
   wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  /* На телефоне не открываем клавиатуру сами: она прячет кнопки и сдвигает экран, а ошибка и так подсвечена */
+  if (window.matchMedia('(hover: none)').matches) { return; }
   const f = $('[data-field]', wrap);
   if (f) { setTimeout(() => f.focus({ preventScroll: true }), 350); }
 }
 
 function next() {
   const bad = validateStage(state.step, true);
-  if (bad) { focusFirst(bad); return; }
+  if (bad) { toast('Заполните обязательные вопросы'); focusFirst(bad); return; }
   if (state.step < total - 1) { go(state.step + 1); } else { submit(); }
 }
 
@@ -679,8 +681,20 @@ function init() {
     state.step = 0; showView('intro'); window.scrollTo({ top: 0 });
     toast('Ответы стёрты');
   });
-  $('#btn-prev').addEventListener('click', () => go(state.step - 1));
-  $('#btn-next').addEventListener('click', next);
+  /* Кнопки «Назад» и «Далее»: на телефоне срабатывают сразу при касании, не дожидаясь клика
+     (иначе после клавиатуры первое касание мог съесть сдвиг экрана и приходилось тыкать несколько раз) */
+  function quick(btn, fn) {
+    let at = 0;
+    btn.addEventListener('pointerup', e => {
+      if (e.pointerType === 'mouse' || btn.disabled) { return; }
+      at = Date.now();
+      e.preventDefault();
+      fn();
+    });
+    btn.addEventListener('click', () => { if (Date.now() - at > 700) { fn(); } });
+  }
+  quick($('#btn-prev'), () => go(state.step - 1));
+  quick($('#btn-next'), next);
   $('#btn-download').addEventListener('click', downloadCopy);
 
   /* Восстановление черновика */

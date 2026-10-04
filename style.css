@@ -2519,3 +2519,6 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .prices__note { margin-top: var(--pad); max-width: 52ch; color: var(--muted); font-family: var(--f-text); font-size: var(--fs-text); line-height: var(--lh-text); }
 
 .js .typing.typed-now .tc { opacity: 1 !important; transition: none !important; }
+
+/* Телефон: нажатия сразу, без ожидания двойного касания и приближения */
+a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
