@@ -7,16 +7,16 @@
   <meta name="description" content="Такой страницы нет. Пока ищем, можно сыграть со смайликом или вернуться на главную.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0d0e0c">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791123520">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791123520">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791123520">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791123780">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791123780">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791123780">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add('js')</script>
   <!-- Страница отдаётся по любому несуществующему адресу, поэтому все пути абсолютные -->
-  <link rel="stylesheet" href="/style.css?v=1791123520">
-  <link rel="stylesheet" href="/brief/styles.css?v=1791123520">
+  <link rel="stylesheet" href="/style.css?v=1791123780">
+  <link rel="stylesheet" href="/brief/styles.css?v=1791123780">
   <style>
     .nf-links { margin-top: var(--pad); }
     .nf-links a { color: inherit; }
@@ -140,11 +140,15 @@
   </main>
 </div>
 
-  <script src="/brief/ui.js?v=1791123520"></script>
+  <script src="/brief/ui.js?v=1791123780"></script>
   <script>
   (function () {
     var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), endTimer = 0;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, touch = window.matchMedia('(hover: none)').matches;
+    /* Правила разные: для компьютера и для телефона/планшета */
+    msg.innerHTML = touch
+      ? 'Тапните, чтобы начать<small>Ведите пальцем по полю: смайлик едет за пальцем и стреляет сам. Разбейте все баги и не пускайте их к нижней линии.</small>'
+      : 'Нажмите пробел или кликните<small>← → или мышь: двигаться. Пробел или клик: стрелять. Разбейте все баги и не пускайте их к нижней линии.</small>';
     var narrow = stage.clientWidth < 600, W = narrow ? 360 : 720, H = 440;
     var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; var ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
     var GREEN = '#3f9669', TEXT = '#ececE9', MUTED = '#8a8c86', DARK = '#24593f', LINE = '#2a2c28';
@@ -152,7 +156,7 @@
     var SMILE = ['.X...X.', '.......', 'X.....X', '.X...X.', '..XXX..'];
     var BUG = ['X.X.X', '.XXX.', 'XXXXX', '.XXX.', 'X...X'];
     var G = { 4: ['X.X', 'X.X', 'XXX', '..X', '..X'], 0: ['XXX', 'X.X', 'X.X', 'X.X', 'XXX'] };
-    var U = narrow ? 3 : 4, SU = narrow ? 4 : 5, SX = narrow ? 30 : 46, SY = narrow ? 28 : 34, BW = 5 * U;
+    var U = narrow ? 3 : 4, SU = narrow ? 4 : 5, SX = narrow ? 24 : 46, SY = narrow ? 26 : 34, BW = 5 * U;
     var bugs, dir, bullets, ship, score, best = 0, state = 'idle', raf, last, keys = {}, cool = 0, total = 0;
     try { best = +localStorage.getItem('nf-404-best') || 0; } catch (e) {}
 
@@ -195,9 +199,9 @@
       var dt = Math.min((now - last) / 1000, 0.04); last = now; if (state !== 'run') { return; } cool -= dt;
       if (keys.ArrowLeft || keys.KeyA) { ship.x -= 380 * dt; } if (keys.ArrowRight || keys.KeyD) { ship.x += 380 * dt; } if (keys.Space) { fire(); } if (touch) { fire(); }
       ship.x = Math.max(0, Math.min(W - 7 * SU, ship.x));
-      var alive = bugs.filter(function (b) { return b.on; }), sp = 44 + (total - alive.length) * 3;
+      var alive = bugs.filter(function (b) { return b.on; }), sp = (narrow ? 22 + (total - alive.length) * 1.2 : touch ? 32 + (total - alive.length) * 2.2 : 44 + (total - alive.length) * 3);
       var minX = Math.min.apply(null, alive.map(function (b) { return b.x; })), maxX = Math.max.apply(null, alive.map(function (b) { return b.x; })) + BW;
-      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 16; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
+      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += narrow ? 12 : 16; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
       bullets.forEach(function (b) { b.y -= 540 * dt; });
       bullets = bullets.filter(function (bl) {
         for (var i = 0; i < alive.length; i++) { var b = alive[i]; if (b.on && bl.x > b.x - 3 && bl.x < b.x + BW + 3 && bl.y > b.y && bl.y < b.y + BW) { b.on = false; score += 10; hud.textContent = score + (best ? ' · рекорд ' + best : ''); shatter(b); return false; } }
@@ -229,6 +233,6 @@
     reset(); draw(); showIntro();
   })();
   </script>
-<script src="/analytics.js?v=1791123520" defer></script>
+<script src="/analytics.js?v=1791123780" defer></script>
 </body>
 </html>
