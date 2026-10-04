@@ -3,172 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Страница не найдена — Полина Гусева</title>
+  <title>Страница потерялась — Полина Гусева</title>
+  <meta name="description" content="Такой страницы нет. Пока ищем, можно сыграть со смайликом или вернуться на главную.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0d0e0c">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791099954">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791099954">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791099954">
+  <link rel="preload" href="/fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <script>document.documentElement.classList.add('js')</script>
+  <!-- Страница отдаётся по любому несуществующему адресу, поэтому все пути абсолютные -->
+  <link rel="stylesheet" href="/style.css?v=1791099954">
+  <link rel="stylesheet" href="/brief/styles.css?v=1791099954">
   <style>
-    html, body { background: var(--bg); }
-    body { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; text-align: left; overflow-x: hidden; }
-    .nf { width: 100%; max-width: 56rem; padding: var(--gutter); }
-    .nf__title { font-family: var(--f-head); font-weight: 700; font-size: clamp(3.5rem, 2rem + 8vw, 8rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.02em; }
-    .nf__title span { color: var(--accent-text); }
-    .nf__lead { margin: 1rem 0 0; color: var(--muted); max-width: 40rem; min-height: 3.2em; }
-    .game { position: relative; margin-top: 1.5rem; border-top: 1px solid var(--line, #2a2c28); border-bottom: 1px solid var(--line, #2a2c28); touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer; }
+    .nf-lead { margin-top: var(--pad); max-width: 46ch; color: var(--muted); }
+    .nf-lead strong { color: var(--text); font-weight: 600; }
+    .nf-links { margin-top: var(--pad); }
+    .nf-links a { color: inherit; }
+    .nf-links a:hover strong, .nf-links a:focus-visible strong { color: var(--accent-bright, #4fbf85); }
+    .view--game { padding-block: 0 var(--section); }
+    .game-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; margin-bottom: 1rem; }
+    .game-head .kicker { margin: 0; }
+    .game-hud { font-size: var(--fs-small); color: var(--muted); letter-spacing: 0.05em; white-space: nowrap; }
+    .game-hud::before { content: "[ "; }
+    .game-hud::after { content: " ]"; }
+    .game { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 3%, var(--bg)); cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
     .game canvas { display: block; width: 100%; height: auto; }
-    .game__hud { position: absolute; top: 0.6rem; left: 0.8rem; font-size: var(--fs-small); color: var(--muted); letter-spacing: 0.08em; pointer-events: none; }
-    .game__msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 2.4rem; gap: 0.35rem; text-align: center; padding-left: 1rem; padding-right: 1rem; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.06em; color: var(--text); text-transform: uppercase; }
-    .game__msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; font-size: var(--fs-small); }
-    .nf__row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 1.5rem; }
-    .nf__hint { color: var(--muted); font-size: var(--fs-small); }
-    @media (max-width: 599px) { .nf__row .btn { width: 100%; } }
+    .game__msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0.4rem; padding: 2.2rem 1rem 0; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); }
+    .game__msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; font-size: var(--fs-small); max-width: 34ch; }
+    .game__joke { margin-top: 0.9rem; min-height: 3em; color: var(--muted); font-size: var(--fs-small); }
+    .game__joke::before { content: ""; display: inline-block; width: var(--sq); height: var(--sq); margin-right: var(--sq-gap); background: var(--accent-text); vertical-align: 0.05em; }
+    .view--why { padding-block: 0 var(--section); }
+    .view--why .kicker { margin-bottom: 1.25rem; }
+    body.brief .pane { min-height: 100vh; min-height: 100dvh; }
+    .app .footer { margin-top: auto; }
   </style>
 </head>
-<body>
-  <main class="nf">
-    <h1 class="nf__title">4<span>0</span>4</h1>
-    <p class="nf__lead" id="lead">Такой страницы нет. Возможно, она переехала или в адресе опечатка. Пока ищем, поможем смайлику добежать до неё.</p>
+<body class="brief">
 
-    <div class="game" id="game" role="application" aria-label="Мини-игра: смайлик перепрыгивает цифры. Прыжок: пробел, стрелка вверх или касание экрана">
-      <canvas id="cv" width="720" height="200"></canvas>
-      <div class="game__hud" id="hud">00000</div>
-      <div class="game__msg" id="msg">Нажмите пробел или коснитесь экрана<small>смайлик побежит, а вы перепрыгивайте цифры</small></div>
+<div class="layout" id="top">
+
+  <aside class="side" id="side">
+    <div class="side__bar">
+      <a class="side__brand" href="/" aria-label="Полина Гусева, веб-дизайнер. На сайт">
+        <img class="side__photo" src="/img/portrait.jpg" alt="" width="104" height="104">
+        <span class="side__name"><span>Полина Гусева</span><span>— веб-дизайнер</span></span>
+      </a>
+      <button class="side__toggle" type="button" aria-expanded="false" aria-controls="side-panel">
+        <span class="side__toggle-text">Меню</span>
+      </button>
     </div>
 
-    <div class="nf__row">
-      <a class="btn" href="/"><span class="btn__label">На главную</span></a>
-      <span class="nf__hint">Прыжок: пробел, ↑ или касание</span>
+    <div class="side__panel" id="side-panel">
+      <p class="side__role">Живу в Санкт-Петербурге. Разрабатываю сайты через Claude Code и на Tilda.</p>
+
+      <nav class="nav" aria-label="Разделы">
+        <a class="nav__link" href="/#works"><span class="nav__text">Работы</span></a>
+        <a class="nav__link" href="/#prices"><span class="nav__text">Цены</span></a>
+        <a class="nav__link" href="/#about"><span class="nav__text">Обо мне</span></a>
+        <a class="nav__link" href="/#contacts"><span class="nav__text">Контакты</span></a>
+      </nav>
+
+      <div class="side__foot">
+        <a class="blink blink--mail" href="mailto:polinaguseva13@yandex.ru">polinaguseva13@yandex.ru</a>
+        <a class="blink" href="https://t.me/ppolinaguseva" target="_blank" rel="noopener">Telegram</a>
+        <a class="blink" href="https://ru.pinterest.com/ppolinaguseva/" target="_blank" rel="noopener">Pinterest</a>
+        <a class="blink" href="#" aria-label="Instagram (принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой)">Instagram<span class="mark" aria-hidden="true"></span></a>
+        <p class="side__note"><span class="mark" aria-hidden="true"></span>Принадлежит Meta, признанной в РФ экстремистской организацией и запрещённой.</p>
+      </div>
     </div>
+  </aside>
+
+  <main class="pane app" id="app">
+
+    <div class="top">
+      <span class="top__count">Ошибка 404</span>
+      <div class="top__right">
+        <a class="btn btn--ghost top__back" href="/" aria-label="Вернуться на сайт"><span class="btn__label">На сайт</span></a>
+      </div>
+    </div>
+
+    <section class="view view--intro" aria-labelledby="intro-title">
+      <div class="intro__head">
+        <span class="kicker">Страница не найдена</span>
+        <h1 class="intro__title" id="intro-title">Страница потерялась</h1>
+        <p class="nf-lead">Такого адреса на сайте нет. Возможно, <strong>страница переехала</strong>, ссылка устарела или в адресе опечатка. Бывает у всех, даже у веб-дизайнеров.</p>
+        <div class="intro__actions">
+          <a class="btn" href="/"><span class="btn__label">На главную</span></a>
+          <a class="btn btn--ghost" href="/brief/"><span class="btn__label">Заполнить бриф</span></a>
+        </div>
+      </div>
+      <div class="intro__body">
+        <ol class="intro__list nf-links">
+          <li><a href="/#works"><strong>Посмотреть работы</strong><span>сайты, которые уже живут в интернете и приносят пользу.</span></a></li>
+          <li><a href="/#prices"><strong>Узнать цены</strong><span>от лендинга до интернет-магазина, всё по-честному.</span></a></li>
+          <li><a href="/#about"><strong>Познакомиться</strong><span>раньше проектировала здания, теперь сайты.</span></a></li>
+          <li><a href="/#contacts"><strong>Написать мне</strong><span>отвечу в Telegram или на почту и всё расскажу.</span></a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="view view--game" aria-label="Мини-игра">
+      <div class="game-head">
+        <span class="kicker">Пока ищем, сыграйте</span>
+        <span class="game-hud" id="hud">00000</span>
+      </div>
+      <div class="game" id="game" role="application" aria-label="Мини-игра: смайлик перепрыгивает цифры. Прыжок: пробел, стрелка вверх или касание экрана">
+        <canvas id="cv" width="720" height="200"></canvas>
+        <div class="game__msg" id="msg">Нажмите пробел или коснитесь<small>смайлик побежит, а вы перепрыгивайте цифры</small></div>
+      </div>
+      <p class="game__joke" id="joke">Страница ушла за хлебом. Скоро вернётся.</p>
+    </section>
+
+    <section class="view view--why" aria-labelledby="why-title">
+      <span class="kicker" id="why-title">Куда могла деться страница</span>
+      <ol class="intro__list">
+        <li><strong>Её съел баг.</strong><span>Мы уже строго поговорили с багом.</span></li>
+        <li><strong>Она ушла в отпуск без предупреждения.</strong><span>Вернётся загорелой и с новым адресом.</span></li>
+        <li><strong>Вы опечатались.</strong><span>Я сама иногда пишу «сйат» вместо «сайт». Это нормально.</span></li>
+        <li><strong>Её никогда не было.</strong><span>Но если вы ждали именно её, напишите мне, и я её сделаю.</span></li>
+      </ol>
+    </section>
+
+    <footer class="footer" id="footer" style="--fp: 1">
+      <div class="footer__inner">
+        <div class="footer__bottom">
+          <div class="footer__copy">
+            <span>© 2026 Полина Гусева</span>
+            <span class="footer__meta"><span class="caps">Веб-дизайнер</span><i class="sq" aria-hidden="true"></i><span>ИНН 472600004020</span></span>
+          </div>
+          <a class="blink footer__up" href="#top">Наверх</a>
+          <nav class="footer__docs" aria-label="Документы">
+            <a class="doclink" href="/docs/privacy.html">Политика конфиденциальности</a>
+            <a class="doclink" href="/docs/consent.html">Согласие на обработку персональных данных</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
   </main>
+</div>
 
+  <script src="/brief/ui.js?v=1791099954"></script>
   <script>
   (function () {
     var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
-    var hud = document.getElementById('hud'), msg = document.getElementById('msg'), lead = document.getElementById('lead');
+    var hud = document.getElementById('hud'), msg = document.getElementById('msg'), joke = document.getElementById('joke');
     var game = document.getElementById('game');
-    var W = game.clientWidth < 600 ? 360 : 720, H = 200, GROUND = 168, CELL = game.clientWidth < 600 ? 6 : 5;
-    var SPEEDK = W < 720 ? 0.8 : 1;
-    cv.style.aspectRatio = W + ' / ' + H;
+    var narrow = game.clientWidth < 600;
+    var W = narrow ? 360 : 960, H = narrow ? 220 : 240, GROUND = H - 34, CELL = narrow ? 6 : 7;
+    var SPEEDK = narrow ? 0.8 : 1;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.aspectRatio = W + ' / ' + H; ctx.scale(dpr, dpr);
 
     var css = getComputedStyle(document.documentElement);
     function tok(n, d) { var v = css.getPropertyValue(n).trim(); return v || d; }
-    var C = { text: tok('--text', '#ececE9'), muted: tok('--muted', '#8a8c86'), accent: tok('--accent-text', '#3f9669'), line: '#2a2c28' };
+    var C = { text: tok('--text', '#ececE9'), muted: tok('--muted', '#8a8c86'), accent: tok('--accent-text', '#3f9669'), line: tok('--line', '#2a2c28') };
 
-    /* Пиксельные рисунки: смайлик 7×5 и цифры 3×5 */
     var SMILE = ['.X...X.', '.X...X.', '.......', 'X.....X', '.XXXXX.'];
-    var GLYPH = {
-      '4': ['X.X', 'X.X', 'XXX', '..X', '..X'],
-      '0': ['XXX', 'X.X', 'X.X', 'X.X', 'XXX']
-    };
+    var GLYPH = { '4': ['X.X', 'X.X', 'XXX', '..X', '..X'], '0': ['XXX', 'X.X', 'X.X', 'X.X', 'XXX'] };
     function px(rows, x, y, cell, color) {
       ctx.fillStyle = color;
-      for (var r = 0; r < rows.length; r++) {
-        for (var c = 0; c < rows[r].length; c++) {
-          if (rows[r][c] === 'X') { ctx.fillRect(Math.round(x + c * cell), Math.round(y + r * cell), cell, cell); }
-        }
-      }
+      for (var r = 0; r < rows.length; r++) { for (var c = 0; c < rows[r].length; c++) { if (rows[r][c] === 'X') { ctx.fillRect(Math.round(x + c * cell), Math.round(y + r * cell), cell, cell); } } }
     }
 
     var JOKES = [
-      'Страница ушла за хлебом.',
+      'Страница ушла за хлебом. Скоро вернётся.',
       'Она точно была где-то здесь.',
       'Ищем в соседней вкладке…',
       'Кажется, её съел баг.',
       'Не бегите так быстро, она стесняется.',
       'Страница уехала в отпуск без предупреждения.',
       'Сайт работает, а эта страница нет. Бывает.',
-      'Цифры злятся, потому что их три.'
+      'Цифры злятся: их трое, а смайлик один.',
+      'Четвёрка и ноль не пропустят. Их надо перепрыгнуть.'
     ];
-    var DEAD = ['Врезались в ошибку.', 'Ой, четвёрка оказалась крепкой.', 'Ноль не пропустил.', 'Классика: 404 побеждает.'];
-
+    var DEAD = ['Врезались в ошибку.', 'Четвёрка оказалась крепкой.', 'Ноль не пропустил.', 'Классика: 404 побеждает.'];
     var best = 0;
     try { best = +localStorage.getItem('nf-best') || 0; } catch (e) {}
 
     var st, raf, last;
-    function reset() {
-      st = { state: 'idle', t: 0, score: 0, speed: 300, y: 0, vy: 0, obs: [], nextGap: 0.9, jokeAt: 0 };
-    }
+    function reset() { st = { state: 'idle', t: 0, score: 0, speed: 300, y: 0, vy: 0, obs: [], nextGap: 0.9, jokeAt: 0 }; }
     reset();
-
-    var player = { w: 7 * CELL, h: 5 * CELL };
-    function onGround() { return st.y === 0; }
+    var pw0 = 7 * CELL, ph0 = 5 * CELL, PX = 56;
+    function rj() { joke.textContent = JOKES[Math.floor(Math.random() * JOKES.length)]; }
     function jump() {
       if (st.state === 'idle' || st.state === 'dead') { start(); return; }
-      if (onGround()) { st.vy = 780; }
+      if (st.y === 0) { st.vy = 800; }
     }
     function start() {
-      reset(); st.state = 'run';
-      msg.style.display = 'none';
-      lead.textContent = JOKES[Math.floor(Math.random() * JOKES.length)];
-      last = performance.now();
-      cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+      reset(); st.state = 'run'; msg.style.display = 'none'; rj();
+      last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
     }
     function die() {
       st.state = 'dead';
       var sc = Math.floor(st.score);
       if (sc > best) { best = sc; try { localStorage.setItem('nf-best', String(best)); } catch (e) {} }
       msg.style.display = 'flex';
-      msg.innerHTML = DEAD[Math.floor(Math.random() * DEAD.length)] + '<small>' + sc + ' м · рекорд ' + best + ' м. Тап или пробел: ещё раз</small>';
+      msg.innerHTML = DEAD[Math.floor(Math.random() * DEAD.length)] + '<small>' + sc + ' м, рекорд ' + best + ' м. Тап или пробел: ещё раз</small>';
     }
-
     function spawn() {
       var kinds = ['4', '0', '40', '04'];
       var k = kinds[Math.floor(Math.random() * kinds.length)];
-      var cell = 5 + Math.floor(Math.random() * 2);
-      var w = k.length * 3 * cell + (k.length - 1) * cell;
-      st.obs.push({ k: k, x: W + 20, w: w, h: 5 * cell, cell: cell });
+      var cell = CELL - 1 + Math.floor(Math.random() * 2);
+      st.obs.push({ k: k, x: W + 20, w: k.length * 3 * cell + (k.length - 1) * cell, h: 5 * cell, cell: cell });
     }
-
     function update(dt) {
       st.t += dt;
       st.speed = Math.min(300 + st.t * 14, 720) * SPEEDK;
       st.score += dt * st.speed / 40;
-      /* прыжок */
-      if (st.y > 0 || st.vy > 0) {
-        st.vy -= 2300 * dt;
-        st.y += st.vy * dt;
-        if (st.y <= 0) { st.y = 0; st.vy = 0; }
-      }
-      /* препятствия */
+      if (st.y > 0 || st.vy > 0) { st.vy -= 2300 * dt; st.y += st.vy * dt; if (st.y <= 0) { st.y = 0; st.vy = 0; } }
       st.nextGap -= dt;
       if (st.nextGap <= 0) { spawn(); st.nextGap = 0.85 + Math.random() * 0.9 + 260 / st.speed * 0.3; }
       st.obs.forEach(function (o) { o.x -= st.speed * dt; });
       st.obs = st.obs.filter(function (o) { return o.x + o.w > -10; });
-      /* шутки по ходу */
-      if (Math.floor(st.score / 150) > st.jokeAt) {
-        st.jokeAt = Math.floor(st.score / 150);
-        lead.textContent = JOKES[Math.floor(Math.random() * JOKES.length)];
-      }
-      /* столкновения */
-      var px0 = 40 + 4, pw = player.w - 8, ph = player.h - 4, pyTop = GROUND - st.y - player.h + 2;
+      if (Math.floor(st.score / 150) > st.jokeAt) { st.jokeAt = Math.floor(st.score / 150); rj(); }
+      var l = PX + 4, w = pw0 - 8, top = GROUND - st.y - ph0 + 2, h = ph0 - 4;
       for (var i = 0; i < st.obs.length; i++) {
         var o = st.obs[i], oy = GROUND - o.h;
-        if (px0 < o.x + o.w - 3 && px0 + pw > o.x + 3 && pyTop < GROUND && pyTop + ph > oy + 3) { die(); return; }
+        if (l < o.x + o.w - 3 && l + w > o.x + 3 && top < GROUND && top + h > oy + 3) { die(); return; }
       }
     }
-
     function draw() {
       ctx.clearRect(0, 0, W, H);
-      /* земля */
       ctx.fillStyle = C.line; ctx.fillRect(0, GROUND, W, 1);
       var off = st.state === 'run' ? (st.t * st.speed) % 24 : 0;
       ctx.fillStyle = C.muted;
-      for (var x = -off; x < W; x += 24) { ctx.fillRect(Math.round(x), GROUND + 6, 8, 2); }
-      /* препятствия */
-      st.obs.forEach(function (o) {
-        for (var i = 0; i < o.k.length; i++) {
-          px(GLYPH[o.k[i]], o.x + i * (3 * o.cell + o.cell), GROUND - o.h, o.cell, C.accent);
-        }
-      });
-      /* смайлик, при беге чуть подпрыгивает ножками */
-      var bob = (st.state === 'run' && onGround()) ? (Math.floor(st.t * 10) % 2) * 2 : 0;
-      px(SMILE, 40, GROUND - player.h - st.y - bob, CELL, st.state === 'dead' ? C.muted : C.text);
-      hud.textContent = String(Math.floor(st.score)).padStart(5, '0') + (best ? '  HI ' + String(best).padStart(5, '0') : '');
+      for (var x = -off; x < W; x += 24) { ctx.fillRect(Math.round(x), GROUND + 8, 8, 2); }
+      st.obs.forEach(function (o) { for (var i = 0; i < o.k.length; i++) { px(GLYPH[o.k[i]], o.x + i * 4 * o.cell, GROUND - o.h, o.cell, C.accent); } });
+      var bob = (st.state === 'run' && st.y === 0) ? (Math.floor(st.t * 10) % 2) * 2 : 0;
+      px(SMILE, PX, GROUND - ph0 - st.y - bob, CELL, st.state === 'dead' ? C.muted : C.text);
+      hud.textContent = String(Math.floor(st.score)).padStart(5, '0') + (best ? ' · рекорд ' + String(best).padStart(5, '0') : '');
     }
-
     function loop(now) {
       var dt = Math.min((now - last) / 1000, 0.05); last = now;
       if (st.state === 'run') { update(dt); }
@@ -176,7 +243,6 @@
       if (st.state === 'run') { raf = requestAnimationFrame(loop); }
     }
     draw();
-
     document.addEventListener('keydown', function (e) {
       if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
         if (e.target && /^(A|BUTTON)$/.test(e.target.tagName) && e.code === 'Space') { return; }
