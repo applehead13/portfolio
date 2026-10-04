@@ -7,15 +7,15 @@
   <meta name="description" content="Такой страницы нет. Пока ищем, можно сыграть со смайликом или вернуться на главную.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0d0e0c">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791107257">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791107257">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791107257">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1791112706">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1791112706">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1791112706">
   <link rel="preload" href="/fonts/Arturito-Slab.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/SourceCodePro-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add('js')</script>
   <!-- Страница отдаётся по любому несуществующему адресу, поэтому все пути абсолютные -->
-  <link rel="stylesheet" href="/style.css?v=1791107257">
-  <link rel="stylesheet" href="/brief/styles.css?v=1791107257">
+  <link rel="stylesheet" href="/style.css?v=1791112706">
+  <link rel="stylesheet" href="/brief/styles.css?v=1791112706">
   <style>
     .nf-lead { margin-top: var(--pad); max-width: 46ch; color: var(--muted); }
     .nf-lead strong { color: var(--text); font-weight: 600; }
@@ -31,42 +31,17 @@
     .game__joke { margin-top: 1.25rem; min-height: 3em; color: var(--muted); font-size: var(--fs-small); }
     .game__joke::before { content: ""; display: inline-block; width: var(--sq); height: var(--sq); margin-right: var(--sq-gap); background: var(--accent-text); vertical-align: 0.05em; }
 
-    /* Поле сборки: у блоков свои «слоты» в сетке, как макет страницы */
-    .board { --u: 1px; position: relative; width: 100%; aspect-ratio: 16 / 10; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 3%, var(--bg)); overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
-    /* Наша сетка: 12 колонок с полями 2% и промежутком 1%, плюс горизонтальный ритм */
-    .board::before { content: ""; position: absolute; inset: 0 2%; pointer-events: none; z-index: 0;
-      background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent-text) 16%, transparent) 0, color-mix(in srgb, var(--accent-text) 16%, transparent) calc((100% - 11%) / 12), transparent calc((100% - 11%) / 12), transparent calc((100% - 11%) / 12 + 1%)); }
-    .board::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-      background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--text) 7%, transparent) 0, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px, transparent 10%); }
-    @media (max-width: 599px) { .board { aspect-ratio: 3 / 4; } }
-    .slot { z-index: 1; position: absolute; border: 1px dashed color-mix(in srgb, var(--text) 30%, transparent); display: flex; align-items: flex-start; justify-content: flex-start; pointer-events: none; transition: opacity 0.4s var(--ease); }
-    .slot span { padding: calc(var(--u) * 0.8) calc(var(--u) * 1.2); font-size: max(0.6rem, calc(var(--u) * 1.5)); color: var(--muted); letter-spacing: 0.04em; }
-    .slot span::before { content: "[ "; } .slot span::after { content: " ]"; }
-    .board.is-done .slot { opacity: 0; }
-    .pc { position: absolute; display: flex; overflow: hidden; touch-action: none; cursor: grab; z-index: 2; box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 35%, transparent); background: var(--bg); will-change: left, top; }
-    .pc.is-hidden { opacity: 0; }
-    .pc.is-drag { cursor: grabbing; z-index: 20; transition: none; box-shadow: 0 0 0 1px var(--text), 0 calc(var(--u) * 1.2) calc(var(--u) * 3) rgba(0,0,0,0.5); }
-    .pc.is-placed { cursor: default; z-index: 1; box-shadow: none; }
-    .pc.is-flash { animation: nfpop 0.4s steps(4, end) 1; }
-    @keyframes nfpop { 0% { transform: scale(1.06); } 100% { transform: scale(1); } }
-    .pc img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; filter: grayscale(1) contrast(1.05); pointer-events: none; }
-    .pc.is-placed img { filter: none; }
-    .pc--header { background: var(--accent); align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 1.6); }
-    .pc__brand { font-family: var(--f-head); font-weight: 700; font-size: max(0.6rem, calc(var(--u) * 1.9)); text-transform: uppercase; white-space: nowrap; }
-    .pc__brand i { font-style: normal; opacity: 0.7; }
-    .pc__nav { display: flex; gap: calc(var(--u) * 1); } .pc__nav b { width: calc(var(--u) * 1.4); height: calc(var(--u) * 1.4); background: var(--text); }
-    .pc--title { flex-direction: column; justify-content: center; padding: 0 calc(var(--u) * 2); font-family: var(--f-head); font-weight: 700; text-transform: uppercase; line-height: 1.02; font-size: calc(var(--u) * 5.4); }
-    .pc--title .pc__t2 { color: var(--accent-text); }
-    .pc--text { flex-direction: column; justify-content: center; gap: calc(var(--u) * 1.5); padding: 0 calc(var(--u) * 2); }
-    .pc--text i { display: block; height: calc(var(--u) * 1.1); background: var(--muted); opacity: 0.7; } .pc--text i:nth-child(2) { width: 90%; } .pc--text i:nth-child(3) { width: 75%; } .pc--text i:nth-child(4) { width: 40%; }
-    .pc--btn { background: var(--accent); align-items: center; justify-content: center; box-shadow: none; }
-    .pc--btn::before, .pc--btn::after { content: ""; position: absolute; top: 0; bottom: 0; width: calc(var(--u) * 1.2); border: 1px solid var(--text); }
-    .pc--btn::before { left: 0; border-right: 0; } .pc--btn::after { right: 0; border-left: 0; }
-    .pc__label { font-family: var(--f-head); font-weight: 700; font-size: max(0.6rem, calc(var(--u) * 1.8)); text-transform: uppercase; letter-spacing: 0.1em; }
-    .pc--footer { background: linear-gradient(180deg, #123524, var(--accent)); align-items: center; justify-content: space-between; padding: 0 calc(var(--u) * 1.6); font-size: max(0.55rem, calc(var(--u) * 1.4)); }
-    .pc__up { background: var(--bg); padding: calc(var(--u) * 0.5) calc(var(--u) * 1.4); text-transform: uppercase; letter-spacing: 0.08em; }
-    .board.is-done .pc--btn { cursor: pointer; }
-    .board__actions { margin-top: var(--pad); }
+    .arena { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 3%, var(--bg)); overflow: hidden; cursor: crosshair; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    .arena canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+    .msg { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 1rem; text-align: center; pointer-events: none; font-size: var(--fs-small); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); background: color-mix(in srgb, var(--bg) 55%, transparent); }
+    .msg small { color: var(--muted); text-transform: none; letter-spacing: 0.02em; max-width: 38ch; font-size: var(--fs-small); }
+    .msg[hidden] { display: none; }
+    .view--game .game-head, .view--game .arena, .view--game .game-actions { max-width: 40rem; }
+    .view--why .intro__list { gap: 0.85rem; }
+    .nf-next { margin-top: 1rem; }
+    .view--rules { padding-block: 0 var(--section); }
+    .view--rules .kicker { margin-bottom: 1.25rem; }
+    .game-actions { margin-top: var(--pad); display: flex; gap: 0.75rem 1rem; flex-wrap: wrap; }
     .px { position: absolute; z-index: 30; pointer-events: none; }
     /* Игра сразу на первом экране: короткий заголовок и поле сборки чуть меньше ширины страницы; пояснения ниже */
     /* Грустный смайлик: тот же пиксельный рисунок и место, рот перевёрнут вниз */
@@ -148,33 +123,25 @@
         <li><strong>Вы опечатались.</strong><span>Я сама иногда пишу «сйат» вместо «сайт». Это нормально.</span></li>
         <li><strong>Её никогда не было.</strong><span>Но если вы ждали именно её, напишите мне, и я её сделаю.</span></li>
       </ol>
-      <p class="nf-lead nf-next">А ниже небольшой интерактив, чтобы было не так грустно.</p>
+      <p class="nf-lead nf-next">А ниже небольшая игра, чтобы было не так грустно.</p>
     </section>
-    <section class="view view--game" aria-label="Собери страницу">
+    <section class="view view--game" aria-label="Игра: баги наступают">
       <div class="game-head">
-        <span class="kicker">Страница рассыпалась. Соберите её по сетке</span>
-        <span class="game-hud" id="hud">0 / 6 · 0,0 с</span>
+        <span class="kicker">Баги наступают. Остановите их</span>
+        <span class="game-hud" id="hud">0</span>
       </div>
-      <div class="board" id="board" aria-label="Поле сборки страницы. Перетащите блоки на свои места">
-        <div class="slot" data-k="header"><span>шапка</span></div>
-        <div class="slot" data-k="title"><span>заголовок</span></div>
-        <div class="slot" data-k="photo"><span>фото</span></div>
-        <div class="slot" data-k="text"><span>текст</span></div>
-        <div class="slot" data-k="btn"><span>кнопка</span></div>
-        <div class="slot" data-k="footer"><span>подвал</span></div>
-
-        <div class="pc pc--header" data-k="header"><span class="pc__brand">Полина Гусева <i>— веб-дизайнер</i></span><span class="pc__nav"><b></b><b></b><b></b></span></div>
-        <div class="pc pc--title" data-k="title"><span class="pc__t1">Страница</span><span class="pc__t2">не найдена</span></div>
-        <div class="pc pc--photo" data-k="photo"><img src="/img/portrait.jpg" alt="" draggable="false"></div>
-        <div class="pc pc--text" data-k="text"><i></i><i></i><i></i><i></i></div>
-        <div class="pc pc--btn" data-k="btn"><span class="pc__label">Назад</span></div>
-        <div class="pc pc--footer" data-k="footer"><span>© 2026 Полина Гусева</span><span class="pc__up">Наверх</span></div>
-      </div>
-      <p class="game__joke" id="joke">Перетащите блоки на пунктирные места, как в Figma, только без курсора: можно и пальцем.</p>
-      <div class="intro__actions board__actions">
-        <button class="btn" type="button" id="btn-auto"><span class="btn__label">Собрать за меня</span></button>
-        <button class="btn btn--ghost" type="button" id="btn-again" hidden><span class="btn__label">Рассыпать заново</span></button>
-      </div>
+      <div class="arena" id="stage"><canvas id="cv"></canvas><div class="msg" id="msg">Нажмите пробел или тапните<small>двигайтесь стрелками или мышью, стреляйте пробелом или кликом. Правила ниже.</small></div></div>
+      <div class="game-actions"><button class="btn btn--ghost" id="again" type="button" hidden><span class="btn__label">Сыграть ещё раз</span></button></div>
+    </section>
+    <section class="view view--rules" aria-labelledby="rules-title">
+      <span class="kicker" id="rules-title">Правила</span>
+      <ol class="intro__list">
+        <li><strong>Двигайтесь.</strong><span>Стрелки ← → или клавиши A и D. Мышью и пальцем смайлик едет за курсором.</span></li>
+        <li><strong>Стреляйте.</strong><span>Пробел или клик мышью. На телефоне огонь идёт сам, нужно только двигать пальцем.</span></li>
+        <li><strong>Баги выстроены в «404».</strong><span>Они ползут вбок и спускаются вниз. Чем меньше их остаётся, тем быстрее они бегут.</span></li>
+        <li><strong>Не дайте им дойти до нижней линии.</strong><span>Если хоть один баг достиг её, игра окончена.</span></li>
+        <li><strong>Разбейте все баги.</strong><span>10 очков за каждый, 100 за победу. Рекорд хранится в вашем браузере.</span></li>
+      </ol>
     </section>
 
     <footer class="footer" id="footer" style="--fp: 1">
@@ -196,152 +163,83 @@
   </main>
 </div>
 
-  <script src="/brief/ui.js?v=1791107257"></script>
+  <script src="/brief/ui.js?v=1791112706"></script>
   <script>
   (function () {
-    var board = document.getElementById('board'), hud = document.getElementById('hud'), joke = document.getElementById('joke');
-    var btnAuto = document.getElementById('btn-auto'), btnAgain = document.getElementById('btn-again');
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var pcs = Array.prototype.slice.call(board.querySelectorAll('.pc'));
-    var slots = {};
-    Array.prototype.forEach.call(board.querySelectorAll('.slot'), function (el) { slots[el.getAttribute('data-k')] = el; });
+    var cv = document.getElementById('cv'), stage = document.getElementById('stage'), hud = document.getElementById('hud'), msg = document.getElementById('msg'), again = document.getElementById('again');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, touch = window.matchMedia('(hover: none)').matches;
+    var narrow = stage.clientWidth < 600, W = narrow ? 360 : 640, H = narrow ? 360 : 290;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; var ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+    var GREEN = '#3f9669', TEXT = '#ececE9', MUTED = '#8a8c86', DARK = '#24593f', LINE = '#2a2c28';
+    /* Смайлик ровно как на главной: тот же пиксельный рисунок 7×5 и тот же зелёный */
+    var SMILE = ['.X...X.', '.......', 'X.....X', '.X...X.', '..XXX..'];
+    var BUG = ['X.X.X', '.XXX.', 'XXXXX', '.XXX.', 'X...X'];
+    var G = { 4: ['X.X', 'X.X', 'XXX', '..X', '..X'], 0: ['XXX', 'X.X', 'X.X', 'X.X', 'XXX'] };
+    var U = narrow ? 3 : 4, SU = narrow ? 4 : 5, SX = narrow ? 30 : 40, SY = narrow ? 26 : 28, BW = 5 * U;
+    var bugs, dir, bullets, ship, score, best = 0, state = 'idle', raf, last, keys = {}, cool = 0, total = 0;
+    try { best = +localStorage.getItem('nf-404-best') || 0; } catch (e) {}
 
-    /* Слоты лежат строго в колонках сетки: поля 2%, колонка 7.083%, промежуток 1% */
-    function col(i) { return 2 + i * 8.0833; }
-    function span(n) { return n * 8.0833 - 1; }
-    var WIDE = { header: [2, 3, 96, 10], title: [col(0), 18, span(7), 32], photo: [col(8), 18, span(4), 46], text: [col(0), 54, span(7), 18], btn: [col(0), 78, span(3), 9], footer: [2, 90, 96, 8] };
-    var NARROW = { header: [2, 2, 96, 8], title: [2, 13, 96, 18], photo: [col(0), 35, span(6), 28], text: [col(6), 35, span(6), 28], btn: [col(0), 67, span(6), 8], footer: [2, 90, 96, 7] };
-    var COLORS = { header: ['#24593f', '#ececE9'], title: ['#ececE9', '#3f9669', '#0d0e0c'], photo: ['#8a8c86', '#c9c9c6', '#4a4a48'], text: ['#8a8c86', '#0d0e0c'], btn: ['#24593f', '#ececE9'], footer: ['#24593f', '#123524', '#ececE9'] };
-    var L, bw, bh, cell;
-    function measure() {
-      bw = board.clientWidth; bh = board.clientHeight; L = bw < 600 ? NARROW : WIDE;
-      cell = Math.max(5, Math.round(bw / 70));
-      board.style.setProperty('--u', (bw / (bw < 600 ? 60 : 100)) + 'px');
-      Object.keys(slots).forEach(function (k) { place(slots[k], L[k]); });
-    }
-    function place(el, r) { el.style.left = r[0] + '%'; el.style.top = r[1] + '%'; el.style.width = r[2] + '%'; el.style.height = r[3] + '%'; }
-    function rectOf(r) { return { x: r[0] / 100 * bw, y: r[1] / 100 * bh, w: r[2] / 100 * bw, h: r[3] / 100 * bh }; }
-
-    /* Настоящие пиксели: целые квадраты по сетке из клеток, цвет без прозрачности, движение ступенями, без плавного затухания */
+    function glyph(a, x, y, u, c) { ctx.fillStyle = c; a.forEach(function (row, r) { for (var k = 0; k < row.length; k++) { if (row[k] === 'X') { ctx.fillRect(Math.round(x + k * u), Math.round(y + r * u), u, u); } } }); }
     function rnd(a, b) { return a + Math.random() * (b - a); }
-    function snapN(v) { return Math.round(v / cell) * cell; }
-    function pxEl(x, y, size, color) {
-      var d = document.createElement('span'); d.className = 'px';
-      d.style.left = snapN(x) + 'px'; d.style.top = snapN(y) + 'px'; d.style.width = d.style.height = size + 'px'; d.style.background = color;
-      board.appendChild(d); return d;
+    /* Баг рассыпается на собственные пиксели: каждая клетка рисунка отлетает в свою сторону от центра бага, движение ступенями, без прозрачности */
+    function shatter(b) {
+      if (reduce) { return; } var k = stage.clientWidth / W, col = b.ch === '0' ? MUTED : GREEN, cx = (b.x + BW / 2), cy = (b.y + BW / 2);
+      BUG.forEach(function (row, r) { for (var c = 0; c < row.length; c++) { if (row[c] !== 'X') { continue; }
+        var px = b.x + c * U, py = b.y + r * U, d = document.createElement('span'); d.className = 'px';
+        d.style.left = px * k + 'px'; d.style.top = py * k + 'px'; d.style.width = d.style.height = (U + 1) * k + 'px'; d.style.background = Math.random() < 0.25 ? TEXT : col;
+        stage.appendChild(d);
+        var vx = (px + U / 2 - cx), vy = (py + U / 2 - cy), len = Math.hypot(vx, vy) || 1, dist = rnd(34, 84);
+        var dx = Math.round(vx / len * dist / U) * U * k + rnd(-1, 1) * U * k, dy = Math.round(vy / len * dist / U) * U * k + rnd(0, 2) * U * k;
+        var an = d.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(' + dx + 'px,' + dy + 'px)' }], { duration: rnd(450, 700), easing: 'steps(6, end)', fill: 'forwards' });
+        an.onfinish = (function (el) { return function () { el.remove(); }; })(d); } });
     }
-    function fly(d, dx, dy, dur) {
-      var a = d.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(' + snapN(dx) + 'px,' + snapN(dy) + 'px)' }], { duration: dur, easing: 'steps(5, end)', fill: 'forwards' });
-      a.onfinish = function () { d.remove(); };
-    }
-    /* Блок встал на место: из его прямоугольника разлетаются пиксели */
-    function explode(r, key) {
-      if (reduce) { return; }
-      var cols = COLORS[key], n = Math.min(70, Math.max(24, Math.round(r.w * r.h / (cell * cell) * 0.12)));
-      for (var i = 0; i < n; i++) {
-        var sz = cell * (Math.random() < 0.25 ? 2 : 1);
-        var d = pxEl(r.x + rnd(0, r.w - sz), r.y + rnd(0, r.h - sz), sz, cols[Math.floor(Math.random() * cols.length)]);
-        var ang = rnd(0, Math.PI * 2), dist = rnd(30, 110);
-        fly(d, Math.cos(ang) * dist, Math.sin(ang) * dist, rnd(450, 750));
-      }
-    }
+    function rnd(a, b) { return a + Math.random() * (b - a); }
 
-    var t0 = 0, timer = 0, placed = 0, done = false, finalMs = 0;
-    var MSG = [
-      'Перетащите блоки на пунктирные места, по колонкам сетки. Можно и пальцем.',
-      'Шапка на месте. Уже не страница-беглянка.',
-      'Заголовок встал. Теперь понятно, о чём речь.',
-      'Лицо нашлось. Дальше проще.',
-      'Текст на месте: что-то про то, что страницы нет.',
-      'Кнопка есть. Осталось закрыть подвал.',
-      'Всё собрано. Страницы нет, а вот эта получилась отличной.'
-    ];
-    function fmt(ms) { return (ms / 1000).toFixed(1).replace('.', ','); }
-    function hudUpdate() { hud.textContent = placed + ' / ' + pcs.length + ' · ' + fmt(done ? finalMs : (t0 ? performance.now() - t0 : 0)) + ' с'; }
-    function startTimer() { if (t0) { return; } t0 = performance.now(); timer = setInterval(hudUpdate, 100); }
-
-    /* Блоки сразу лежат россыпью: без эффектов, эффект только когда блок встал на место */
-    function scatter() {
-      pcs.forEach(function (pc) {
-        var k = pc.getAttribute('data-k'), r = L[k], w = r[2] / 100 * bw, h = r[3] / 100 * bh, x, y, tries = 0;
-        do { x = rnd(0, bw - w); y = rnd(0, bh - h); tries++; }
-        while (tries < 20 && Math.abs(x - r[0] / 100 * bw) < bw * 0.18 && Math.abs(y - r[1] / 100 * bh) < bh * 0.18);
-        var rot = 'rotate(' + rnd(-7, 7).toFixed(1) + 'deg)';
-        pc.classList.remove('is-placed', 'is-drag', 'is-flash', 'is-hidden');
-        pc.style.width = r[2] + '%'; pc.style.height = r[3] + '%';
-        pc.style.left = (x / bw * 100) + '%'; pc.style.top = (y / bh * 100) + '%';
-        pc.style.setProperty('--rot', rot); pc.style.transform = rot;
-        pc.__placed = false;
+    function build() {
+      bugs = []; var cols = 11, x0 = (W - ((cols - 1) * SX + BW)) / 2;
+      '404'.split('').forEach(function (ch, g) { G[ch].forEach(function (row, r) { for (var c = 0; c < 3; c++) { if (row[c] === 'X') { bugs.push({ x: x0 + (g * 4 + c) * SX, y: 20 + r * SY, on: true, ch: ch }); } } }); });
+      total = bugs.length;
+    }
+    function reset() { build(); dir = 1; bullets = []; ship = { x: W / 2 - 3.5 * SU }; score = 0; cool = 0; hud.textContent = '0' + (best ? ' · рекорд ' + best : ''); }
+    function begin() { if (state !== 'run') { reset(); state = 'run'; msg.hidden = true; again.hidden = true; last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }
+    function end(win) {
+      state = 'over'; if (win) { score += 100; } if (score > best) { best = score; try { localStorage.setItem('nf-404-best', String(best)); } catch (e) {} }
+      hud.textContent = score + (best ? ' · рекорд ' + best : '');
+      msg.hidden = false; again.hidden = false;
+      msg.innerHTML = win ? 'Ошибка исправлена!<small>Все баги разбиты, ' + score + ' очк. Страницы всё равно нет, зато вы молодец. Нажмите пробел или тапните: ещё раз.</small>' : 'Баги дошли до края<small>' + score + ' очк. Рекорд ' + best + '. Нажмите пробел или тапните: ещё раз.</small>';
+      draw();
+    }
+    function fire() { if (cool <= 0 && bullets.length < 3) { bullets.push({ x: ship.x + 3.5 * SU - 2, y: H - 52 }); cool = 0.28; } }
+    function loop(now) {
+      var dt = Math.min((now - last) / 1000, 0.04); last = now; if (state !== 'run') { return; } cool -= dt;
+      if (keys.ArrowLeft || keys.KeyA) { ship.x -= 380 * dt; } if (keys.ArrowRight || keys.KeyD) { ship.x += 380 * dt; } if (keys.Space) { fire(); } if (touch) { fire(); }
+      ship.x = Math.max(0, Math.min(W - 7 * SU, ship.x));
+      var alive = bugs.filter(function (b) { return b.on; }), sp = 24 + (total - alive.length) * 2.2;
+      var minX = Math.min.apply(null, alive.map(function (b) { return b.x; })), maxX = Math.max.apply(null, alive.map(function (b) { return b.x; })) + BW;
+      if ((dir > 0 && maxX + sp * dt > W - 6) || (dir < 0 && minX - sp * dt < 6)) { dir *= -1; alive.forEach(function (b) { b.y += 12; }); } else { alive.forEach(function (b) { b.x += dir * sp * dt; }); }
+      bullets.forEach(function (b) { b.y -= 540 * dt; });
+      bullets = bullets.filter(function (bl) {
+        for (var i = 0; i < alive.length; i++) { var b = alive[i]; if (b.on && bl.x > b.x - 3 && bl.x < b.x + BW + 3 && bl.y > b.y && bl.y < b.y + BW) { b.on = false; score += 10; hud.textContent = score + (best ? ' · рекорд ' + best : ''); shatter(b); return false; } }
+        return bl.y > -12;
       });
+      if (!bugs.some(function (b) { return b.on; })) { end(true); return; }
+      if (bugs.some(function (b) { return b.on && b.y + BW >= H - 54; })) { end(false); return; }
+      draw(); raf = requestAnimationFrame(loop);
     }
-
-    function snap(pc, quiet) {
-      var k = pc.getAttribute('data-k'), r = L[k];
-      pc.__placed = true; pc.classList.remove('is-drag'); pc.classList.add('is-placed');
-      pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; pc.style.transform = 'none'; pc.style.setProperty('--rot', 'rotate(0)');
-      if (!quiet) { pc.classList.add('is-flash'); setTimeout(function () { pc.classList.remove('is-flash'); }, 420); explode(rectOf(r), k); }
-      placed = pcs.filter(function (x) { return x.__placed; }).length;
-      joke.textContent = MSG[Math.min(placed, MSG.length - 1)];
-      hudUpdate();
-      if (placed === pcs.length) { finish(); }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      bugs.forEach(function (b) { if (b.on) { glyph(BUG, b.x, b.y, U, b.ch === '0' ? MUTED : GREEN); } });
+      bullets.forEach(function (b) { ctx.fillStyle = TEXT; ctx.fillRect(Math.round(b.x), Math.round(b.y), 4, 12); });
+      glyph(SMILE, ship.x, H - 46, SU, GREEN);
+      ctx.fillStyle = LINE; ctx.fillRect(0, H - 12, W, 1);
     }
-    function finish() {
-      done = true; finalMs = t0 ? performance.now() - t0 : 0; clearInterval(timer); hudUpdate();
-      board.classList.add('is-done'); btnAgain.hidden = false; btnAuto.hidden = true;
-      joke.textContent = MSG[MSG.length - 1] + ' Время: ' + fmt(finalMs) + ' с.';
-      setTimeout(function () {
-        var t = board.querySelector('.pc--title'), b = board.querySelector('.pc--btn');
-        t.querySelector('.pc__t1').textContent = 'Другое дело'; t.querySelector('.pc__t2').textContent = 'но не то';
-        b.querySelector('.pc__label').textContent = 'На главную'; b.setAttribute('role', 'link'); b.tabIndex = 0;
-      }, 350);
-    }
-    function reset() {
-      done = false; t0 = 0; placed = 0; clearInterval(timer); finalMs = 0;
-      board.classList.remove('is-done'); btnAgain.hidden = true; btnAuto.hidden = false;
-      var t = board.querySelector('.pc--title'), b = board.querySelector('.pc--btn');
-      t.querySelector('.pc__t1').textContent = 'Страница'; t.querySelector('.pc__t2').textContent = 'не найдена';
-      b.querySelector('.pc__label').textContent = 'Назад'; b.removeAttribute('role'); b.removeAttribute('tabindex');
-      joke.textContent = MSG[0]; measure();
-      scatter(); hudUpdate();
-    }
-    btnAgain.addEventListener('click', reset);
-    btnAuto.addEventListener('click', function () {
-      startTimer();
-      pcs.filter(function (x) { return !x.__placed; }).forEach(function (pc, i) { setTimeout(function () { snap(pc); }, i * (reduce ? 0 : 280)); });
-    });
-
-    /* Перетаскивание: за блоком тянется след из пикселей */
-    pcs.forEach(function (pc) {
-      var dx = 0, dy = 0, drag = false;
-      pc.addEventListener('pointerdown', function (e) {
-        if (done && pc.classList.contains('pc--btn')) { location.href = '/'; return; }
-        if (pc.__placed) { return; }
-        e.preventDefault(); startTimer();
-        var r = pc.getBoundingClientRect();
-        dx = e.clientX - r.left; dy = e.clientY - r.top; drag = true;
-        pc.setPointerCapture(e.pointerId); pc.classList.add('is-drag');
-        pc.style.transform = 'none'; pc.style.setProperty('--rot', 'rotate(0)');
-      });
-      pc.addEventListener('pointermove', function (e) {
-        if (!drag) { return; }
-        var br = board.getBoundingClientRect();
-        var x = Math.max(0, Math.min(e.clientX - br.left - dx, br.width - pc.offsetWidth));
-        var y = Math.max(0, Math.min(e.clientY - br.top - dy, br.height - pc.offsetHeight));
-        pc.style.left = x / bw * 100 + '%'; pc.style.top = y / bh * 100 + '%';
-      });
-      function end() {
-        if (!drag) { return; } drag = false; pc.classList.remove('is-drag');
-        var r = L[pc.getAttribute('data-k')];
-        var x = pc.offsetLeft, y = pc.offsetTop;
-        var tx = r[0] / 100 * bw, ty = r[1] / 100 * bh, near = Math.max(bw * 0.09, 28);
-        if (Math.abs(x - tx) < near && Math.abs(y - ty) < near) { snap(pc); }
-      }
-      pc.addEventListener('pointerup', end); pc.addEventListener('pointercancel', end);
-      pc.addEventListener('keydown', function (e) { if (done && pc.classList.contains('pc--btn') && (e.key === 'Enter' || e.key === ' ')) { location.href = '/'; } });
-    });
-
-    measure(); scatter(); hudUpdate();
-    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { measure(); pcs.forEach(function (pc) { var r = L[pc.getAttribute('data-k')]; pc.style.width = r[2] + '%'; pc.style.height = r[3] + '%'; if (pc.__placed) { pc.style.left = r[0] + '%'; pc.style.top = r[1] + '%'; } }); }, 150); });
+    document.addEventListener('keydown', function (e) { keys[e.code] = true; if (e.code === 'Space') { if (e.target && /^(A|BUTTON|INPUT)$/.test(e.target.tagName)) { return; } e.preventDefault(); begin(); } if (e.code.indexOf('Arrow') === 0) { e.preventDefault(); } });
+    document.addEventListener('keyup', function (e) { keys[e.code] = false; });
+    function mv(e) { var r = cv.getBoundingClientRect(); ship.x = Math.max(0, Math.min(W - 7 * SU, (e.clientX - r.left) * (W / r.width) - 3.5 * SU)); }
+    stage.addEventListener('pointermove', function (e) { if (state === 'run' || state === 'idle') { mv(e); } });
+    stage.addEventListener('pointerdown', function (e) { mv(e); if (state !== 'run') { begin(); } else { fire(); } });
+    again.addEventListener('click', begin);
+    reset(); draw();
   })();
   </script>
 </body>

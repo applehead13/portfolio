@@ -41,3 +41,7 @@
 
 /* Совсем узкие экраны: длинное слово «КОНФИДЕНЦИАЛЬНОСТИ» не должно шире экрана */
 @media (max-width: 359px) { .docpage .doc__title { font-size: 1.3rem; } }
+
+/* Заголовок документа того же размера, что заголовки на главном экране и в брифе */
+.docpage .doc__title { font-size: var(--fs-h1); line-height: 1.08; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+@media (max-width: 359px) { .docpage .doc__title { font-size: 1.3rem; } }
