@@ -2452,3 +2452,22 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .footer__up { grid-column: 6 / span 3; }
   .footer__docs { grid-column: 9 / -1; }
 }
+
+/* Подвал на узких экранах (до 699 px): «Наверх» справа над всем, под крупной фразой;
+   ниже в одну линию копирайт слева и документы справа, слова документов переносятся на строку ниже */
+@media (max-width: 699px) {
+  .footer__bottom {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "up up" "copy docs" !important;
+    align-items: start !important; row-gap: 1.25rem !important; column-gap: 1.5rem !important;
+  }
+  .footer__up { grid-area: up !important; justify-self: end !important; width: auto !important; }
+  .footer__copy { grid-area: copy !important; }
+  .footer__bottom .footer__docs { grid-area: docs !important; justify-self: end !important; align-items: flex-end !important; text-align: right; }
+  .footer__docs .doclink { white-space: normal; }
+}
+/* Совсем узкий телефон: два столбца уже не помещаются, документы встают под копирайт слева */
+@media (max-width: 479px) {
+  .footer__bottom { grid-template-columns: minmax(0, 1fr) !important; grid-template-areas: "up" "copy" "docs" !important; }
+  .footer__bottom .footer__docs { justify-self: start !important; align-items: flex-start !important; text-align: left; }
+}
