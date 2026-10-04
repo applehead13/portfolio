@@ -2471,3 +2471,13 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
   .footer__bottom { grid-template-columns: minmax(0, 1fr) !important; grid-template-areas: "up" "copy" "docs" !important; }
   .footer__bottom .footer__docs { justify-self: start !important; align-items: flex-start !important; text-align: left; }
 }
+
+/* ===== Всё, что в квадратных скобках, выглядит одинаково везде: приглушённый цвет, шрифт текста сайта, размер мельче основного ===== */
+.nav__num, .section__count, .card__year, .price__num, .footer__label, .gallery__count, .facts__label,
+.stage-row__num, .stage-card__num, .step-item__num, .top__count, .kicker, .stage__num, .tag,
+.hud, .game-hud, .toast {
+  font-family: var(--f-text) !important; font-weight: 400 !important; font-size: var(--fs-small) !important;
+  color: var(--muted) !important; letter-spacing: normal !important; text-transform: none !important;
+}
+.form__error::before, .q__error::before { color: var(--muted) !important; font-size: var(--fs-small) !important; font-family: var(--f-text) !important; font-weight: 400 !important; letter-spacing: normal !important; }
+.slot span { font-size: var(--fs-small) !important; letter-spacing: normal !important; }
