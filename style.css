@@ -2497,10 +2497,10 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 /* Окошко после отправки заявки */
 .sent { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: var(--gutter); background: rgba(0, 0, 0, 0.72); }
 .sent[hidden] { display: none; }
-.sent__box { position: relative; width: 100%; max-width: 37rem; padding: 3.5rem 2rem 2rem; outline: none; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.6); }
+.sent__box { position: relative; width: 100%; max-width: 37rem; padding: 2rem; outline: none; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.6); }
 .sent__x { position: absolute; top: 0.9rem; right: 1rem; padding: 0.25rem; font-family: var(--f-text); font-size: var(--fs-small); color: var(--muted); }
 .sent__x:hover, .sent__x:focus-visible { color: var(--text); }
-.sent__title { margin: 0 0 1.75rem; font-family: var(--f-head); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.08; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text); }
+.sent__title { margin: 0 0 1.75rem; padding-right: 3rem; font-family: var(--f-head); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.08; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text); }
 .sent__text { margin: 0; font-size: var(--fs-small); line-height: var(--lh-text); color: var(--muted); }
 .sent__actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 1.75rem; }
 .sent .btn:not(.btn--ghost)::before { transform: scaleX(1) !important; }
@@ -2510,7 +2510,8 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 .sent__actions { opacity: 0; transform: translateY(1.5rem); transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
 .sent__actions.is-in { opacity: 1; transform: none; }
 @media (max-width: 600px) {
-  .sent__box { padding: 3.25rem 1.25rem 1.25rem; }
+  .sent__box { padding: 1.25rem; }
+  .sent__title { padding-right: 2.5rem; }
   .sent__actions { flex-direction: column; }
   .sent__actions .btn { width: 100%; justify-content: center; }
 }
