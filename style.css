@@ -2522,3 +2522,12 @@ p, .price__desc, .card__desc, .check__text { text-wrap: pretty; }
 
 /* Телефон: нажатия сразу, без ожидания двойного касания и приближения */
 a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+/* Телефон: кнопка «На сайт» не нужна, на сайт ведёт логотип в меню. На планшете и компьютере она остаётся */
+@media (max-width: 767px) {
+  .top__back { display: none; }
+  .top:has(> .top__back:only-child) { display: none; }
+}
+@media (max-width: 599px) {
+  .top:not(:has(.top__clear:not([hidden]))) { display: none; }
+}
