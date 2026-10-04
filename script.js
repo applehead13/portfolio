@@ -309,7 +309,7 @@
         .then(function (r) {
           if (!r.ok) { throw new Error('send'); }
           form.reset(); attach.classList.remove('has-file'); fileName.textContent = 'Если есть своё ТЗ, прикрепите его. До 10 МБ';
-          note.hidden = false; note.textContent = 'Заявка отправлена. Отвечу в течение дня.';
+          note.hidden = false; note.textContent = 'Заявка отправлена. Отвечу в течение дня.'; if (window.nfGoal) { window.nfGoal('lead'); }
         })
         .catch(function () {
           err.hidden = false; err.textContent = 'Не получилось отправить. Напишите на почту или в Telegram.';
@@ -320,6 +320,7 @@
     var body = 'Имя: ' + name + '\nКонтакт: ' + contact + '\nЧто нужно: ' + (f.type.value || 'Не выбрано') +
       (file ? '\nТЗ: ' + file.name + ' (прикреплю к этому письму)' : '') +
       '\n\n' + f.message.value.trim();
+    if (window.nfGoal) { window.nfGoal('lead'); }
     window.location.href = 'mailto:polinaguseva13@yandex.ru?subject=' +
       encodeURIComponent('Заявка с сайта') + '&body=' + encodeURIComponent(body);
     if (file) {

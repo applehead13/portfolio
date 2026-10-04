@@ -536,6 +536,7 @@ function next() {
    Отправка
    ===================================================================== */
 function showDone(mode) {
+  if (window.nfGoal && mode !== 'error') { window.nfGoal('brief'); }
   const lead = $('#done-lead');
   const note = $('#done-note');
   if (mode === 'sent') {
