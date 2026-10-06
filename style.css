@@ -2532,3 +2532,10 @@ a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-ac
 
 /* Очень широкие экраны (4K): всё чуть крупнее, чтобы левая колонка и тексты не терялись */
 @media (min-width: 3200px) { html { font-size: 20px; } }
+
+/* Карточка «Здесь может быть ваш сайт» занимает последнюю строку целиком, чтобы рядом не оставалось пустого места */
+@media (min-width: 768px) {
+  .works .card--free { grid-column: 1 / -1; }
+  .works .card--free .card__media { aspect-ratio: 10 / 3; }
+}
+@media (min-width: 2560px) { .works .card--free .card__media { aspect-ratio: 4 / 1; } }
