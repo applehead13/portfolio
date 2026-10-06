@@ -20,7 +20,7 @@
       var r = w.getBoundingClientRect();
       if (r.width > 0) { rows[Math.round((r.top + r.bottom) / 2 / lh)] = 1; }
     });
-    var step = (Object.keys(rows).length > 2 || el.classList.contains('fact__rest')) ? TYPE_STEP * 0.6 : TYPE_STEP;
+    var step = (Object.keys(rows).length > 2 || el.classList.contains('fact__lead')) ? TYPE_STEP * 0.6 : TYPE_STEP;
     el.style.setProperty('--ts', (step / 1000).toFixed(4) + 's');
     el.__typeDur = letters * step + 60;
   }
@@ -904,7 +904,7 @@
      Буквы заранее занимают место (невидимы), поэтому раскладка не прыгает. */
   if (!reduce && 'IntersectionObserver' in window) {
     var TYPE_SEL = [
-      '.fact__rest',
+      '.fact__lead',
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
       '.step-item__inner p',
