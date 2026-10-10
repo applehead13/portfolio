@@ -156,7 +156,7 @@
      печатаются только подсказки: надписи в полях и пояснения под кнопкой брифа и у вложения ТЗ */
   document.querySelectorAll('#contacts .section__head, #contacts .contacts__side .lead, #contacts .contacts__brief, #contacts .form').forEach(function (el) { el.removeAttribute('data-reveal'); el.classList.add('is-in'); });
   document.querySelectorAll('#prices .price').forEach(function (el) { el.setAttribute('data-now', ''); });
-  document.querySelectorAll('#contacts .contacts__hint, #contacts .attach__name').forEach(function (el) { el.setAttribute('data-par', ''); });
+  document.querySelectorAll('#contacts .contacts__hint').forEach(function (el) { el.setAttribute('data-par', ''); });
   var sendBtn = document.querySelector('#lead-form .btn--wide');
   if (sendBtn) { sendBtn.setAttribute('data-reveal', ''); sendBtn.setAttribute('data-after', ''); }
   /* Факты: белое начало («Первое образование…») и квадратик стоят сразу, печатается только продолжение-описание */
@@ -907,8 +907,7 @@
       '.fact__lead',
       '.card__desc', '.card__tags',
       '.price__label', '.price__value',
-      '.step-item__inner p',
-      '.contacts__hint', '.attach__name',
+      '.contacts__hint',
       '.doc__body p', '.doc__body li'
     ].join(', ');
 
@@ -953,7 +952,7 @@
        Левое меню не печатается и не проявляется, оно стоит на месте сразу. */
     (function () {
       var fig = document.querySelector('.hero__figure');
-      var sub = document.querySelector('.hero__sub');
+      var sub = null;   // текст под заголовком и кнопки без анимации, печатается только подпись под фото
       var caps = Array.prototype.slice.call(document.querySelectorAll('.hero__cap span'));
       var acts = document.querySelector('.hero__actions');
       var typed = [sub].concat(caps).filter(Boolean);
@@ -979,19 +978,6 @@
       };
       if (document.fonts && document.fonts.ready) { document.fonts.ready.then(go); } else { go(); }
     })();
-
-    /* «Контакты»: подсказки в самих полях («Ваше имя», «Telegram или телефон», «Чем занимаетесь…») тоже печатаются по очереди */
-    var phObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { phObs.unobserve(e.target); seqAdd(e.target, 'ph'); } });
-    }, { rootMargin: '0px', threshold: 0 });
-    document.querySelectorAll('#lead-form .field__input').forEach(function (inp) {
-      var ph = inp.getAttribute('placeholder');
-      if (!ph) { return; }
-      inp.__ph = ph;
-      inp.setAttribute('data-par', '');
-      inp.setAttribute('placeholder', '');
-      phObs.observe(inp);
-    });
 
     document.querySelectorAll(TYPE_SEL).forEach(function (el) {
       /* Вложенные блоки (например «ИНН» внутри строки подвала) не оборачиваем второй раз: печатается внешний */
@@ -1019,16 +1005,6 @@
       });
     });
 
-    /* Описание этапа печатается заново при каждом раскрытии */
-    document.querySelectorAll('.step-item__head').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var p = btn.closest('.step-item').querySelector('.step-item__inner p');
-        if (!p) { return; }
-        p.classList.remove('is-typed');
-        void p.offsetWidth;
-        setTimeout(function () { if (btn.getAttribute('aria-expanded') === 'true') { speedUp(p); p.classList.add('is-typed'); } }, 120);
-      });
-    });
   }
 
 })();

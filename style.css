@@ -2533,12 +2533,9 @@ a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-ac
 /* Очень широкие экраны (4K): всё чуть крупнее, чтобы левая колонка и тексты не терялись */
 @media (min-width: 3200px) { html { font-size: 20px; } }
 
-/* Карточка «Здесь может быть ваш сайт» занимает последнюю строку целиком, чтобы рядом не оставалось пустого места */
-@media (min-width: 768px) {
-  .works .card--free { grid-column: 1 / -1; }
-  .works .card--free .card__media { aspect-ratio: 10 / 3; }
-}
-@media (min-width: 2560px) { .works .card--free .card__media { aspect-ratio: 4 / 1; } }
+/* Карточка «Здесь может быть ваш сайт»: такой же квадрат, как у проектов, стоит в правой колонке */
+@media (min-width: 768px) { .works .card--free { grid-column: -2 / -1; } }
+
 
 /* Полоса прокрутки: чёрное поле и зелёный ползунок с острыми углами, без стрелок и линий */
 @supports selector(::-webkit-scrollbar) {
@@ -2551,4 +2548,12 @@ a, button, input, select, textarea, label, summary, .btn, .chip, .dot { touch-ac
 }
 @supports not selector(::-webkit-scrollbar) {
   html { scrollbar-width: thin; scrollbar-color: var(--accent-text) var(--bg); }
+}
+
+/* Телефон: в «Контактах» заголовок, кнопка «Заполнить бриф» и подпись под ней по центру экрана */
+@media (max-width: 767px) {
+  .contacts__side { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .contacts__side .lead { text-align: center; }
+  .contacts__brief { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .contacts__hint { text-align: center; }
 }
